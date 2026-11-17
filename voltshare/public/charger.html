@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VoltShare — Charger Details</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=Google+Sans:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Roboto', 'Google Sans', 'sans-serif'],
+            google: ['Google Sans', 'Roboto', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            googleBlue: '#1A73E8',
+            googleBlueHover: '#1557B0',
+            googleRed: '#EA4335',
+            googleGreen: '#0F9D58',
+            googleYellow: '#FBBC04',
+            googleGray: '#5F6368',
+            googleBorder: '#DADCE0'
+          },
+          boxShadow: {
+            google: '0 2px 6px rgba(60,64,67, 0.3), 0 1px 2px rgba(60,64,67, 0.15)',
+            googleCard: '0 4px 16px rgba(0,0,0,0.12)'
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col font-sans text-gray-800">
+
+  <!-- Shared Navbar Mount -->
+  <div id="voltNavbarMount"></div>
+
+  <!-- Charger Details Container -->
+  <main class="flex-1 max-w-5xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+    
+    <!-- Top Breadcrumb & Back Action -->
+    <div class="flex items-center justify-between mb-4">
+      <a href="index.html" class="inline-flex items-center gap-1.5 text-xs font-medium text-googleBlue hover:text-googleBlueHover hover:underline">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        </svg>
+        Back to Ludhiana Map
+      </a>
+
+      <div class="flex items-center gap-2">
+        <span id="availabilityBadge" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Available Now
+        </span>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      
+      <!-- Left 2 Cols: Photos, Specs, Host, Reviews -->
+      <div class="lg:col-span-2 space-y-6">
+        
+        <!-- Hero Photo & Badges -->
+        <div class="bg-white rounded-2xl overflow-hidden shadow-google border border-gray-200">
+          <div class="relative h-64 sm:h-80 w-full bg-gray-900">
+            <img id="chargerPhoto" src="" alt="Driveway Charger" class="w-full h-full object-cover">
+            
+            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+
+            <div class="absolute bottom-4 left-4 right-4 text-white">
+              <div class="flex flex-wrap items-center gap-2 mb-1.5">
+                <span class="bg-white/20 backdrop-blur-md px-2.5 py-0.5 rounded-full text-xs font-bold" id="connectorPill">
+                  Type-2 AC
+                </span>
+                <span class="bg-emerald-500/90 px-2.5 py-0.5 rounded-full text-xs font-bold" id="powerPill">
+                  7.4 kW Fast AC
+                </span>
+                <span class="bg-blue-600/90 px-2.5 py-0.5 rounded-full text-xs font-medium flex items-center gap-1">
+                  🛡️ PSPCL Verified
+                </span>
+              </div>
+              <h1 class="text-xl sm:text-2xl font-bold font-google tracking-tight text-white" id="chargerTitle">
+                Sarabha Nagar Green Driveway Wallbox
+              </h1>
+              <p class="text-xs text-gray-200 mt-1 flex items-center gap-1.5" id="chargerAddress">
+                <svg class="w-3.5 h-3.5 text-googleRed shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                </svg>
+                <span>Loading address...</span>
+              </p>
+            </div>
+          </div>
+
+          <!-- Quick Stats Row -->
+          <div class="grid grid-cols-3 divide-x divide-gray-100 border-t border-gray-100 p-3 text-center bg-gray-50/50">
+            <div>
+              <span class="text-[11px] text-gray-500 block uppercase font-medium">Rating</span>
+              <div class="flex items-center justify-center gap-1 font-bold text-gray-900 text-sm">
+                <span class="text-amber-500">★</span>
+                <span id="ratingDisplay">4.9</span>
+                <span class="text-[11px] text-gray-400 font-normal" id="reviewsCountDisplay">(32)</span>
+              </div>
+            </div>
+            <div>
+              <span class="text-[11px] text-gray-500 block uppercase font-medium">Power Output</span>
+              <div class="font-bold text-gray-900 text-sm" id="statPower">7.4 kW</div>
+            </div>
+            <div>
+              <span class="text-[11px] text-gray-500 block uppercase font-medium">Availability</span>
+              <div class="font-bold text-emerald-600 text-xs sm:text-sm" id="statHours">6 AM - 11 PM</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Host Profile Card -->
+        <div class="bg-white rounded-2xl p-5 shadow-google border border-gray-200">
+          <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Driveway Host</h2>
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-3.5">
+              <img id="hostAvatar" src="" class="w-12 h-12 rounded-full object-cover border-2 border-emerald-500 shadow-sm">
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <h3 class="text-sm font-bold text-gray-900 font-google" id="hostName">Harpreet Singh</h3>
+                  <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                    Verified Host
+                  </span>
+                </div>
+                <p class="text-xs text-gray-500 mt-0.5" id="hostBio">
+                  Homeowner in Ludhiana • EV enthusiast • 98% On-time response rate
+                </p>
+                <div class="text-[11px] text-gray-400 mt-1 flex items-center gap-3">
+                  <span>⚡ 120+ sessions hosted</span>
+                  <span>🛡️ Identity & meter verified</span>
+                </div>
+              </div>
+            </div>
+
+            <button onclick="contactHost()" class="hidden sm:flex items-center gap-1 text-xs font-semibold text-googleBlue bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-full transition-colors">
+              📞 Contact
+            </button>
+          </div>
+        </div>
+
+        <!-- Driveway Specs & Amenities -->
+        <div class="bg-white rounded-2xl p-5 shadow-google border border-gray-200 space-y-4">
+          <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Features & Driveway Amenities</h2>
+          
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="amenitiesGrid">
+            <!-- Rendered by JS -->
+          </div>
+
+          <div class="pt-3 border-t border-gray-100">
+            <span class="text-xs font-bold text-gray-700 block mb-1">Vehicle Compatibility:</span>
+            <p class="text-xs text-gray-600" id="compatibilityText">
+              Tata Nexon EV, Tata Curvv, MG ZS EV, MG Windsor, Mahindra XUV400, Ather 450X, Ola S1.
+            </p>
+          </div>
+
+          <div class="p-3 bg-emerald-50 border border-emerald-100 rounded-xl flex items-start gap-2.5">
+            <span class="text-emerald-700 text-lg">🛡️</span>
+            <div>
+              <h4 class="text-xs font-bold text-emerald-900">VoltShare Community Protection Scheme</h4>
+              <p class="text-[11px] text-emerald-800 mt-0.5">
+                Every booking is insured up to ₹50,000 for electrical surge and property protection. Payments are locked in escrow until the 4-digit PIN is handed over.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Verified Reviews Section -->
+        <div class="bg-white rounded-2xl p-5 shadow-google border border-gray-200 space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Community Reviews</h2>
+              <div class="flex items-center gap-2 mt-1">
+                <div class="text-xl font-black text-gray-900" id="reviewsSummaryRating">4.9</div>
+                <div class="text-amber-400 text-sm">★★★★★</div>
+                <span class="text-xs text-gray-500" id="reviewsSummaryCount">based on 32 verified charges</span>
+              </div>
+            </div>
+            
+            <a id="btnWriteReviewLink" href="#" class="text-xs font-bold text-googleBlue hover:underline">
+              Rate your visit →
+            </a>
+          </div>
+
+          <div class="space-y-3 divide-y divide-gray-100" id="reviewsList">
+            <!-- Injected by JS -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right 1 Col: Pricing Box & Sticky Booking CTA -->
+      <div class="space-y-4">
+        
+        <div class="bg-white rounded-2xl p-5 shadow-googleCard border border-gray-200 sticky top-20 space-y-4">
+          
+          <div class="flex items-baseline justify-between border-b border-gray-100 pb-3">
+            <div>
+              <span class="text-xs text-gray-400 uppercase font-bold block">Rate</span>
+              <div class="flex items-baseline gap-1">
+                <span class="font-mono text-3xl font-black text-emerald-600" id="boxHourlyRate">₹22.00</span>
+                <span class="text-xs text-gray-500 font-medium">/ hour</span>
+              </div>
+            </div>
+            <div class="text-right">
+              <span class="text-[11px] bg-emerald-50 text-emerald-700 font-bold px-2 py-0.5 rounded-full border border-emerald-200">
+                Peer-to-Peer
+              </span>
+            </div>
+          </div>
+
+          <!-- Quick Estimation Calculator -->
+          <div class="bg-gray-50 rounded-xl p-3 space-y-2 border border-gray-200 text-xs">
+            <div class="font-bold text-gray-700 flex items-center justify-between">
+              <span>Quick Cost Estimator</span>
+              <span class="text-googleBlue font-normal text-[11px]">2 Hours Standard</span>
+            </div>
+            <div class="flex justify-between text-gray-600">
+              <span>Energy Rental (2h @ <span id="estRate">₹22</span>/h):</span>
+              <span class="font-mono" id="estBase">₹44.00</span>
+            </div>
+            <div class="flex justify-between text-gray-600">
+              <span>Community Escrow & Insurance (10%):</span>
+              <span class="font-mono" id="estFee">₹4.40</span>
+            </div>
+            <div class="border-t border-gray-200 pt-1.5 flex justify-between font-bold text-gray-900 text-sm">
+              <span>Total Estimated:</span>
+              <span class="font-mono text-emerald-600" id="estTotal">₹48.40</span>
+            </div>
+          </div>
+
+          <!-- Primary Booking Button -->
+          <button onclick="proceedToBooking()" class="w-full py-3.5 bg-googleBlue hover:bg-googleBlueHover text-white text-sm font-bold rounded-full shadow-google transition-all flex items-center justify-center gap-2 group">
+            <span class="text-lg">⚡</span>
+            <span>Reserve Charger Slot</span>
+            <span class="group-hover:translate-x-1 transition-transform">→</span>
+          </button>
+
+          <!-- Secondary Actions -->
+          <div class="grid grid-cols-2 gap-2 text-center text-xs">
+            <a href="index.html" class="py-2.5 border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium rounded-full transition-colors flex items-center justify-center gap-1">
+              <span>🗺️</span> View on Map
+            </a>
+            <button onclick="shareCharger()" class="py-2.5 border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium rounded-full transition-colors flex items-center justify-center gap-1">
+              <span>📤</span> Share Link
+            </button>
+          </div>
+
+          <div class="text-[11px] text-gray-500 text-center space-y-1 pt-2 border-t border-gray-100">
+            <p class="flex items-center justify-center gap-1 text-emerald-700 font-medium">
+              <span>✓</span> Free cancellation up to 30 mins prior
+            </p>
+            <p>4-digit unlock PIN generated immediately upon confirmation</p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/navbar.js"></script>
+  <script>
+    let currentCharger = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderVoltNavbar('map');
+      loadChargerDetails();
+    });
+
+    function getParam(key) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(key);
+    }
+
+    function loadChargerDetails() {
+      const chargerId = getParam('id') || 1;
+      currentCharger = VoltData.getChargerById(chargerId) || VoltData.getChargers()[0];
+
+      if (!currentCharger) {
+        alert("Charger not found.");
+        window.location.href = 'index.html';
+        return;
+      }
+
+      document.title = `${currentCharger.title} — VoltShare Ludhiana`;
+      document.getElementById('chargerTitle').textContent = currentCharger.title;
+      document.getElementById('chargerAddress').innerHTML = `
+        <svg class="w-3.5 h-3.5 text-googleRed shrink-0" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+        </svg>
+        <span>${currentCharger.address}</span>
+      `;
+      document.getElementById('chargerPhoto').src = currentCharger.photo;
+      document.getElementById('connectorPill').textContent = currentCharger.connector_type;
+      document.getElementById('powerPill').textContent = `${currentCharger.power_kw} kW Output`;
+      document.getElementById('statPower').textContent = `${currentCharger.power_kw} kW`;
+      document.getElementById('statHours').textContent = currentCharger.available_hours || '24/7 Available';
+      document.getElementById('ratingDisplay').textContent = currentCharger.rating.toFixed(1);
+      document.getElementById('reviewsCountDisplay').textContent = `(${currentCharger.reviews_count} reviews)`;
+      
+      document.getElementById('hostName').textContent = currentCharger.host_name;
+      document.getElementById('hostBio').textContent = `Ludhiana Community Host • Verified Driveway Charger • ${currentCharger.city.toUpperCase()}`;
+      document.getElementById('hostAvatar').src = currentCharger.host_id === 'user_host_2' ?
+        'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=160&q=80' :
+        'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=160&q=80';
+
+      document.getElementById('boxHourlyRate').textContent = `₹${currentCharger.hourly_rate.toFixed(2)}`;
+      document.getElementById('estRate').textContent = `₹${currentCharger.hourly_rate.toFixed(0)}`;
+      
+      const base = currentCharger.hourly_rate * 2;
+      const fee = base * 0.10;
+      document.getElementById('estBase').textContent = `₹${base.toFixed(2)}`;
+      document.getElementById('estFee').textContent = `₹${fee.toFixed(2)}`;
+      document.getElementById('estTotal').textContent = `₹${(base + fee).toFixed(2)}`;
+
+      if (currentCharger.is_available) {
+        document.getElementById('availabilityBadge').className = 'inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800';
+        document.getElementById('availabilityBadge').innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Available Now';
+      } else {
+        document.getElementById('availabilityBadge').className = 'inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800';
+        document.getElementById('availabilityBadge').innerHTML = '<span class="w-2 h-2 rounded-full bg-amber-500"></span> Currently In Use';
+      }
+
+      if (currentCharger.compatibility) {
+        document.getElementById('compatibilityText').textContent = currentCharger.compatibility;
+      }
+
+      // Amenities
+      const amenitiesGrid = document.getElementById('amenitiesGrid');
+      amenitiesGrid.innerHTML = '';
+      (currentCharger.amenities || ['Gated Driveway', '24/7 Access', 'CCTV']).forEach(item => {
+        amenitiesGrid.innerHTML += `
+          <div class="flex items-center gap-2 p-2 bg-gray-50 rounded-lg text-xs font-medium text-gray-700 border border-gray-100">
+            <span class="text-emerald-600 font-bold">✓</span>
+            <span>${item}</span>
+          </div>
+        `;
+      });
+
+      // Reviews
+      loadReviews(currentCharger.id);
+    }
+
+    function loadReviews(chargerId) {
+      const reviews = VoltData.getReviews(chargerId);
+      const reviewsList = document.getElementById('reviewsList');
+      const countEl = document.getElementById('reviewsSummaryCount');
+      const ratingEl = document.getElementById('reviewsSummaryRating');
+
+      if (reviews.length > 0) {
+        const avg = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+        ratingEl.textContent = avg.toFixed(1);
+        countEl.textContent = `based on ${reviews.length} community ratings`;
+      }
+
+      if (reviews.length === 0) {
+        reviewsList.innerHTML = `<p class="text-xs text-gray-400 py-2">No reviews written yet. Be the first neighbor to review!</p>`;
+        return;
+      }
+
+      reviewsList.innerHTML = reviews.map(r => `
+        <div class="pt-3 first:pt-0">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-full bg-blue-100 text-googleBlue font-bold text-xs flex items-center justify-center">
+                ${r.user_name.charAt(0)}
+              </div>
+              <span class="text-xs font-bold text-gray-900">${r.user_name}</span>
+            </div>
+            <div class="flex items-center gap-1 text-amber-400 text-xs">
+              ${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}
+              <span class="text-[11px] text-gray-400 ml-1 font-mono">${r.date}</span>
+            </div>
+          </div>
+          <p class="text-xs text-gray-600 mt-1.5 leading-relaxed">${r.comment}</p>
+          ${r.tags && r.tags.length > 0 ? `
+            <div class="flex flex-wrap gap-1 mt-2">
+              ${r.tags.map(t => `<span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-[10px] font-medium">${t}</span>`).join('')}
+            </div>
+          ` : ''}
+        </div>
+      `).join('');
+    }
+
+    function proceedToBooking() {
+      if (!currentCharger) return;
+      window.location.href = `booking.html?chargerId=${currentCharger.id}`;
+    }
+
+    function contactHost() {
+      alert(`Contacting Host ${currentCharger.host_name}:\n\nPhone: +91 98765 43210\nCommunity WhatsApp group available upon booking.`);
+    }
+
+    function shareCharger() {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(window.location.href);
+        showToast("Charger link copied to clipboard!", "📋");
+      } else {
+        showToast("Shareable URL: " + window.location.href);
+      }
+    }
+  </script>
+</body>
+</html>
