@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VoltShare — My EV Bookings</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=Google+Sans:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Roboto', 'Google Sans', 'sans-serif'],
+            google: ['Google Sans', 'Roboto', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            googleBlue: '#1A73E8',
+            googleBlueHover: '#1557B0',
+            googleRed: '#EA4335',
+            googleGreen: '#0F9D58',
+            googleYellow: '#FBBC04',
+            googleGray: '#5F6368',
+            googleBorder: '#DADCE0'
+          },
+          boxShadow: {
+            google: '0 2px 6px rgba(60,64,67, 0.3), 0 1px 2px rgba(60,64,67, 0.15)',
+            googleCard: '0 4px 16px rgba(0,0,0,0.12)'
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col font-sans text-gray-800">
+
+  <!-- Shared Navbar Mount -->
+  <div id="voltNavbarMount"></div>
+
+  <main class="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+    
+    <!-- Header Row -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+      <div>
+        <h1 class="text-xl sm:text-2xl font-bold font-google text-gray-900 tracking-tight flex items-center gap-2">
+          <span>📅</span> My EV Charging Bookings
+        </h1>
+        <p class="text-xs text-gray-500 mt-0.5" id="userHeaderSubtitle">
+          Managing charge sessions for Amanjot Virdi • Tata Nexon EV
+        </p>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <a href="index.html" class="px-4 py-2 bg-googleBlue hover:bg-googleBlueHover text-white text-xs font-bold rounded-full shadow-google transition-colors flex items-center gap-1.5">
+          <span>⚡</span> Find Nearby Charger
+        </a>
+      </div>
+    </div>
+
+    <!-- Tab Bar: Upcoming vs Past -->
+    <div class="flex items-center gap-2 border-b border-gray-200 pb-3 mb-6 overflow-x-auto text-xs font-medium">
+      <button onclick="switchTab('upcoming')" id="tabBtnUpcoming" class="px-4 py-2 rounded-full font-bold bg-blue-50 text-googleBlue border border-googleBlue flex items-center gap-1.5 transition-all">
+        <span>🕒</span> Upcoming & Active (<span id="countUpcoming">0</span>)
+      </button>
+
+      <button onclick="switchTab('completed')" id="tabBtnCompleted" class="px-4 py-2 rounded-full text-gray-600 hover:text-gray-900 hover:bg-gray-100 flex items-center gap-1.5 transition-all">
+        <span>✓</span> Past History (<span id="countCompleted">0</span>)
+      </button>
+
+      <button onclick="switchTab('all')" id="tabBtnAll" class="px-4 py-2 rounded-full text-gray-600 hover:text-gray-900 hover:bg-gray-100 flex items-center gap-1.5 transition-all">
+        <span>📋</span> All Bookings (<span id="countAll">0</span>)
+      </button>
+    </div>
+
+    <!-- Bookings List Container -->
+    <div id="bookingsList" class="space-y-4">
+      <!-- Injected by JavaScript -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="hidden bg-white rounded-2xl p-8 text-center shadow-google border border-gray-200 space-y-3">
+      <div class="w-14 h-14 bg-blue-50 text-googleBlue rounded-full flex items-center justify-center mx-auto text-2xl">
+        🔌
+      </div>
+      <h3 class="text-base font-bold text-gray-900 font-google">No Bookings Found in this Category</h3>
+      <p class="text-xs text-gray-500 max-w-sm mx-auto">
+        Rent a neighbor's driveway charger in Ludhiana to charge overnight without owning a garage.
+      </p>
+      <a href="index.html" class="inline-flex items-center gap-1.5 px-4 py-2 bg-googleBlue text-white text-xs font-bold rounded-full shadow-google hover:bg-googleBlueHover transition-colors mt-2">
+        <span>🗺️</span> Explore Chargers on Map
+      </a>
+    </div>
+
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/navbar.js"></script>
+  <script>
+    let activeTab = 'upcoming';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderVoltNavbar('bookings');
+      renderBookings();
+    });
+
+    function switchTab(tab) {
+      activeTab = tab;
+      
+      const btnUp = document.getElementById('tabBtnUpcoming');
+      const btnComp = document.getElementById('tabBtnCompleted');
+      const btnAll = document.getElementById('tabBtnAll');
+
+      [btnUp, btnComp, btnAll].forEach(b => {
+        b.className = 'px-4 py-2 rounded-full text-gray-600 hover:text-gray-900 hover:bg-gray-100 flex items-center gap-1.5 transition-all';
+      });
+
+      if (tab === 'upcoming') {
+        btnUp.className = 'px-4 py-2 rounded-full font-bold bg-blue-50 text-googleBlue border border-googleBlue flex items-center gap-1.5 transition-all';
+      } else if (tab === 'completed') {
+        btnComp.className = 'px-4 py-2 rounded-full font-bold bg-emerald-50 text-emerald-700 border border-emerald-600 flex items-center gap-1.5 transition-all';
+      } else {
+        btnAll.className = 'px-4 py-2 rounded-full font-bold bg-gray-100 text-gray-900 border border-gray-300 flex items-center gap-1.5 transition-all';
+      }
+
+      renderBookings();
+    }
+
+    function renderBookings() {
+      const currentUser = VoltData.getCurrentUser();
+      document.getElementById('userHeaderSubtitle').textContent = `Managing charge sessions for ${currentUser.name} • ${currentUser.vehicle ? currentUser.vehicle.model : 'EV Community Member'}`;
+
+      const allBookings = VoltData.getBookings();
+      // Filter for current user or show all if demo
+      const userBookings = allBookings.filter(b => b.user_id === currentUser.id || currentUser.role === 'host' ? true : true);
+
+      const upCount = userBookings.filter(b => b.status === 'upcoming').length;
+      const compCount = userBookings.filter(b => b.status === 'completed').length;
+
+      document.getElementById('countUpcoming').textContent = upCount;
+      document.getElementById('countCompleted').textContent = compCount;
+      document.getElementById('countAll').textContent = userBookings.length;
+
+      let filtered = userBookings;
+      if (activeTab === 'upcoming') {
+        filtered = userBookings.filter(b => b.status === 'upcoming');
+      } else if (activeTab === 'completed') {
+        filtered = userBookings.filter(b => b.status === 'completed');
+      }
+
+      const listContainer = document.getElementById('bookingsList');
+      const emptyState = document.getElementById('emptyState');
+
+      if (filtered.length === 0) {
+        listContainer.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      listContainer.innerHTML = filtered.map(b => {
+        const isUpcoming = b.status === 'upcoming';
+        const isCancelled = b.status === 'cancelled';
+        const isCompleted = b.status === 'completed';
+
+        return `
+          <div class="bg-white rounded-2xl shadow-google border border-gray-200 overflow-hidden transition-all hover:shadow-googleHover">
+            
+            <!-- Card Header -->
+            <div class="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-gray-100 bg-gray-50/40">
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="font-mono text-xs font-bold text-googleBlue bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
+                    ${b.id}
+                  </span>
+                  ${isUpcoming ? `
+                    <span class="inline-flex items-center gap-1 text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Confirmed & Active
+                    </span>
+                  ` : ''}
+                  ${isCompleted ? `
+                    <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">
+                      ✓ Completed
+                    </span>
+                  ` : ''}
+                  ${isCancelled ? `
+                    <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-rose-100 text-rose-800">
+                      ✕ Cancelled
+                    </span>
+                  ` : ''}
+                </div>
+                <h3 class="text-base font-bold text-gray-900 font-google">${b.charger_title}</h3>
+                <p class="text-xs text-gray-500 mt-0.5 flex items-center gap-1">
+                  <span>📍 ${b.charger_address}</span>
+                </p>
+              </div>
+
+              <!-- Unlock PIN (For Upcoming sessions) -->
+              ${isUpcoming ? `
+                <div class="bg-gradient-to-r from-emerald-50 to-teal-50 border-2 border-dashed border-emerald-500 rounded-xl px-4 py-2.5 text-center shrink-0">
+                  <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-800 block">Host Unlock PIN</span>
+                  <span class="font-mono text-2xl font-black text-emerald-700 tracking-wider">${b.pin}</span>
+                  <span class="text-[10px] text-emerald-600 block">Show to host on arrival</span>
+                </div>
+              ` : `
+                <div class="text-right">
+                  <span class="font-mono text-base font-bold text-gray-900">₹${b.total_amount.toFixed(2)}</span>
+                  <span class="text-[11px] text-gray-400 block">${b.payment_status}</span>
+                </div>
+              `}
+            </div>
+
+            <!-- Card Body -->
+            <div class="p-4 sm:p-5 space-y-3">
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-100">
+                  <span class="text-[11px] text-gray-400 block">Date</span>
+                  <span class="font-bold text-gray-800">${b.date}</span>
+                </div>
+                <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-100">
+                  <span class="text-[11px] text-gray-400 block">Slot Time</span>
+                  <span class="font-bold text-gray-800">${b.time_slot}</span>
+                </div>
+                <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-100">
+                  <span class="text-[11px] text-gray-400 block">Host</span>
+                  <span class="font-bold text-gray-800">${b.host_name}</span>
+                </div>
+                <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-100">
+                  <span class="text-[11px] text-gray-400 block">Vehicle</span>
+                  <span class="font-bold text-gray-800 truncate block">${b.user_vehicle || 'EV'}</span>
+                </div>
+              </div>
+
+              <!-- Review State if Completed -->
+              ${isCompleted && b.reviewed ? `
+                <div class="p-3 bg-amber-50/70 border border-amber-200 rounded-xl text-xs space-y-1">
+                  <div class="flex items-center justify-between">
+                    <span class="font-bold text-gray-800 flex items-center gap-1">
+                      <span>★</span> Your Review: ${'★'.repeat(b.review_rating || 5)}
+                    </span>
+                    <span class="text-[10px] text-gray-400">Verified Chargee</span>
+                  </div>
+                  <p class="text-gray-600 italic">"${b.review_comment}"</p>
+                </div>
+              ` : ''}
+
+              <!-- Action Buttons -->
+              <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-gray-100 text-xs">
+                
+                <div class="flex items-center gap-2">
+                  <a href="index.html" class="px-3.5 py-1.5 bg-blue-50 hover:bg-blue-100 text-googleBlue font-semibold rounded-full transition-colors flex items-center gap-1">
+                    <span>🗺️</span> Navigate on Map
+                  </a>
+
+                  <button onclick="callHostMock('${b.host_name}')" class="px-3.5 py-1.5 border border-gray-200 hover:bg-gray-50 text-gray-700 font-medium rounded-full transition-colors flex items-center gap-1">
+                    <span>📞</span> Call Host
+                  </button>
+                </div>
+
+                <div class="flex items-center gap-2">
+                  ${isUpcoming ? `
+                    <button onclick="cancelBookingPrompt('${b.id}')" class="px-3.5 py-1.5 text-rose-600 hover:bg-rose-50 border border-rose-200 rounded-full font-medium transition-colors">
+                      Cancel Reservation
+                    </button>
+                  ` : ''}
+
+                  ${isCompleted && !b.reviewed ? `
+                    <a href="review.html?bookingId=${b.id}&chargerId=${b.charger_id}" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-full shadow-sm transition-colors flex items-center gap-1">
+                      <span>★</span> Leave Rating & Review
+                    </a>
+                  ` : ''}
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        `;
+      }).join('');
+    }
+
+    function cancelBookingPrompt(bookingId) {
+      if (confirm(`Cancel booking ${bookingId}?\n\n100% of your funds held in escrow will be immediately refunded.`)) {
+        VoltData.cancelBooking(bookingId);
+        showToast(`Booking ${bookingId} cancelled and refunded!`, "↩️");
+        renderBookings();
+      }
+    }
+
+    function callHostMock(hostName) {
+      alert(`Calling Host ${hostName}...\n\nMobile: +91 98765 43210\n"Hello, this is VoltShare community neighbor line!"`);
+    }
+  </script>
+</body>
+</html>
