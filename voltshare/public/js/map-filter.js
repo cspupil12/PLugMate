@@ -31,14 +31,14 @@
   };
 
   function initMapFilterBridge() {
-    // 1. Sync all 15 Ludhiana chargers into the map's CHARGERS_DATA
+    // 1. Sync all community chargers into the map's CHARGERS_DATA
     if (window.VoltData && window.CHARGERS_DATA) {
       const storedChargers = VoltData.getChargers();
       if (storedChargers && storedChargers.length > 0) {
         // Replace in-memory list with complete 15-charger dataset
         CHARGERS_DATA.length = 0;
         storedChargers.forEach(c => CHARGERS_DATA.push(c));
-        
+
         // Update pin counter in index.html header
         const totalCountEl = document.getElementById('totalPinCount');
         if (totalCountEl) totalCountEl.textContent = CHARGERS_DATA.length;
@@ -129,7 +129,7 @@
     toolbar.innerHTML = `
       <div class="flex items-center justify-between pb-1.5 border-b border-gray-100">
         <span class="font-bold text-gray-800 flex items-center gap-1.5">
-          <span>🔍</span> Filter Ludhiana Chargers
+          <span>🔍</span> Filter Chargers
         </span>
         <button id="btnResetFilters" class="text-[11px] text-googleBlue font-medium hover:underline">
           Reset

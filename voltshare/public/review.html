@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VoltShare — Rate Your Charging Session</title>
+  <title>PlugMate — Rate Your Charging Session</title>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -56,7 +56,7 @@
         </div>
         <h1 class="text-xl font-bold font-google">Rate Your Charging Experience</h1>
         <p class="text-xs text-amber-100 mt-1">
-          Help neighbors in Ludhiana discover verified, reliable driveway hosts
+          Help neighbors discover verified, reliable driveway hosts
         </p>
       </div>
 
@@ -64,11 +64,11 @@
       <div class="p-5 bg-amber-50/50 border-b border-amber-100 flex items-center justify-between text-xs">
         <div>
           <span class="text-[10px] uppercase font-bold text-amber-800 block">Completed Session</span>
-          <h2 class="font-bold text-gray-900" id="revChargerTitle">Sarabha Nagar Wallbox</h2>
-          <p class="text-gray-500" id="revHostDetails">Hosted by Harpreet Singh • Ludhiana</p>
+          <h2 class="font-bold text-gray-900" id="revChargerTitle">Green Park Wallbox</h2>
+          <p class="text-gray-500" id="revHostDetails">Hosted by Harpreet Singh • Green Park</p>
         </div>
         <span class="font-mono font-bold text-xs bg-white px-2.5 py-1 rounded-full border border-amber-200 text-gray-700" id="revBookingId">
-          VS-LDH-0000
+          PM-0000
         </span>
       </div>
 
@@ -171,7 +171,7 @@
         chargerId = booking.charger_id;
       } else if (charger) {
         document.getElementById('revChargerTitle').textContent = charger.title;
-        document.getElementById('revHostDetails').textContent = `Hosted by ${charger.host_name} • Ludhiana`;
+        document.getElementById('revHostDetails').textContent = `Hosted by ${charger.host_name} • Verified Host`;
       }
 
       setRating(5);
@@ -221,7 +221,7 @@
       if (!comment) return;
 
       VoltData.addReview(bookingId, chargerId, currentRating, comment, selectedTags);
-      showToast("Thank you! Review published to Ludhiana community.", "★");
+      showToast("Thank you! Review published to community.", "★");
 
       setTimeout(() => {
         window.location.href = 'my-bookings.html';

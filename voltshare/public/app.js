@@ -1,14 +1,13 @@
 /**
- * VoltShare — EV Chargers on Google Maps
+ * PlugMate — EV Chargers on Google Maps
  * Authentic Google Maps UI, Custom Teardrop EV Pointer Pins, and Interactive Place Cards.
  */
 
 // Global State
 const STATE = {
-  city: 'ludhiana',
+  city: 'community',
   cities: {
-    jalandhar: { name: 'Jalandhar', lat: 31.3150, lng: 75.5800, zoom: 14 },
-    ludhiana: { name: 'Ludhiana', lat: 30.8950, lng: 75.8050, zoom: 14 }
+    community: { name: 'Neighborhood', lat: 30.8872, lng: 75.8115, zoom: 14 }
   },
   userLocation: { lat: 30.8872, lng: 75.8115 },
   currentLayerType: 'roadmap',
@@ -21,19 +20,18 @@ const STATE = {
   activeFilter: 'all'
 };
 
-// 8 Realistic Seed Chargers across Jalandhar and Ludhiana (TRD Spec)
+// Realistic Seed Chargers
 const CHARGERS_DATA = [
-  // Jalandhar Chargers
   {
     id: 1,
-    city: 'jalandhar',
-    title: 'Model Town Kothi Wallbox',
-    address: 'House 142-A, Model Town, Jalandhar, Punjab',
-    lat: 31.3090,
-    lng: 75.5802,
+    city: 'community',
+    title: 'Green Park Driveway Wallbox',
+    address: '84 Main Market Avenue, Green Park',
+    lat: 30.8872,
+    lng: 75.8115,
     connector_type: 'Type-2 AC',
     power_kw: 7.4,
-    hourly_rate: 20.0,
+    hourly_rate: 22.0,
     host_name: 'Harpreet Singh',
     reviews_count: 32,
     rating: 4.9,
@@ -41,29 +39,29 @@ const CHARGERS_DATA = [
   },
   {
     id: 2,
-    city: 'jalandhar',
-    title: 'Urban Estate Phase II Fast Socket',
-    address: 'Plot 88, Urban Estate Phase II, Jalandhar, Punjab',
-    lat: 31.2855,
-    lng: 75.6020,
-    connector_type: '15A-3Pin',
-    power_kw: 3.3,
-    hourly_rate: 14.0,
+    city: 'community',
+    title: 'Central Boulevard Fast AC Port',
+    address: '312 Central Boulevard, Block C',
+    lat: 30.8790,
+    lng: 75.7950,
+    connector_type: 'Type-2 AC',
+    power_kw: 7.4,
+    hourly_rate: 20.0,
     host_name: 'Harpreet Singh',
-    reviews_count: 19,
+    reviews_count: 24,
     rating: 4.8,
     is_available: true
   },
   {
     id: 3,
-    city: 'jalandhar',
-    title: 'Jalandhar Cantt Officer Enclave',
-    address: 'Bungalow 12, Mall Road, Cantt, Jalandhar, Punjab',
-    lat: 31.2780,
-    lng: 75.6145,
-    connector_type: 'Type-2 AC',
-    power_kw: 7.4,
-    hourly_rate: 22.0,
+    city: 'community',
+    title: 'University Enclave Solar Plug',
+    address: '18 University Road, West Enclave',
+    lat: 30.9015,
+    lng: 75.8201,
+    connector_type: '15A-3Pin',
+    power_kw: 3.3,
+    hourly_rate: 13.0,
     host_name: 'Gurmeet Kaur',
     reviews_count: 41,
     rating: 5.0,
@@ -71,79 +69,77 @@ const CHARGERS_DATA = [
   },
   {
     id: 4,
-    city: 'jalandhar',
-    title: 'Rama Mandi Highway Driveway',
-    address: 'Near Hoshiarpur Road Bye-pass, Rama Mandi, Jalandhar',
-    lat: 31.3340,
-    lng: 75.6310,
-    connector_type: '15A-3Pin',
-    power_kw: 3.3,
-    hourly_rate: 12.0,
-    host_name: 'Gurmeet Kaur',
-    reviews_count: 14,
-    rating: 4.7,
+    city: 'community',
+    title: 'Pinecrest High-Power Wallbox',
+    address: '4 Pinecrest Avenue, Northridge',
+    lat: 30.8920,
+    lng: 75.8340,
+    connector_type: 'Type-2 AC',
+    power_kw: 11.0,
+    hourly_rate: 26.0,
+    host_name: 'Harpreet Singh',
+    reviews_count: 19,
+    rating: 4.9,
     is_available: true
   },
   {
     id: 5,
-    city: 'jalandhar',
-    title: 'Civil Lines Eco Socket',
-    address: '45 Mahavir Marg, Civil Lines, Jalandhar, Punjab',
-    lat: 31.3210,
-    lng: 75.5780,
+    city: 'community',
+    title: 'Heritage Gardens Porch Socket',
+    address: '14 Heritage Walk, Civic Center',
+    lat: 30.9080,
+    lng: 75.8450,
     connector_type: '15A-3Pin',
     power_kw: 3.3,
-    hourly_rate: 15.0,
-    host_name: 'Harpreet Singh',
-    reviews_count: 27,
-    rating: 4.9,
+    hourly_rate: 12.0,
+    host_name: 'Gurmeet Kaur',
+    reviews_count: 15,
+    rating: 4.7,
     is_available: true
   },
-
-  // Ludhiana Chargers
   {
     id: 6,
-    city: 'ludhiana',
-    title: 'Sarabha Nagar Green Driveway',
-    address: 'Main Market Road, Sarabha Nagar, Ludhiana, Punjab',
-    lat: 30.8872,
-    lng: 75.8115,
+    city: 'community',
+    title: 'Garden Quarter Porch Port',
+    address: '55 Garden Walk, Midtown',
+    lat: 30.8995,
+    lng: 75.8290,
     connector_type: 'Type-2 AC',
     power_kw: 7.4,
-    hourly_rate: 24.0,
+    hourly_rate: 22.0,
+    host_name: 'Harpreet Singh',
+    reviews_count: 28,
+    rating: 4.9,
+    is_available: false
+  },
+  {
+    id: 7,
+    city: 'community',
+    title: 'Canal Road DC Fast Haven',
+    address: '108 Canal View Road, South Park',
+    lat: 30.9250,
+    lng: 75.7720,
+    connector_type: 'CCS-2 DC',
+    power_kw: 22.0,
+    hourly_rate: 38.0,
     host_name: 'Gurmeet Kaur',
-    reviews_count: 48,
+    reviews_count: 53,
     rating: 5.0,
     is_available: true
   },
   {
-    id: 7,
-    city: 'ludhiana',
-    title: 'BRS Nagar Block C Charger',
-    address: 'Block C, Bhai Randhir Singh Nagar, Ludhiana, Punjab',
-    lat: 30.8790,
-    lng: 75.7950,
-    connector_type: 'Type-2 AC',
-    power_kw: 7.4,
-    hourly_rate: 20.0,
-    host_name: 'Harpreet Singh',
-    reviews_count: 36,
-    rating: 4.8,
-    is_available: true
-  },
-  {
     id: 8,
-    city: 'ludhiana',
-    title: 'Ferozepur Road PAU Hub',
-    address: 'Opposite PAU Gate 2, Ferozepur Road, Ludhiana, Punjab',
-    lat: 30.9015,
-    lng: 75.8201,
+    city: 'community',
+    title: 'Park Avenue Community Plug',
+    address: '72 Park Avenue, Sector 2',
+    lat: 30.8650,
+    lng: 75.8480,
     connector_type: '15A-3Pin',
     power_kw: 3.3,
-    hourly_rate: 13.0,
-    host_name: 'Gurmeet Kaur',
-    reviews_count: 22,
-    rating: 4.9,
+    hourly_rate: 14.0,
+    host_name: 'Harpreet Singh',
+    reviews_count: 18,
+    rating: 4.8,
     is_available: true
   }
 ];
@@ -413,7 +409,7 @@ function addUserLocationMarker() {
       STATE.userAccuracyCircle.setRadius(5);
     }
     if (window.VoltLocation) {
-      VoltLocation.saveLocation(newPos.lat, newPos.lng, 'ludhiana', 3);
+      VoltLocation.saveLocation(newPos.lat, newPos.lng, 'community', 3);
     }
     if (typeof showToast === 'function') {
       showToast("Exact house pin saved (within 5m precision)!", "🎯");
@@ -443,7 +439,7 @@ function enablePinpointHouseMode() {
       STATE.userAccuracyCircle.setRadius(5);
     }
     if (window.VoltLocation) {
-      VoltLocation.saveLocation(lat, lng, 'ludhiana', 3);
+      VoltLocation.saveLocation(lat, lng, 'community', 3);
     }
     if (typeof showToast === 'function') {
       showToast("House doorstep locked (under 5 meters accuracy)!", "🏠");
@@ -457,7 +453,7 @@ function openPlaceCard(charger) {
 
   const card = document.getElementById('placeCard');
   document.getElementById('cardTitle').textContent = charger.title;
-  document.getElementById('cardHostName').textContent = `Hosted by ${charger.host_name} • Punjab DISCOM Landed`;
+  document.getElementById('cardHostName').textContent = `Hosted by ${charger.host_name} • Verified Host`;
   document.getElementById('cardConnectorBadge').textContent = `${charger.connector_type} • ${charger.power_kw} kW`;
   document.getElementById('cardHourlyRate').textContent = `₹${charger.hourly_rate.toFixed(2)}`;
   document.getElementById('cardAddress').textContent = charger.address;
@@ -549,7 +545,7 @@ async function calculateRoadRouteAndNavigate() {
     distanceKm = (distM / 1000).toFixed(1);
     durationMins = Math.max(3, Math.round((distM / 1000) * 2.5)); // ~25 km/h urban speed
     instruction = `Head towards ${STATE.activeCharger.address.split(',')[1] || 'Main Avenue'}`;
-    routeName = `via ${STATE.city === 'jalandhar' ? 'Model Town Rd / Mall Rd' : 'Main Market Rd / Ferozepur Rd'}`;
+    routeName = `via Main Avenue / Primary Corridor`;
   }
 
   STATE.routeCoords = roadCoordinates;
@@ -800,33 +796,13 @@ function filterCategory(type) {
   renderAllChargerPins(filtered);
 }
 
-// City Selector
+// Filter or View Selector
 function selectCity(cityKey) {
-  STATE.city = cityKey;
-  const city = STATE.cities[cityKey];
-
   closePlaceCard();
-
-  // Highlight pill
-  document.getElementById('pill-jalandhar').className = cityKey === 'jalandhar' ?
-    'filter-pill bg-blue-50 text-googleBlue border-googleBlue shadow-google px-3 py-1.5 rounded-full text-xs font-medium border flex items-center gap-1 whitespace-nowrap' :
-    'filter-pill bg-white hover:bg-gray-50 text-gray-700 shadow-google px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 flex items-center gap-1 whitespace-nowrap';
-
-  document.getElementById('pill-ludhiana').className = cityKey === 'ludhiana' ?
-    'filter-pill bg-blue-50 text-googleBlue border-googleBlue shadow-google px-3 py-1.5 rounded-full text-xs font-medium border flex items-center gap-1 whitespace-nowrap' :
-    'filter-pill bg-white hover:bg-gray-50 text-gray-700 shadow-google px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 flex items-center gap-1 whitespace-nowrap';
-
-  // Reposition User Dot
-  STATE.userLocation = { lat: city.lat + 0.012, lng: city.lng - 0.008 };
-  if (STATE.userMarker) {
-    STATE.userMarker.setLatLng([STATE.userLocation.lat, STATE.userLocation.lng]);
+  renderAllChargerPins(CHARGERS_DATA);
+  if (STATE.map && STATE.userLocation) {
+    STATE.map.flyTo([STATE.userLocation.lat, STATE.userLocation.lng], 14, { duration: 1.0 });
   }
-
-  // Filter city pins and fly
-  const cityChargers = CHARGERS_DATA.filter(c => c.city === cityKey);
-  renderAllChargerPins(cityChargers);
-
-  STATE.map.flyTo([city.lat, city.lng], city.zoom, { duration: 1.0 });
 }
 
 // Real-Time Search Bar Filter
@@ -838,9 +814,9 @@ function handleSearchFilter(query) {
   }
 
   const matches = CHARGERS_DATA.filter(c =>
-    c.title.toLowerCase().includes(q) ||
-    c.address.toLowerCase().includes(q) ||
-    c.city.toLowerCase().includes(q)
+    (c.title && c.title.toLowerCase().includes(q)) ||
+    (c.address && c.address.toLowerCase().includes(q)) ||
+    (c.connector_type && c.connector_type.toLowerCase().includes(q))
   );
 
   renderAllChargerPins(matches);
@@ -851,8 +827,9 @@ function handleSearchFilter(query) {
   }
 }
 
-// City dropdown toggle from hamburger icon
+// Map focus toggle
 function toggleCityDropdown() {
-  const nextCity = STATE.city === 'jalandhar' ? 'ludhiana' : 'jalandhar';
-  selectCity(nextCity);
+  if (STATE.map && STATE.userLocation) {
+    STATE.map.flyTo([STATE.userLocation.lat, STATE.userLocation.lng], 14, { duration: 0.8 });
+  }
 }

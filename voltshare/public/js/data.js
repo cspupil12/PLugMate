@@ -1,9 +1,17 @@
 /**
- * VoltShare — Peer-to-Peer Community EV Charger Sharing
+ * PlugMate — Community EV Charger Sharing Network
  * Shared LocalStorage Data Layer & Demo Seed Engine
- * Context: Ludhiana, Punjab Community EV Charging Prototype
  */
 
+const PLUGMATE_STORAGE_KEYS = {
+  CHARGERS: 'plugmate_chargers_v1',
+  BOOKINGS: 'plugmate_bookings_v1',
+  REVIEWS: 'plugmate_reviews_v1',
+  CURRENT_USER: 'plugmate_current_user_v1',
+  USERS: 'plugmate_users_v1'
+};
+
+// Legacy keys for backward compatibility
 const VOLT_STORAGE_KEYS = {
   CHARGERS: 'voltshare_chargers_v1',
   BOOKINGS: 'voltshare_bookings_v1',
@@ -12,60 +20,60 @@ const VOLT_STORAGE_KEYS = {
   USERS: 'voltshare_users_v1'
 };
 
-// 3 Realistic Prototype Demo Users
+// Realistic Community Users
 const SEED_USERS = [
   {
     id: 'user_chargee_1',
     name: 'Amanjot Virdi',
-    email: 'aman@voltshare.in',
+    email: 'aman@plugmate.io',
     phone: '+91 98888 12345',
     role: 'chargee',
     vehicle: {
       make: 'Tata',
       model: 'Nexon EV Empowered+',
-      reg_no: 'PB-10-AZ-4521',
+      reg_no: 'EV-DRIVE-2026',
       connector: 'Type-2 AC',
       battery_kwh: 40.5
     },
-    address: 'Flat 402, Green Avenue, Pakhowal Rd, Ludhiana (No Driveway Parking)',
+    address: 'Green Avenue Apartments (No Driveway Parking)',
     avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=160&q=80'
   },
   {
     id: 'user_host_1',
     name: 'Harpreet Singh',
-    email: 'harpreet@voltshare.in',
+    email: 'harpreet@plugmate.io',
     phone: '+91 98765 43210',
     role: 'host',
     rating: 4.9,
     reviewsCount: 38,
-    badge: 'Punjab DISCOM Verified Host',
-    address: 'Kothi 142-A, Sarabha Nagar, Ludhiana',
+    badge: 'Verified Community Host',
+    address: '142 Oakridge Avenue, Green Park',
     avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=160&q=80'
   },
   {
     id: 'user_host_2',
     name: 'Gurmeet Kaur',
-    email: 'gurmeet@voltshare.in',
+    email: 'gurmeet@plugmate.io',
     phone: '+91 98123 45678',
     role: 'host',
     rating: 5.0,
     reviewsCount: 42,
-    badge: 'Solar Rooftop Certified Host',
-    address: 'Bungalow 7, Ferozepur Road PAU Enclave, Ludhiana',
+    badge: 'Solar Rooftop Host',
+    address: '7 Westside Boulevard',
     avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=160&q=80'
   }
 ];
 
-// 15 Realistic Community EV Chargers in Ludhiana (Punjab)
+// 15 Realistic Community EV Chargers
 const SEED_CHARGERS = [
   {
     id: 1,
     host_id: 'user_host_1',
     host_name: 'Harpreet Singh',
-    title: 'Sarabha Nagar Green Driveway Wallbox',
-    tagline: 'Gated wide porch with shade, 5 mins from Kip\'s Market',
-    address: 'House 84, Main Market Road, Sarabha Nagar, Ludhiana',
-    city: 'ludhiana',
+    title: 'Green Park Driveway Wallbox',
+    tagline: 'Gated wide porch with shade, 5 mins from community center',
+    address: '84 Main Market Avenue, Green Park',
+    city: 'community',
     lat: 30.8872,
     lng: 75.8115,
     connector_type: 'Type-2 AC',
@@ -74,7 +82,7 @@ const SEED_CHARGERS = [
     is_available: true,
     available_hours: '06:00 AM - 11:30 PM',
     photo: 'https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=800&q=80',
-    amenities: ['Gated Driveway', 'CCTV 24/7', 'Covered Porch', 'Drinking Water', 'Restroom'],
+    amenities: ['Gated Driveway', 'CCTV Monitor', 'Covered Porch', 'Drinking Water', 'Restroom'],
     rating: 4.9,
     reviews_count: 32,
     compatibility: 'Tata Nexon/Curvv, MG ZS/Windsor, Hyundai Ioniq, Mahindra XUV400',
@@ -84,10 +92,10 @@ const SEED_CHARGERS = [
     id: 2,
     host_id: 'user_host_1',
     host_name: 'Harpreet Singh',
-    title: 'BRS Nagar Block C Fast AC Socket',
-    tagline: 'Convenient overnight spot for non-driveway townhomes',
-    address: 'Plot 312, Block C, Bhai Randhir Singh Nagar, Ludhiana',
-    city: 'ludhiana',
+    title: 'Central Boulevard Fast AC Port',
+    tagline: 'Convenient overnight spot for apartment residents',
+    address: '312 Central Boulevard, Block C',
+    city: 'community',
     lat: 30.8790,
     lng: 75.7950,
     connector_type: 'Type-2 AC',
@@ -96,7 +104,7 @@ const SEED_CHARGERS = [
     is_available: true,
     available_hours: '24 Hours Open',
     photo: 'https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=800&q=80',
-    amenities: ['Street Lamp Security', 'Wide Gate Entry', 'Automatic Cutoff Meter'],
+    amenities: ['Security Lighting', 'Wide Gate Entry', 'Automatic Cutoff Meter'],
     rating: 4.8,
     reviews_count: 24,
     compatibility: 'All Type-2 4-Wheelers & 3-Wheelers',
@@ -106,10 +114,10 @@ const SEED_CHARGERS = [
     id: 3,
     host_id: 'user_host_2',
     host_name: 'Gurmeet Kaur',
-    title: 'PAU Gate 2 Solar Powered Plug',
-    tagline: 'Clean 100% solar surplus charging right on Ferozepur Road',
-    address: 'Kothi 18, Opp. PAU Gate 2, Ferozepur Road, Ludhiana',
-    city: 'ludhiana',
+    title: 'University Enclave Solar Plug',
+    tagline: 'Clean 100% solar surplus charging on quiet residential street',
+    address: '18 University Road, West Enclave',
+    city: 'community',
     lat: 30.9015,
     lng: 75.8201,
     connector_type: '15A-3Pin',
@@ -128,10 +136,10 @@ const SEED_CHARGERS = [
     id: 4,
     host_id: 'user_host_1',
     host_name: 'Harpreet Singh',
-    title: 'Model Town Ext. High-Power AC',
-    tagline: '11 kW 3-phase commercial grade home wallbox for quick turnarounds',
-    address: 'Lane 4, Model Town Extension, Ludhiana',
-    city: 'ludhiana',
+    title: 'Pinecrest High-Power Wallbox',
+    tagline: '11 kW 3-phase home wallbox for faster charging turnarounds',
+    address: '4 Pinecrest Avenue, Northridge',
+    city: 'community',
     lat: 30.8920,
     lng: 75.8340,
     connector_type: 'Type-2 AC',
@@ -143,17 +151,17 @@ const SEED_CHARGERS = [
     amenities: ['11 kW 3-Phase', 'CCTV Monitor', 'Easy Reversing Space'],
     rating: 4.9,
     reviews_count: 19,
-    compatibility: 'BYD Atto 3/Seals, Hyundai Ioniq 5, Kia EV6, Audi e-tron',
+    compatibility: 'BYD Atto 3/Seal, Hyundai Ioniq 5, Kia EV6, Audi e-tron',
     surge_guarantee: true
   },
   {
     id: 5,
     host_id: 'user_host_2',
     host_name: 'Gurmeet Kaur',
-    title: 'Civil Lines Heritage Porch Socket',
-    tagline: 'Quiet residential porch opposite Rakh Bagh',
-    address: '14 Rakh Bagh Enclave, Civil Lines, Ludhiana',
-    city: 'ludhiana',
+    title: 'Heritage Gardens Porch Socket',
+    tagline: 'Quiet residential porch opposite neighborhood park',
+    address: '14 Heritage Walk, Civic Center',
+    city: 'community',
     lat: 30.9080,
     lng: 75.8450,
     connector_type: '15A-3Pin',
@@ -162,7 +170,7 @@ const SEED_CHARGERS = [
     is_available: true,
     available_hours: '08:00 AM - 08:00 PM',
     photo: 'https://images.unsplash.com/photo-1590674899484-d5640e854abe?auto=format&fit=crop&w=800&q=80',
-    amenities: ['Shaded Carport', 'Tea / Water Provided', 'WiFi Access'],
+    amenities: ['Shaded Carport', 'Drinking Water Provided', 'WiFi Access'],
     rating: 4.7,
     reviews_count: 15,
     compatibility: 'All 15A Industrial Plug EV Chargers',
@@ -172,19 +180,19 @@ const SEED_CHARGERS = [
     id: 6,
     host_id: 'user_host_1',
     host_name: 'Harpreet Singh',
-    title: 'Gurdev Nagar Quiet Porch',
-    tagline: 'Secure gated lane, walking distance to Malhar Road eateries',
-    address: 'Kothi 55, Gurdev Nagar, Ludhiana',
-    city: 'ludhiana',
+    title: 'Garden Quarter Porch Port',
+    tagline: 'Secure gated lane with clear driveway access',
+    address: '55 Garden Walk, Midtown',
+    city: 'community',
     lat: 30.8995,
     lng: 75.8290,
     connector_type: 'Type-2 AC',
     power_kw: 7.4,
     hourly_rate: 22.0,
-    is_available: false, // Currently in use to showcase "Busy / In-use" status
+    is_available: false,
     available_hours: '07:00 AM - 11:00 PM',
     photo: 'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=800&q=80',
-    amenities: ['Gated Community', 'Guard on Gate', 'Security Lighting'],
+    amenities: ['Gated Lane', 'Night Illumination', 'Surge Protected'],
     rating: 4.9,
     reviews_count: 28,
     compatibility: 'Type-2 4-Wheelers',
@@ -194,10 +202,10 @@ const SEED_CHARGERS = [
     id: 7,
     host_id: 'user_host_2',
     host_name: 'Gurmeet Kaur',
-    title: 'South City Canal Road Rapid Haven',
-    tagline: 'High speed DC fast point for long-trip commuters near canal',
-    address: 'Villa 108, South City Canal Road, Ludhiana',
-    city: 'ludhiana',
+    title: 'Canal Road DC Fast Haven',
+    tagline: 'Fast point for long-trip commuters near bypass ring',
+    address: '108 Canal View Road, South Park',
+    city: 'community',
     lat: 30.9250,
     lng: 75.7720,
     connector_type: 'CCS-2 DC',
@@ -206,7 +214,7 @@ const SEED_CHARGERS = [
     is_available: true,
     available_hours: '24 Hours Open',
     photo: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80',
-    amenities: ['High-Power CCS-2', 'Lounge Waiting Area', 'Washroom', 'EV Tire Inflator'],
+    amenities: ['High-Power CCS-2', 'Waiting Area', 'Washroom Access', 'Tire Pressure Gauge'],
     rating: 5.0,
     reviews_count: 53,
     compatibility: 'All CCS-2 DC Fast Capable EVs',
@@ -216,17 +224,17 @@ const SEED_CHARGERS = [
     id: 8,
     host_id: 'user_host_1',
     host_name: 'Harpreet Singh',
-    title: 'Dugri Phase 1 Community Plug',
-    tagline: 'Affordable overnight top-ups for South Ludhiana residents',
-    address: 'Plot 72, Main Road, Dugri Phase 1, Ludhiana',
-    city: 'ludhiana',
+    title: 'Park Avenue Community Plug',
+    tagline: 'Affordable overnight top-ups for local residents',
+    address: '72 Park Avenue, Sector 2',
+    city: 'community',
     lat: 30.8650,
     lng: 75.8480,
     connector_type: '15A-3Pin',
     power_kw: 3.3,
     hourly_rate: 14.0,
     is_available: true,
-    available_hours: '06:00 PM - 08:00 AM (Overnight Special)',
+    available_hours: '06:00 PM - 08:00 AM',
     photo: 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&w=800&q=80',
     amenities: ['Dedicated Sub-meter', 'Spacious Driveway', 'Night Motion Sensor'],
     rating: 4.8,
@@ -238,10 +246,10 @@ const SEED_CHARGERS = [
     id: 9,
     host_id: 'user_host_2',
     host_name: 'Gurmeet Kaur',
-    title: 'Kitchlu Nagar Eco Point',
-    tagline: 'Quiet residential porch near Tagore Nagar crossing',
-    address: 'House 22, Block A, Kitchlu Nagar, Ludhiana',
-    city: 'ludhiana',
+    title: 'Highland Park Eco Point',
+    tagline: 'Quiet residential porch near green belt',
+    address: '22 Highland Way, Block A',
+    city: 'community',
     lat: 30.9180,
     lng: 75.8150,
     connector_type: 'Type-2 AC',
@@ -250,7 +258,7 @@ const SEED_CHARGERS = [
     is_available: true,
     available_hours: '07:00 AM - 10:30 PM',
     photo: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=800&q=80',
-    amenities: ['Gated Lawn', 'Type-2 Tethered Cable', 'Fire Extinguisher'],
+    amenities: ['Gated Porch', 'Type-2 Tethered Cable', 'Fire Safety Extinguisher'],
     rating: 4.8,
     reviews_count: 21,
     compatibility: 'Type-2 AC Standard',
@@ -260,10 +268,10 @@ const SEED_CHARGERS = [
     id: 10,
     host_id: 'user_host_1',
     host_name: 'Harpreet Singh',
-    title: 'Rajguru Nagar Gated Haven',
-    tagline: 'Wide paved driveway inside secure gated society',
-    address: 'House 410, Block D, Rajguru Nagar, Ludhiana',
-    city: 'ludhiana',
+    title: 'Eastgate Gated Driveway Wallbox',
+    tagline: 'Wide paved driveway inside peaceful residential neighborhood',
+    address: '410 Meadow Lane, Eastgate',
+    city: 'community',
     lat: 30.8720,
     lng: 75.7820,
     connector_type: 'Type-2 AC',
@@ -272,7 +280,7 @@ const SEED_CHARGERS = [
     is_available: true,
     available_hours: '24 Hours Open',
     photo: 'https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80',
-    amenities: ['24x7 Security Guard', 'Dedicated Parking Bay', 'Tethered 5m Cable'],
+    amenities: ['Dedicated Parking Bay', 'Tethered 5m Cable', 'CCTV Coverage'],
     rating: 4.9,
     reviews_count: 31,
     compatibility: 'Type-2 AC 4-Wheelers',
@@ -282,10 +290,10 @@ const SEED_CHARGERS = [
     id: 11,
     host_id: 'user_host_2',
     host_name: 'Gurmeet Kaur',
-    title: 'Aggar Nagar Block B Eco Socket',
-    tagline: 'Low noise charging port next to community garden',
-    address: 'B-89, Aggar Nagar, Ludhiana',
-    city: 'ludhiana',
+    title: 'Garden Reach Eco Socket',
+    tagline: 'Low-noise charging port next to community garden',
+    address: '89 Garden Reach Crescent',
+    city: 'community',
     lat: 30.8850,
     lng: 75.7890,
     connector_type: '15A-3Pin',
@@ -304,10 +312,10 @@ const SEED_CHARGERS = [
     id: 12,
     host_id: 'user_host_1',
     host_name: 'Harpreet Singh',
-    title: 'Pakhowal Road Boulevard Port',
-    tagline: 'Prime spot right on Pakhowal expressway, easy access',
-    address: 'Highway Plaza Villa 3, Pakhowal Road, Ludhiana',
-    city: 'ludhiana',
+    title: 'Expressway Plaza Port',
+    tagline: 'Prime spot near arterial roadway with seamless street access',
+    address: '3 Expressway Plaza, Pine Ridge',
+    city: 'community',
     lat: 30.8580,
     lng: 75.8230,
     connector_type: 'Type-2 AC',
@@ -316,7 +324,7 @@ const SEED_CHARGERS = [
     is_available: true,
     available_hours: '06:00 AM - 11:00 PM',
     photo: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80',
-    amenities: ['Expressway Entrance', 'High Amperage Wiring', 'CCTV Monitor'],
+    amenities: ['Highway Proximity', 'Heavy Amperage Wiring', 'CCTV Monitor'],
     rating: 4.9,
     reviews_count: 27,
     compatibility: 'Tata Nexon, Curvv EV, MG ZS EV',
@@ -326,10 +334,10 @@ const SEED_CHARGERS = [
     id: 13,
     host_id: 'user_host_2',
     host_name: 'Gurmeet Kaur',
-    title: 'Shastri Nagar Solar Wallbox',
-    tagline: '100% solar microgrid powered with smart load sharing',
-    address: 'House 50, Shastri Nagar, Near Railway Crossing, Ludhiana',
-    city: 'ludhiana',
+    title: 'Sunset Ridge Solar Wallbox',
+    tagline: 'Surplus solar rooftop microgrid with smart load balancing',
+    address: '50 Sunset Ridge Road',
+    city: 'community',
     lat: 30.9030,
     lng: 75.8380,
     connector_type: 'Type-2 AC',
@@ -348,10 +356,10 @@ const SEED_CHARGERS = [
     id: 14,
     host_id: 'user_host_1',
     host_name: 'Harpreet Singh',
-    title: 'Haibowal Kalan Streetfront Socket',
-    tagline: 'Compact driveway charging point for North Ludhiana commuters',
-    address: 'Main Bazaar Road, Haibowal Kalan, Ludhiana',
-    city: 'ludhiana',
+    title: 'Northgate Streetfront Socket',
+    tagline: 'Compact driveway charging point for northern neighborhoods',
+    address: '14 Northgate Avenue',
+    city: 'community',
     lat: 30.9280,
     lng: 75.8320,
     connector_type: '15A-3Pin',
@@ -370,10 +378,10 @@ const SEED_CHARGERS = [
     id: 15,
     host_id: 'user_host_2',
     host_name: 'Gurmeet Kaur',
-    title: 'Gill Road Industrial Link Hub',
-    tagline: 'Reliable high current point near GNDEC engineering college',
-    address: 'Near GNDEC Campus, Gill Road, Ludhiana',
-    city: 'ludhiana',
+    title: 'Tech Quarter Campus Hub',
+    tagline: 'High-current charging point near tech park entrance',
+    address: '9 Campus Circle, Tech Quarter',
+    city: 'community',
     lat: 30.8710,
     lng: 75.8620,
     connector_type: 'Type-2 AC',
@@ -382,7 +390,7 @@ const SEED_CHARGERS = [
     is_available: true,
     available_hours: '06:00 AM - 10:00 PM',
     photo: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80',
-    amenities: ['Adjacent to College Gate', 'Resting Bench', 'Cold Drinking Water'],
+    amenities: ['Campus Proximity', 'Resting Bench', 'Drinking Water'],
     rating: 4.8,
     reviews_count: 23,
     compatibility: 'Tata Nexon, Curvv EV, MG Windsor',
@@ -393,16 +401,16 @@ const SEED_CHARGERS = [
 // Seed Bookings
 const SEED_BOOKINGS = [
   {
-    id: 'VS-LDH-8921',
+    id: 'PM-8921',
     charger_id: 1,
-    charger_title: 'Sarabha Nagar Green Driveway Wallbox',
-    charger_address: 'House 84, Main Market Road, Sarabha Nagar, Ludhiana',
+    charger_title: 'Green Park Driveway Wallbox',
+    charger_address: '84 Main Market Avenue, Green Park',
     host_id: 'user_host_1',
     host_name: 'Harpreet Singh',
     user_id: 'user_chargee_1',
     user_name: 'Amanjot Virdi',
     user_phone: '+91 98888 12345',
-    user_vehicle: 'Tata Nexon EV (PB-10-AZ-4521)',
+    user_vehicle: 'Tata Nexon EV (EV-DRIVE-2026)',
     date: '2026-11-16',
     time_slot: '08:00 PM - 10:00 PM',
     duration_hours: 2,
@@ -411,23 +419,23 @@ const SEED_BOOKINGS = [
     platform_fee: 4.4,
     total_amount: 48.4,
     pin: '8492',
-    status: 'completed', // completed, upcoming, cancelled
-    payment_method: 'UPI (Google Pay)',
+    status: 'completed',
+    payment_method: 'UPI',
     payment_status: 'Paid',
     created_at: '2026-11-16T18:30:00Z',
     reviewed: false
   },
   {
-    id: 'VS-LDH-9042',
+    id: 'PM-9042',
     charger_id: 2,
-    charger_title: 'BRS Nagar Block C Fast AC Socket',
-    charger_address: 'Plot 312, Block C, Bhai Randhir Singh Nagar, Ludhiana',
+    charger_title: 'Central Boulevard Fast AC Port',
+    charger_address: '312 Central Boulevard, Block C',
     host_id: 'user_host_1',
     host_name: 'Harpreet Singh',
     user_id: 'user_chargee_1',
     user_name: 'Amanjot Virdi',
     user_phone: '+91 98888 12345',
-    user_vehicle: 'Tata Nexon EV (PB-10-AZ-4521)',
+    user_vehicle: 'Tata Nexon EV (EV-DRIVE-2026)',
     date: '2026-11-18',
     time_slot: '06:00 PM - 09:00 PM',
     duration_hours: 3,
@@ -437,22 +445,22 @@ const SEED_BOOKINGS = [
     total_amount: 66.0,
     pin: '4318',
     status: 'upcoming',
-    payment_method: 'VoltShare Community Escrow (UPI)',
+    payment_method: 'PlugMate Community Escrow',
     payment_status: 'Held in Escrow',
     created_at: '2026-11-17T10:15:00Z',
     reviewed: false
   },
   {
-    id: 'VS-LDH-7810',
+    id: 'PM-7810',
     charger_id: 3,
-    charger_title: 'PAU Gate 2 Solar Powered Plug',
-    charger_address: 'Kothi 18, Opp. PAU Gate 2, Ferozepur Road, Ludhiana',
+    charger_title: 'University Enclave Solar Plug',
+    charger_address: '18 University Road, West Enclave',
     host_id: 'user_host_2',
     host_name: 'Gurmeet Kaur',
     user_id: 'user_chargee_1',
     user_name: 'Amanjot Virdi',
     user_phone: '+91 98888 12345',
-    user_vehicle: 'Tata Nexon EV (PB-10-AZ-4521)',
+    user_vehicle: 'Tata Nexon EV (EV-DRIVE-2026)',
     date: '2026-11-12',
     time_slot: '02:00 PM - 04:00 PM',
     duration_hours: 2,
@@ -467,7 +475,7 @@ const SEED_BOOKINGS = [
     created_at: '2026-11-12T13:00:00Z',
     reviewed: true,
     review_rating: 5,
-    review_comment: 'Gurmeet ji was super courteous! Her solar charger ran smoothly and filled my Nexon up with clean green energy.'
+    review_comment: 'Host was welcoming! Her solar charger ran smoothly and filled my Nexon up with clean green energy.'
   }
 ];
 
@@ -476,61 +484,83 @@ const SEED_REVIEWS = [
   {
     id: 1,
     charger_id: 1,
-    booking_id: 'VS-LDH-7701',
+    booking_id: 'PM-7701',
     user_name: 'Navdeep Gill',
     rating: 5,
     date: '2026-11-10',
-    tags: ['Safe at night', 'Friendly host', 'Fast charging'],
-    comment: 'Harpreet uncle made sure the driveway gate was unlocked when I arrived at 10 PM. Clean 7.4 kW charge, no voltage drops!'
+    tags: ['Safe at night', 'Friendly host', 'Reliable power'],
+    comment: 'The host made sure the driveway gate was ready when I arrived at 10 PM. Smooth 7.4 kW charge.'
   },
   {
     id: 2,
     charger_id: 1,
-    booking_id: 'VS-LDH-7755',
+    booking_id: 'PM-7755',
     user_name: 'Simranjeet Singh',
     rating: 5,
     date: '2026-11-05',
     tags: ['Clean driveway', 'Easy access'],
-    comment: 'Much better than waiting at public commercial fast chargers. Neighborhood charger sharing is a lifesaver for apartment dwellers.'
+    comment: 'Much better than waiting in line at commercial stations. Sharing driveway plugs is a lifesaver for apartment owners.'
   },
   {
     id: 3,
     charger_id: 3,
-    booking_id: 'VS-LDH-7810',
+    booking_id: 'PM-7810',
     user_name: 'Amanjot Virdi',
     rating: 5,
     date: '2026-11-12',
     tags: ['Green energy', 'Solar power', 'Quiet porch'],
-    comment: 'Gurmeet ji was super courteous! Her solar charger ran smoothly and filled my Nexon up with clean green energy.'
+    comment: 'Host was courteous and responsive. Clean solar charge directly into my car.'
   }
 ];
 
 // -------------------------------------------------------------
-// Storage Layer Implementation
+// PlugMate Storage Layer Implementation
 // -------------------------------------------------------------
 const VoltData = {
   // Initialize LocalStorage with seed data if not present
   init() {
-    if (!localStorage.getItem(VOLT_STORAGE_KEYS.CHARGERS)) {
-      localStorage.setItem(VOLT_STORAGE_KEYS.CHARGERS, JSON.stringify(SEED_CHARGERS));
+    // If old voltshare keys exist and plugmate doesn't, migrate them
+    if (!localStorage.getItem(PLUGMATE_STORAGE_KEYS.CHARGERS)) {
+      localStorage.setItem(PLUGMATE_STORAGE_KEYS.CHARGERS, JSON.stringify(SEED_CHARGERS));
     }
-    if (!localStorage.getItem(VOLT_STORAGE_KEYS.BOOKINGS)) {
-      localStorage.setItem(VOLT_STORAGE_KEYS.BOOKINGS, JSON.stringify(SEED_BOOKINGS));
+    // Also sync to legacy voltshare keys for complete backward compatibility
+    localStorage.setItem(VOLT_STORAGE_KEYS.CHARGERS, localStorage.getItem(PLUGMATE_STORAGE_KEYS.CHARGERS));
+
+    if (!localStorage.getItem(PLUGMATE_STORAGE_KEYS.BOOKINGS)) {
+      localStorage.setItem(PLUGMATE_STORAGE_KEYS.BOOKINGS, JSON.stringify(SEED_BOOKINGS));
     }
-    if (!localStorage.getItem(VOLT_STORAGE_KEYS.REVIEWS)) {
-      localStorage.setItem(VOLT_STORAGE_KEYS.REVIEWS, JSON.stringify(SEED_REVIEWS));
+    localStorage.setItem(VOLT_STORAGE_KEYS.BOOKINGS, localStorage.getItem(PLUGMATE_STORAGE_KEYS.BOOKINGS));
+
+    if (!localStorage.getItem(PLUGMATE_STORAGE_KEYS.REVIEWS)) {
+      localStorage.setItem(PLUGMATE_STORAGE_KEYS.REVIEWS, JSON.stringify(SEED_REVIEWS));
     }
-    if (!localStorage.getItem(VOLT_STORAGE_KEYS.USERS)) {
-      localStorage.setItem(VOLT_STORAGE_KEYS.USERS, JSON.stringify(SEED_USERS));
+    localStorage.setItem(VOLT_STORAGE_KEYS.REVIEWS, localStorage.getItem(PLUGMATE_STORAGE_KEYS.REVIEWS));
+
+    if (!localStorage.getItem(PLUGMATE_STORAGE_KEYS.USERS)) {
+      localStorage.setItem(PLUGMATE_STORAGE_KEYS.USERS, JSON.stringify(SEED_USERS));
     }
-    if (!localStorage.getItem(VOLT_STORAGE_KEYS.CURRENT_USER)) {
-      // Default to Chargee Amanjot
-      localStorage.setItem(VOLT_STORAGE_KEYS.CURRENT_USER, JSON.stringify(SEED_USERS[0]));
+    localStorage.setItem(VOLT_STORAGE_KEYS.USERS, localStorage.getItem(PLUGMATE_STORAGE_KEYS.USERS));
+
+    if (!localStorage.getItem(PLUGMATE_STORAGE_KEYS.CURRENT_USER)) {
+      // Check if voltshare has a signed in user (e.g. from clerk sync)
+      const existingUser = localStorage.getItem(VOLT_STORAGE_KEYS.CURRENT_USER);
+      if (existingUser) {
+        localStorage.setItem(PLUGMATE_STORAGE_KEYS.CURRENT_USER, existingUser);
+      } else {
+        localStorage.setItem(PLUGMATE_STORAGE_KEYS.CURRENT_USER, JSON.stringify(SEED_USERS[0]));
+        localStorage.setItem(VOLT_STORAGE_KEYS.CURRENT_USER, JSON.stringify(SEED_USERS[0]));
+      }
     }
   },
 
-  // Reset to initial demo seeds (Crucial for live exhibition presentations!)
+  // Reset to initial clean seeds
   resetToSeed() {
+    localStorage.setItem(PLUGMATE_STORAGE_KEYS.CHARGERS, JSON.stringify(SEED_CHARGERS));
+    localStorage.setItem(PLUGMATE_STORAGE_KEYS.BOOKINGS, JSON.stringify(SEED_BOOKINGS));
+    localStorage.setItem(PLUGMATE_STORAGE_KEYS.REVIEWS, JSON.stringify(SEED_REVIEWS));
+    localStorage.setItem(PLUGMATE_STORAGE_KEYS.USERS, JSON.stringify(SEED_USERS));
+    localStorage.setItem(PLUGMATE_STORAGE_KEYS.CURRENT_USER, JSON.stringify(SEED_USERS[0]));
+
     localStorage.setItem(VOLT_STORAGE_KEYS.CHARGERS, JSON.stringify(SEED_CHARGERS));
     localStorage.setItem(VOLT_STORAGE_KEYS.BOOKINGS, JSON.stringify(SEED_BOOKINGS));
     localStorage.setItem(VOLT_STORAGE_KEYS.REVIEWS, JSON.stringify(SEED_REVIEWS));
@@ -542,7 +572,7 @@ const VoltData = {
   getUsers() {
     this.init();
     try {
-      return JSON.parse(localStorage.getItem(VOLT_STORAGE_KEYS.USERS)) || SEED_USERS;
+      return JSON.parse(localStorage.getItem(PLUGMATE_STORAGE_KEYS.USERS)) || SEED_USERS;
     } catch {
       return SEED_USERS;
     }
@@ -551,13 +581,14 @@ const VoltData = {
   getCurrentUser() {
     this.init();
     try {
-      return JSON.parse(localStorage.getItem(VOLT_STORAGE_KEYS.CURRENT_USER)) || SEED_USERS[0];
+      return JSON.parse(localStorage.getItem(PLUGMATE_STORAGE_KEYS.CURRENT_USER)) || SEED_USERS[0];
     } catch {
       return SEED_USERS[0];
     }
   },
 
   setCurrentUser(user) {
+    localStorage.setItem(PLUGMATE_STORAGE_KEYS.CURRENT_USER, JSON.stringify(user));
     localStorage.setItem(VOLT_STORAGE_KEYS.CURRENT_USER, JSON.stringify(user));
   },
 
@@ -575,6 +606,7 @@ const VoltData = {
     const users = this.getUsers();
     let existing = users.find(u => u.email.toLowerCase() === email.toLowerCase());
     if (existing) {
+      existing.role = role;
       this.setCurrentUser(existing);
       return existing;
     }
@@ -584,28 +616,27 @@ const VoltData = {
       name: name.trim(),
       email: email.trim().toLowerCase(),
       phone: phone || '+91 98765 00000',
-      role: role, // 'chargee' or 'host'
+      role: role,
       avatar: `https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=160&q=80`,
       vehicle: role === 'chargee' ? (vehicle || {
         make: 'EV Owner',
-        model: 'Electric Car',
-        reg_no: 'PB-10-TEMP',
+        model: 'Electric Vehicle',
+        reg_no: 'EV-2026',
         connector: 'Type-2 AC',
-        battery_kwh: 35.0
+        battery_kwh: 40.0
       }) : null,
-      address: 'Ludhiana, Punjab',
+      address: 'Community Neighborhood',
       rating: 5.0,
       reviewsCount: 0
     };
 
     users.push(newUser);
-    localStorage.setItem(VOLT_STORAGE_KEYS.USERS, JSON.stringify(users));
+    localStorage.setItem(PLUGMATE_STORAGE_KEYS.USERS, JSON.stringify(users));
     this.setCurrentUser(newUser);
     return newUser;
   },
 
   logout() {
-    // Reset to default chargee
     this.setCurrentUser(SEED_USERS[0]);
   },
 
@@ -613,7 +644,7 @@ const VoltData = {
   getChargers() {
     this.init();
     try {
-      return JSON.parse(localStorage.getItem(VOLT_STORAGE_KEYS.CHARGERS)) || SEED_CHARGERS;
+      return JSON.parse(localStorage.getItem(PLUGMATE_STORAGE_KEYS.CHARGERS)) || SEED_CHARGERS;
     } catch {
       return SEED_CHARGERS;
     }
@@ -633,11 +664,13 @@ const VoltData = {
       reviews_count: 0,
       is_available: true,
       surge_guarantee: true,
+      city: 'community',
       photo: chargerData.photo || 'https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=800&q=80',
       amenities: chargerData.amenities || ['Gated Driveway', 'CCTV Monitor'],
       ...chargerData
     };
     chargers.unshift(newCharger);
+    localStorage.setItem(PLUGMATE_STORAGE_KEYS.CHARGERS, JSON.stringify(chargers));
     localStorage.setItem(VOLT_STORAGE_KEYS.CHARGERS, JSON.stringify(chargers));
     return newCharger;
   },
@@ -647,6 +680,7 @@ const VoltData = {
     const idx = chargers.findIndex(c => c.id === Number(id));
     if (idx !== -1) {
       chargers[idx] = { ...chargers[idx], ...updatedFields };
+      localStorage.setItem(PLUGMATE_STORAGE_KEYS.CHARGERS, JSON.stringify(chargers));
       localStorage.setItem(VOLT_STORAGE_KEYS.CHARGERS, JSON.stringify(chargers));
       return chargers[idx];
     }
@@ -656,6 +690,7 @@ const VoltData = {
   deleteCharger(id) {
     let chargers = this.getChargers();
     chargers = chargers.filter(c => c.id !== Number(id));
+    localStorage.setItem(PLUGMATE_STORAGE_KEYS.CHARGERS, JSON.stringify(chargers));
     localStorage.setItem(VOLT_STORAGE_KEYS.CHARGERS, JSON.stringify(chargers));
   },
 
@@ -663,7 +698,7 @@ const VoltData = {
   getBookings() {
     this.init();
     try {
-      return JSON.parse(localStorage.getItem(VOLT_STORAGE_KEYS.BOOKINGS)) || SEED_BOOKINGS;
+      return JSON.parse(localStorage.getItem(PLUGMATE_STORAGE_KEYS.BOOKINGS)) || SEED_BOOKINGS;
     } catch {
       return SEED_BOOKINGS;
     }
@@ -678,7 +713,7 @@ const VoltData = {
     const bookings = this.getBookings();
     const randomSuffix = Math.floor(1000 + Math.random() * 9000);
     const newBooking = {
-      id: `VS-LDH-${randomSuffix}`,
+      id: `PM-${randomSuffix}`,
       pin: `${Math.floor(1000 + Math.random() * 9000)}`,
       status: 'upcoming',
       payment_status: 'Held in Escrow',
@@ -687,6 +722,7 @@ const VoltData = {
       ...bookingPayload
     };
     bookings.unshift(newBooking);
+    localStorage.setItem(PLUGMATE_STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings));
     localStorage.setItem(VOLT_STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings));
     return newBooking;
   },
@@ -697,6 +733,7 @@ const VoltData = {
     if (booking) {
       booking.status = 'cancelled';
       booking.payment_status = 'Refunded to Source (₹' + booking.total_amount + ')';
+      localStorage.setItem(PLUGMATE_STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings));
       localStorage.setItem(VOLT_STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings));
       return booking;
     }
@@ -709,6 +746,7 @@ const VoltData = {
     if (booking) {
       booking.status = 'completed';
       booking.payment_status = 'Released to Host';
+      localStorage.setItem(PLUGMATE_STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings));
       localStorage.setItem(VOLT_STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings));
       return booking;
     }
@@ -719,7 +757,7 @@ const VoltData = {
   getReviews(chargerId = null) {
     this.init();
     try {
-      const reviews = JSON.parse(localStorage.getItem(VOLT_STORAGE_KEYS.REVIEWS)) || SEED_REVIEWS;
+      const reviews = JSON.parse(localStorage.getItem(PLUGMATE_STORAGE_KEYS.REVIEWS)) || SEED_REVIEWS;
       if (chargerId !== null) {
         return reviews.filter(r => r.charger_id === Number(chargerId));
       }
@@ -744,6 +782,7 @@ const VoltData = {
       comment: comment.trim()
     };
     reviews.unshift(newReview);
+    localStorage.setItem(PLUGMATE_STORAGE_KEYS.REVIEWS, JSON.stringify(reviews));
     localStorage.setItem(VOLT_STORAGE_KEYS.REVIEWS, JSON.stringify(reviews));
 
     // Mark booking as reviewed
@@ -753,6 +792,7 @@ const VoltData = {
       b.reviewed = true;
       b.review_rating = Number(rating);
       b.review_comment = comment.trim();
+      localStorage.setItem(PLUGMATE_STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings));
       localStorage.setItem(VOLT_STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings));
     }
 
@@ -770,6 +810,10 @@ const VoltData = {
     return newReview;
   }
 };
+
+// Aliases for compatibility
+window.PlugMateData = VoltData;
+window.VoltData = VoltData;
 
 // Auto-run init
 VoltData.init();

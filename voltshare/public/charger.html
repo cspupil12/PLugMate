@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VoltShare — Charger Details</title>
+  <title>PlugMate — Charger Details</title>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -54,7 +54,7 @@
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
         </svg>
-        Back to Ludhiana Map
+        Back to Map
       </a>
 
       <div class="flex items-center gap-2">
@@ -85,11 +85,11 @@
                   7.4 kW Fast AC
                 </span>
                 <span class="bg-blue-600/90 px-2.5 py-0.5 rounded-full text-xs font-medium flex items-center gap-1">
-                  🛡️ PSPCL Verified
+                  🛡️ Verified Charger
                 </span>
               </div>
               <h1 class="text-xl sm:text-2xl font-bold font-google tracking-tight text-white" id="chargerTitle">
-                Sarabha Nagar Green Driveway Wallbox
+                Green Park Driveway Wallbox
               </h1>
               <p class="text-xs text-gray-200 mt-1 flex items-center gap-1.5" id="chargerAddress">
                 <svg class="w-3.5 h-3.5 text-googleRed shrink-0" fill="currentColor" viewBox="0 0 24 24">
@@ -135,7 +135,7 @@
                   </span>
                 </div>
                 <p class="text-xs text-gray-500 mt-0.5" id="hostBio">
-                  Homeowner in Ludhiana • EV enthusiast • 98% On-time response rate
+                  Verified Neighborhood Host • EV Enthusiast
                 </p>
                 <div class="text-[11px] text-gray-400 mt-1 flex items-center gap-3">
                   <span>⚡ 120+ sessions hosted</span>
@@ -168,9 +168,9 @@
           <div class="p-3 bg-emerald-50 border border-emerald-100 rounded-xl flex items-start gap-2.5">
             <span class="text-emerald-700 text-lg">🛡️</span>
             <div>
-              <h4 class="text-xs font-bold text-emerald-900">VoltShare Community Protection Scheme</h4>
+              <h4 class="text-xs font-bold text-emerald-900">PlugMate Community Protection Guarantee</h4>
               <p class="text-[11px] text-emerald-800 mt-0.5">
-                Every booking is insured up to ₹50,000 for electrical surge and property protection. Payments are locked in escrow until the 4-digit PIN is handed over.
+                Every booking is protected for electrical safety and property protection. Payments remain locked in escrow until your 4-digit PIN is verified.
               </p>
             </div>
           </div>
@@ -297,7 +297,7 @@
         return;
       }
 
-      document.title = `${currentCharger.title} — VoltShare Ludhiana`;
+      document.title = `${currentCharger.title} — PlugMate`;
       document.getElementById('chargerTitle').textContent = currentCharger.title;
       document.getElementById('chargerAddress').innerHTML = `
         <svg class="w-3.5 h-3.5 text-googleRed shrink-0" fill="currentColor" viewBox="0 0 24 24">
@@ -314,7 +314,7 @@
       document.getElementById('reviewsCountDisplay').textContent = `(${currentCharger.reviews_count} reviews)`;
       
       document.getElementById('hostName').textContent = currentCharger.host_name;
-      document.getElementById('hostBio').textContent = `Ludhiana Community Host • Verified Driveway Charger • ${currentCharger.city.toUpperCase()}`;
+      document.getElementById('hostBio').textContent = `Verified Driveway Host • ${currentCharger.connector_type}`;
       document.getElementById('hostAvatar').src = currentCharger.host_id === 'user_host_2' ?
         'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=160&q=80' :
         'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=160&q=80';

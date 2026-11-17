@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>VoltShare — EV Chargers on Google Maps</title>
+  <title>PlugMate — EV Chargers on Google Maps</title>
 
   <!-- Google Font: Roboto (Authentic Google Maps Font) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -147,7 +147,7 @@
       </button>
 
       <!-- Search Input -->
-      <input type="text" id="mapSearchInput" onkeyup="handleSearchFilter(this.value)" placeholder="Search EV chargers in Jalandhar, Ludhiana..." class="flex-1 ml-2 text-sm text-gray-800 placeholder-gray-500 focus:outline-none font-normal" />
+      <input type="text" id="mapSearchInput" onkeyup="handleSearchFilter(this.value)" placeholder="Search EV chargers, streets, or connector types..." class="flex-1 ml-2 text-sm text-gray-800 placeholder-gray-500 focus:outline-none font-normal" />
 
       <!-- Search Glass Icon -->
       <div class="text-googleGray p-1">
@@ -177,11 +177,8 @@
       <button onclick="filterCategory('15a')" id="pill-15a" class="filter-pill bg-white hover:bg-gray-50 text-gray-700 shadow-google px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 flex items-center gap-1.5 whitespace-nowrap">
         <span>🔌</span> 15A Socket (3.3kW)
       </button>
-      <button onclick="selectCity('jalandhar')" id="pill-jalandhar" class="filter-pill bg-blue-50 text-googleBlue border-googleBlue shadow-google px-3 py-1.5 rounded-full text-xs font-medium border flex items-center gap-1 whitespace-nowrap">
-        Jalandhar
-      </button>
-      <button onclick="selectCity('ludhiana')" id="pill-ludhiana" class="filter-pill bg-white hover:bg-gray-50 text-gray-700 shadow-google px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 flex items-center gap-1 whitespace-nowrap">
-        Ludhiana
+      <button onclick="filterCategory('solar')" id="pill-solar" class="filter-pill bg-white hover:bg-gray-50 text-gray-700 shadow-google px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 flex items-center gap-1.5 whitespace-nowrap">
+        <span>☀️</span> Solar Powered
       </button>
     </div>
 
@@ -198,12 +195,6 @@
     <a href="host-dashboard.html" class="bg-white hover:bg-gray-50 text-emerald-700 rounded-lg shadow-google border border-emerald-200 px-3 py-2 text-xs font-bold flex items-center gap-1.5 transition-all">
       <span>⚡</span> <span class="hidden md:inline">Host Mode</span>
     </a>
-    <button onclick="enablePinpointHouseMode()" id="btnPinpointHouse" class="bg-blue-50 hover:bg-blue-100 text-googleBlue rounded-lg shadow-google border border-blue-300 px-3 py-2 text-xs font-bold flex items-center gap-1.5 transition-all" title="Click on map or drag blue pin to set exact house location under 5m">
-      <span>🎯</span> <span class="hidden sm:inline">Set Exact House (≤5m)</span>
-    </button>
-    <button onclick="if(window.VoltLocation){VoltLocation.showLocationManagerModal();}" id="btnMapCookieStatus" class="bg-white hover:bg-gray-50 text-googleGray rounded-lg shadow-google border border-gray-200 px-3 py-2 text-xs font-medium flex items-center gap-1.5 transition-all" title="Location Tracking Cookie (GPS)">
-      <span>🍪</span> <span class="hidden lg:inline">GPS Cookie</span>
-    </button>
     <button id="btnLayerSat" onclick="toggleSatelliteLayer()" class="bg-white hover:bg-gray-50 text-gray-700 rounded-lg shadow-google border border-gray-200 px-3 py-2 text-xs font-medium flex items-center gap-1.5 transition-all" title="Toggle Satellite Imagery">
       <svg class="w-4 h-4 text-googleGray" fill="currentColor" viewBox="0 0 24 24">
         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
@@ -250,10 +241,10 @@
       </div>
 
       <h2 class="text-lg font-bold tracking-tight text-white pr-6" id="cardTitle">
-        Model Town Kothi Wallbox
+        Green Park Driveway Wallbox
       </h2>
       <p class="text-xs text-blue-100 mt-0.5" id="cardHostName">
-        Hosted by Harpreet Singh • Punjab DISCOM Landed
+        Hosted by Harpreet Singh • Verified Community Host
       </p>
     </div>
 
@@ -281,7 +272,7 @@
           </svg>
         </div>
         <div>
-          <div class="font-medium text-gray-900" id="cardAddress">House 142-A, Model Town, Jalandhar</div>
+          <div class="font-medium text-gray-900" id="cardAddress">84 Main Market Avenue, Green Park</div>
           <div class="text-[11px] text-gray-500">Verified residential driveway • Safe overnight parking</div>
         </div>
       </div>
@@ -321,7 +312,7 @@
       <!-- Surge & Protection Shield -->
       <div class="bg-gray-50 rounded-lg p-2.5 border border-gray-200 flex items-center gap-2 text-[11px] text-gray-600">
         <span class="text-emerald-600 font-bold">🛡️</span>
-        <span>Covered by VoltShare Community Surge Protection (₹50,000 guarantee)</span>
+        <span>Covered by PlugMate Community Driveway Protection Guarantee</span>
       </div>
 
     </div>
