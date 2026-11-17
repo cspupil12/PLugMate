@@ -5,12 +5,12 @@
 
 // Global State
 const STATE = {
-  city: 'jalandhar',
+  city: 'ludhiana',
   cities: {
-    jalandhar: { name: 'Jalandhar', lat: 31.3150, lng: 75.5800, zoom: 30 },
-    ludhiana: { name: 'Ludhiana', lat: 30.8950, lng: 75.8050, zoom: 30 }
+    jalandhar: { name: 'Jalandhar', lat: 31.3150, lng: 75.5800, zoom: 14 },
+    ludhiana: { name: 'Ludhiana', lat: 30.8950, lng: 75.8050, zoom: 14 }
   },
-  userLocation: { lat: 31.3250, lng: 75.5720 },
+  userLocation: { lat: 30.8872, lng: 75.8115 },
   currentLayerType: 'roadmap',
   activeCharger: null,
   map: null,
@@ -150,10 +150,64 @@ const CHARGERS_DATA = [
 
 // Initialize on DOM Ready
 document.addEventListener('DOMContentLoaded', () => {
+  // Sync chargers from VoltData LocalStorage if available
+  if (window.VoltData && typeof VoltData.getChargers === 'function') {
+    const freshChargers = VoltData.getChargers();
+    if (freshChargers && freshChargers.length > 0) {
+      CHARGERS_DATA.length = 0;
+      freshChargers.forEach(c => CHARGERS_DATA.push(c));
+    }
+  }
+
+  // Sync user location from Location Cookies if available
+  if (window.VoltLocation && typeof VoltLocation.getLocationCookie === 'function') {
+    const locCookie = VoltLocation.getLocationCookie();
+    if (locCookie && !isNaN(locCookie.lat) && !isNaN(locCookie.lng)) {
+      STATE.userLocation = { lat: locCookie.lat, lng: locCookie.lng };
+    }
+  }
+
   initGoogleMap();
   renderAllChargerPins();
-  document.getElementById('totalPinCount').textContent = CHARGERS_DATA.length;
+  
+  const countEl = document.getElementById('totalPinCount');
+  if (countEl) countEl.textContent = CHARGERS_DATA.length;
+
+  // Listen for live cookie location updates
+  window.addEventListener('voltshare:locationUpdated', (e) => {
+    if (e.detail && STATE.userMarker) {
+      STATE.userLocation = { lat: e.detail.lat, lng: e.detail.lng };
+      STATE.userMarker.setLatLng([e.detail.lat, e.detail.lng]);
+      if (STATE.map) {
+        STATE.map.flyTo([e.detail.lat, e.detail.lng], 15, { duration: 0.8 });
+      }
+    }
+  });
+
+  // Check if opened after booking confirmation for auto-navigation
+  checkUrlNavigationTrigger();
 });
+
+// Auto-navigate to charger if URL has ?navigate=ID or ?chargerId=ID
+function checkUrlNavigationTrigger() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const targetId = urlParams.get('navigate') || urlParams.get('chargerId');
+  if (targetId) {
+    const target = CHARGERS_DATA.find(c => c.id === Number(targetId));
+    if (target) {
+      setTimeout(() => {
+        openPlaceCard(target);
+        if (STATE.map) {
+          STATE.map.flyTo([target.lat, target.lng], 15, { duration: 0.8 });
+        }
+        // Auto-start road route calculation & directions banner
+        setTimeout(() => {
+          calculateRoadRouteAndNavigate();
+        }, 600);
+      }, 500);
+    }
+  }
+}
 
 // Initialize Leaflet with Official Google Maps Raster Tiles
 function initGoogleMap() {
@@ -304,11 +358,17 @@ function addUserLocationMarker() {
     iconAnchor: [11, 11]
   });
 
-  const city = STATE.cities[STATE.city];
-  STATE.userLocation = { lat: city.lat + 0.012, lng: city.lng - 0.008 };
+  if (!STATE.userLocation || isNaN(STATE.userLocation.lat)) {
+    const city = STATE.cities[STATE.city];
+    STATE.userLocation = { lat: city.lat + 0.006, lng: city.lng - 0.004 };
+  }
+
+  if (STATE.userMarker && STATE.map) {
+    STATE.map.removeLayer(STATE.userMarker);
+  }
 
   STATE.userMarker = L.marker([STATE.userLocation.lat, STATE.userLocation.lng], { icon: userIcon }).addTo(STATE.map);
-  STATE.userMarker.bindTooltip('Your Location (EV)', { direction: 'bottom', offset: [0, 8] });
+  STATE.userMarker.bindTooltip('Your Location (EV) • Tracked by Cookie', { direction: 'bottom', offset: [0, 8] });
 }
 
 // Open Floating Google Maps Place Card
@@ -322,6 +382,11 @@ function openPlaceCard(charger) {
   document.getElementById('cardHourlyRate').textContent = `₹${charger.hourly_rate.toFixed(2)}`;
   document.getElementById('cardAddress').textContent = charger.address;
   document.getElementById('cardPower').textContent = `${charger.power_kw} kW Dedicated AC Charging`;
+
+  const specsLink = document.getElementById('cardFullSpecsLink');
+  if (specsLink) {
+    specsLink.href = `charger.html?id=${charger.id}`;
+  }
 
   card.classList.remove('hidden');
 }
@@ -594,26 +659,19 @@ function handleArrivalAtCharger() {
   }, 600);
 }
 
-// Open Booking Handshake Modal
+// Open Booking Page for Active Charger (Redirects to booking.html)
 function openBookingHandshake() {
-  if (!STATE.activeCharger) return;
-
-  const charger = STATE.activeCharger;
-  const pin = `${Math.floor(1000 + Math.random() * 9000)}`;
-
-  document.getElementById('modalTitle').textContent = charger.title;
-  document.getElementById('modalPinDisplay').textContent = pin;
-  document.getElementById('modalRate').textContent = `₹${charger.hourly_rate.toFixed(2)} / hr`;
-
-  const estimatedCost = (charger.hourly_rate * 2) * 1.10;
-  document.getElementById('modalCost').textContent = `₹${estimatedCost.toFixed(2)} (Escrow Hold)`;
-
-  document.getElementById('handshakeModal').classList.remove('hidden');
+  if (STATE.activeCharger) {
+    window.location.href = `booking.html?chargerId=${STATE.activeCharger.id}`;
+  } else if (CHARGERS_DATA.length > 0) {
+    window.location.href = `booking.html?chargerId=${CHARGERS_DATA[0].id}`;
+  }
 }
 
 // Close Handshake Modal
 function closeHandshakeModal() {
-  document.getElementById('handshakeModal').classList.add('hidden');
+  const modal = document.getElementById('handshakeModal');
+  if (modal) modal.classList.add('hidden');
 }
 
 // Zoom Controls (Bottom-Right Google Buttons)
@@ -625,9 +683,32 @@ function zoomOutMap() {
   if (STATE.map) STATE.map.zoomOut();
 }
 
-// Recenter Map on User Location
+// Recenter Map on User Location & Update Tracking Cookies
 function recenterOnUser() {
-  if (STATE.map && STATE.userLocation) {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        STATE.userLocation = { lat, lng };
+        if (STATE.userMarker) {
+          STATE.userMarker.setLatLng([lat, lng]);
+        }
+        if (window.VoltLocation) {
+          VoltLocation.saveLocationCookies(lat, lng, 'ludhiana');
+        }
+        if (STATE.map) {
+          STATE.map.flyTo([lat, lng], 15, { duration: 0.8 });
+        }
+      },
+      () => {
+        if (STATE.map && STATE.userLocation) {
+          STATE.map.flyTo([STATE.userLocation.lat, STATE.userLocation.lng], 14, { duration: 0.8 });
+        }
+      },
+      { timeout: 4000 }
+    );
+  } else if (STATE.map && STATE.userLocation) {
     STATE.map.flyTo([STATE.userLocation.lat, STATE.userLocation.lng], 14, { duration: 0.8 });
   }
 }

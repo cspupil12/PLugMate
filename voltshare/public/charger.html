@@ -50,7 +50,7 @@
     
     <!-- Top Breadcrumb & Back Action -->
     <div class="flex items-center justify-between mb-4">
-      <a href="index.html" class="inline-flex items-center gap-1.5 text-xs font-medium text-googleBlue hover:text-googleBlueHover hover:underline">
+      <a href="map.html" class="inline-flex items-center gap-1.5 text-xs font-medium text-googleBlue hover:text-googleBlueHover hover:underline">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
         </svg>
@@ -249,7 +249,7 @@
 
           <!-- Secondary Actions -->
           <div class="grid grid-cols-2 gap-2 text-center text-xs">
-            <a href="index.html" class="py-2.5 border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium rounded-full transition-colors flex items-center justify-center gap-1">
+            <a href="map.html" class="py-2.5 border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium rounded-full transition-colors flex items-center justify-center gap-1">
               <span>🗺️</span> View on Map
             </a>
             <button onclick="shareCharger()" class="py-2.5 border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium rounded-full transition-colors flex items-center justify-center gap-1">
@@ -272,6 +272,7 @@
   </main>
 
   <script src="js/data.js"></script>
+  <script src="js/location-cookie.js"></script>
   <script src="js/navbar.js"></script>
   <script>
     let currentCharger = null;
@@ -292,7 +293,7 @@
 
       if (!currentCharger) {
         alert("Charger not found.");
-        window.location.href = 'index.html';
+        window.location.href = 'map.html';
         return;
       }
 

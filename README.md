@@ -32,9 +32,30 @@ You can directly open `voltshare/public/index.html` in Chrome, Firefox, or Edge.
 
 ---
 
-## 🔌 Connecting the Filter Bar to `index.html`
+## 🍪 Location Tracking & Cookie System
 
-As per the strict project rules, `index.html` was not modified. To enable the real-time filter bar (Plug type, Max price slider, Available now toggle) and map navigation pills, add this **single line** right before the closing `</body>` tag (around line 394) in `voltshare/public/index.html`:
+VoltShare includes a location tracking cookie manager in [`js/location-cookie.js`](file:///d:/My%20projects/Let%20Me%20Plug%20In/voltshare/public/js/location-cookie.js) to track user proximity to chargers and estimate walking times in Ludhiana.
+
+### Active Cookies:
+| Cookie Key | Value Example | Description |
+| :--- | :--- | :--- |
+| `voltshare_loc_consent` | `granted` / `declined` | 30-day user consent state for proximity tracking |
+| `voltshare_user_lat` | `30.88720` | Tracked latitude (defaults to Sarabha Nagar / Ludhiana) |
+| `voltshare_user_lng` | `75.81150` | Tracked longitude |
+| `voltshare_user_city` | `ludhiana` | Active municipality boundary |
+| `voltshare_loc_timestamp`| `2026-11-17T...` | ISO timestamp of the last GPS / location update |
+
+### Features:
+1. **Cookie Consent Banner**: Appears non-intrusively at the bottom if consent hasn't been set, prompting users to allow location cookies.
+2. **Real-time Map Integration**: When location cookies are present, the map automatically centers on the tracked coordinates and positions the pulsing user location dot.
+3. **Inspect in DevTools**: Open Chrome DevTools (`F12`) $\rightarrow$ **Application** $\rightarrow$ **Cookies** $\rightarrow$ `http://localhost:8000` to inspect and demo live cookie values to judges.
+4. **Update / Clear Controls**: Built directly into the profile dropdown in the top navbar.
+
+---
+
+## 🔌 Connecting the Filter Bar to `map.html`
+
+As per the project rules, `map.html` was not modified. To enable the real-time filter bar (Plug type, Max price slider, Available now toggle) and navigation pills, add this **single line** right before the closing `</body>` tag (around line 394) in `voltshare/public/map.html`:
 
 ```html
   <!-- Application Logic -->
@@ -56,8 +77,14 @@ When added, `js/map-filter.js` will:
 
 Follow this exact click-through order to deliver a high-impact presentation at your exhibition:
 
-### **Scene 1: The Problem & Map Discovery (1.5 mins)**
-1. **Open `index.html`**:
+### **Scene 0: The Landing Page (`index.html`) (1 min)**
+1. **Open `http://localhost:8000`**:
+   - Showcase the landing page for **VoltShare Ludhiana**.
+   - Explain the concept to judges: *"Over 60% of EV owners live in apartments without a private driveway. VoltShare lets them charge overnight at a neighbor's home wallbox."*
+   - Click **"🗺️ Explore Chargers on Map"** to navigate to `map.html`.
+
+### **Scene 1: The Map Discovery (`map.html`) (1.5 mins)**
+1. **Explore `map.html`**:
    - Show the authentic Google Maps interface centered on **Ludhiana**.
    - Point out the teardrop pins across familiar localities: *Sarabha Nagar, BRS Nagar, PAU Ferozepur Road, Model Town Extension, South City*.
 2. **Use the Filter Toolbar**:
@@ -71,14 +98,10 @@ Follow this exact click-through order to deliver a high-impact presentation at y
 ---
 
 ### **Scene 2: Charger Detail & Slot Booking (1.5 mins)**
-1. **Show Charger Specs (`charger.html`)**:
-   - Highlight the driveway photo, verified host badge (*Punjab DISCOM Landed*), power rating (7.4 kW), and host bio.
-   - Show the driveway amenities (*Gated Driveway, CCTV, Shade*) and verified neighbor reviews.
-   - Click **"Reserve Charger Slot"** (navigates to `booking.html?chargerId=1`).
-2. **Execute Reservation (`booking.html`)**:
-   - Select **Date**: *Today (Nov 17)*.
-   - Select **Time Slot**: *08:00 PM*.
-   - Select **Duration**: *2 Hours*.
+1. **Explore Charger & Reserve (`booking.html`)**:
+   - On the map, click the green pin in **Sarabha Nagar** (Harpreet Singh's Wallbox).
+   - Click **"⚡ Book & Charge"** (instantly jumps to `booking.html?chargerId=1`).
+   - Select **Date**: *Today (Nov 17)*, **Time Slot**: *08:00 PM*, **Duration**: *2 Hours*.
    - Show the transparent price calculation:
      - Energy: ₹44.00
      - 10% Community Escrow & Insurance: ₹4.40
@@ -86,13 +109,15 @@ Follow this exact click-through order to deliver a high-impact presentation at y
    - Choose **Payment Method**: *UPI (Google Pay / PhonePe) Escrow*.
    - Click **"Confirm & Pay ₹48.40"**.
 
----
-
-### **Scene 3: The Digital Handshake & PIN (45 seconds)**
+### **Scene 3: The Handshake PIN & Auto Road Navigation (1 min)**
 1. **Instant Confirmation Screen**:
-   - Highlight the generated **4-Digit Charging PIN (e.g. `8492`)** and booking ID (`VS-LDH-xxxx`).
-   - *Key Talking Point for Judges:* "Money is safely locked in VoltShare Escrow. The driver drives to the host's house, shows this 4-digit PIN, and the host verifies it before turning on the power."
-   - Click **"View in My Bookings"** (navigates to `my-bookings.html`).
+   - Point out the generated **4-Digit Charging PIN (`8492`)** and booking ID (`VS-LDH-xxxx`).
+   - Click the prominent primary button: **"🗺️ Start Turn-by-Turn Road Directions on Map"**.
+2. **Back on Map for Live Directions**:
+   - VoltShare automatically re-opens `map.html?navigate=1`.
+   - The map animates and draws the real road route from your **cookie-tracked GPS location** to the host's driveway in Sarabha Nagar!
+   - Show the green turn-by-turn Google Maps navigation header (*"Turn right onto Ferozepur Rd"*) and live ETA bar.
+   - Click **"Simulate Drive"** to watch the car smoothly follow the road in real time!
 
 ---
 
@@ -136,8 +161,9 @@ Follow this exact click-through order to deliver a high-impact presentation at y
 ```
 voltshare/
 ├── public/
-│   ├── index.html            # [FINAL & LOCKED] Google Maps UI
-│   ├── app.js                # Original map routing & Leaflet layer logic
+│   ├── index.html            # VoltShare community landing page
+│   ├── map.html              # Google Maps UI & charger discovery (formerly index.html)
+│   ├── app.js                # Map routing & Leaflet layer logic
 │   ├── login.html            # Authentication & role selector (Host vs Chargee)
 │   ├── charger.html          # Detailed charger page (photos, specs, host bio, reviews)
 │   ├── booking.html          # Slot booking, price calculation, fake UPI escrow, 4-digit PIN

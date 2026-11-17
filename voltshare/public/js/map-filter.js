@@ -5,8 +5,14 @@
  */
 
 (function () {
-  // Ensure VoltData is loaded
+  // Ensure VoltData and VoltLocation are loaded
   function ensureVoltData(callback) {
+    if (!window.VoltLocation && !document.querySelector('script[src*="location-cookie.js"]')) {
+      const locScript = document.createElement('script');
+      locScript.src = 'js/location-cookie.js';
+      document.head.appendChild(locScript);
+    }
+
     if (window.VoltData) {
       callback();
     } else {
@@ -52,12 +58,39 @@
 
     // 4. Enhance Place Card with "View Full Details & Book" CTA
     enhancePlaceCard();
+
+    // 5. Sync Map User Location from Location Cookie
+    syncMapFromLocationCookie();
+  }
+
+  function syncMapFromLocationCookie() {
+    if (window.VoltLocation) {
+      const loc = VoltLocation.getLocationCookie();
+      if (loc && loc.consent && window.STATE) {
+        STATE.userLocation = { lat: loc.lat, lng: loc.lng };
+        if (STATE.userMarker) {
+          STATE.userMarker.setLatLng([loc.lat, loc.lng]);
+        }
+      }
+    }
+
+    window.addEventListener('voltshare:locationUpdated', (e) => {
+      if (window.STATE && e.detail) {
+        STATE.userLocation = { lat: e.detail.lat, lng: e.detail.lng };
+        if (STATE.userMarker) {
+          STATE.userMarker.setLatLng([e.detail.lat, e.detail.lng]);
+        }
+        if (STATE.map) {
+          STATE.map.flyTo([e.detail.lat, e.detail.lng], 15, { duration: 1.0 });
+        }
+      }
+    });
   }
 
   // Inject top-right navigation pills (My Bookings, Host Dashboard, Profile)
   function injectMapNavShortcuts() {
     const topBar = document.querySelector('.absolute.top-3.right-3');
-    if (!topBar || document.getElementById('voltMapNavPillGroup')) return;
+    if (!topBar || document.getElementById('voltMapNavPillGroup') || topBar.querySelector('a[href="my-bookings.html"]')) return;
 
     const currentUser = window.VoltData ? VoltData.getCurrentUser() : { name: 'Amanjot', role: 'chargee' };
 

@@ -49,7 +49,7 @@
     
     <!-- Top Back Link -->
     <div class="mb-4">
-      <a id="btnBackToCharger" href="index.html" class="inline-flex items-center gap-1.5 text-xs font-medium text-googleBlue hover:text-googleBlueHover hover:underline">
+      <a id="btnBackToCharger" href="map.html" class="inline-flex items-center gap-1.5 text-xs font-medium text-googleBlue hover:text-googleBlueHover hover:underline">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
         </svg>
@@ -343,8 +343,10 @@
 
         <!-- Actions -->
         <div class="space-y-2">
-          <a href="index.html" class="w-full py-3 bg-googleBlue hover:bg-googleBlueHover text-white text-xs font-bold rounded-full shadow-google transition-colors flex items-center justify-center gap-1.5">
-            <span>🗺️</span> Open Navigation Directions on Map
+          <a id="confNavMapBtn" href="map.html" class="w-full py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-bold rounded-full shadow-google transition-all flex items-center justify-center gap-2 group">
+            <span class="text-base">🗺️</span>
+            <span>Start Turn-by-Turn Road Directions on Map</span>
+            <span class="group-hover:translate-x-1 transition-transform">→</span>
           </a>
 
           <a href="my-bookings.html" class="w-full py-2.5 border border-gray-300 hover:bg-gray-50 text-gray-700 text-xs font-bold rounded-full transition-colors flex items-center justify-center gap-1.5">
@@ -359,6 +361,7 @@
   </main>
 
   <script src="js/data.js"></script>
+  <script src="js/location-cookie.js"></script>
   <script src="js/navbar.js"></script>
   <script>
     let charger = null;
@@ -389,7 +392,7 @@
 
       if (!charger) {
         alert("Charger not found");
-        window.location.href = 'index.html';
+        window.location.href = 'map.html';
         return;
       }
 
@@ -569,6 +572,12 @@
       document.getElementById('confAmountPaid').textContent = `₹${total.toFixed(2)} (${selectedPayMethod})`;
       document.getElementById('confSlot').textContent = `${selectedDate} • ${selectedStartTime} (${selectedDurationHours}h)`;
       document.getElementById('confVehicle').textContent = driverVehicle;
+
+      // Set map navigation destination with charger ID
+      const navBtn = document.getElementById('confNavMapBtn');
+      if (navBtn) {
+        navBtn.href = `map.html?navigate=${charger.id}`;
+      }
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
       showToast("Booking Confirmed! PIN: " + booking.pin);

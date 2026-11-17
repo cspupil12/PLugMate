@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>VoltShare — EV Chargers on Google Maps</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VoltShare — Peer-to-Peer Community EV Charger Sharing</title>
 
-  <!-- Google Font: Roboto (Authentic Google Maps Font) -->
+  <!-- Google Fonts: Roboto & Google Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=Google+Sans:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -17,7 +17,7 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Roboto', 'Google Sans', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            sans: ['Roboto', 'Google Sans', 'sans-serif'],
             google: ['Google Sans', 'Roboto', 'sans-serif'],
             mono: ['JetBrains Mono', 'monospace'],
           },
@@ -33,363 +33,317 @@
           boxShadow: {
             google: '0 2px 6px rgba(60,64,67, 0.3), 0 1px 2px rgba(60,64,67, 0.15)',
             googleHover: '0 3px 8px rgba(60,64,67, 0.4), 0 1px 3px rgba(60,64,67, 0.2)',
-            googleCard: '0 4px 16px rgba(0,0,0,0.2)'
+            googleCard: '0 4px 16px rgba(0,0,0,0.12)'
           }
         }
       }
     }
   </script>
-
-  <!-- Leaflet CSS & JS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-
-  <style>
-    html, body {
-      height: 100%;
-      width: 100%;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
-    #map {
-      height: 100%;
-      width: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 1;
-    }
-    /* Google Maps custom clean popup */
-    .leaflet-popup-content-wrapper {
-      padding: 0;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 16px rgba(60,64,67,0.3) !important;
-      border: 1px solid #DADCE0;
-    }
-    .leaflet-popup-content {
-      margin: 0 !important;
-      line-height: 1.4;
-    }
-    .leaflet-container a.leaflet-popup-close-button {
-      top: 10px;
-      right: 10px;
-      color: #5F6368;
-      font: 18px/18px Tahoma, Verdana, sans-serif;
-    }
-    /* Hide default Leaflet controls to use authentic Google Maps controls */
-    .leaflet-control-zoom {
-      display: none !important;
-    }
-    .leaflet-control-attribution {
-      font-size: 10px !important;
-      background: rgba(255,255,255,0.7) !important;
-      color: #5F6368 !important;
-    }
-    /* Natural Google Maps land color so no grey boxes appear during tile fetch */
-    .leaflet-container {
-      background-color: #f2efe9 !important;
-    }
-    .leaflet-tile {
-      will-change: transform, opacity;
-    }
-    /* Pulsing user blue location dot */
-    .google-user-dot {
-      position: relative;
-      width: 22px;
-      height: 22px;
-    }
-    .google-user-dot .pulse {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: rgba(26, 115, 232, 0.25);
-      animation: google-pulse 2s infinite ease-out;
-    }
-    .google-user-dot .dot {
-      position: absolute;
-      top: 4px;
-      left: 4px;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: #1A73E8;
-      border: 2.5px solid #FFFFFF;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.35);
-    }
-    @keyframes google-pulse {
-      0% { transform: scale(0.8); opacity: 1; }
-      100% { transform: scale(2.4); opacity: 0; }
-    }
-  </style>
+  <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="relative w-screen h-screen overflow-hidden bg-gray-100 select-none">
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
 
-  <!-- MAP CONTAINER (Full Screen Google Maps Layer) -->
-  <div id="map"></div>
+  <!-- Navigation Bar -->
+  <div id="voltNavbarMount"></div>
 
-  <!-- FLOATING GOOGLE MAPS TOP BAR: Search & City Filters -->
-  <header class="absolute top-3 left-3 sm:left-4 z-20 flex flex-col gap-2 max-w-[calc(100vw-24px)] pointer-events-none">
-    
-    <!-- Google Search Box -->
-    <div class="pointer-events-auto flex items-center bg-white rounded-lg shadow-google h-12 w-full sm:w-[390px] px-3.5 border border-transparent hover:border-gray-200 transition-all">
-      <!-- Google Brand / Menu Icon -->
-      <button onclick="toggleCityDropdown()" title="Menu / Cities" class="text-googleGray hover:text-gray-900 p-1.5 -ml-1 rounded-full hover:bg-gray-100">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6h16M4 12h16M4 18h16"/>
-        </svg>
-      </button>
+  <!-- Hero Section -->
+  <header class="relative overflow-hidden bg-white border-b border-gray-200">
+    <!-- Subtle Background Accent -->
+    <div class="absolute inset-0 bg-gradient-to-b from-blue-50/60 via-white to-transparent pointer-events-none"></div>
 
-      <!-- Search Input -->
-      <input type="text" id="mapSearchInput" onkeyup="handleSearchFilter(this.value)" placeholder="Search EV chargers in Jalandhar, Ludhiana..." class="flex-1 ml-2 text-sm text-gray-800 placeholder-gray-500 focus:outline-none font-normal" />
-
-      <!-- Search Glass Icon -->
-      <div class="text-googleGray p-1">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-        </svg>
+    <div class="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-16 sm:pt-16 sm:pb-20 text-center">
+      
+      <!-- Initiative Pill -->
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-googleBlue text-xs font-bold mb-6 shadow-sm">
+        <span class="w-2 h-2 rounded-full bg-googleBlue animate-pulse"></span>
+        <span>Ludhiana Community EV Sharing Network</span>
+        <span class="text-blue-300">•</span>
+        <span class="text-gray-600 font-medium">PSPCL Green Grid</span>
       </div>
 
-      <div class="h-6 w-[1px] bg-gray-200 mx-1.5"></div>
+      <!-- Main Headline -->
+      <h1 class="text-3xl sm:text-5xl lg:text-6xl font-bold font-google text-gray-900 tracking-tight leading-tight max-w-4xl mx-auto">
+        Share Home Chargers.<br class="hidden sm:inline">
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+          Power Your Neighborhood.
+        </span>
+      </h1>
 
-      <!-- Directions / Recenter Icon -->
-      <button onclick="recenterOnUser()" title="My Location" class="text-googleBlue p-1.5 rounded-full hover:bg-blue-50">
-        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/>
-        </svg>
-      </button>
+      <!-- Subtitle -->
+      <p class="mt-4 sm:mt-6 text-sm sm:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+        Own an EV but no private driveway? Rent a neighbor's home wallbox for safe, affordable overnight charging. Have a driveway? Share your socket and earn.
+      </p>
+
+      <!-- Primary Action Buttons -->
+      <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto">
+        <a href="map.html" class="w-full sm:w-auto px-7 py-3.5 bg-googleBlue hover:bg-googleBlueHover text-white text-sm font-bold rounded-full shadow-google transition-all flex items-center justify-center gap-2 group">
+          <span>🗺️</span>
+          <span>Explore Chargers on Map</span>
+          <span class="group-hover:translate-x-1 transition-transform">→</span>
+        </a>
+
+        <a href="host-dashboard.html" class="w-full sm:w-auto px-6 py-3.5 bg-white hover:bg-gray-50 text-gray-800 border border-gray-300 text-sm font-bold rounded-full shadow-sm transition-colors flex items-center justify-center gap-1.5">
+          <span>⚡</span>
+          <span>List My Charger (Host)</span>
+        </a>
+      </div>
+
+      <!-- Quick Locality Chips -->
+      <div class="mt-8 pt-6 border-t border-gray-100 flex flex-wrap items-center justify-center gap-2 text-xs">
+        <span class="text-gray-400 font-medium">Popular Ludhiana Hubs:</span>
+        <a href="map.html" class="px-3 py-1 bg-gray-100 hover:bg-blue-50 hover:text-googleBlue rounded-full text-gray-700 font-medium transition-colors">📍 Sarabha Nagar</a>
+        <a href="map.html" class="px-3 py-1 bg-gray-100 hover:bg-blue-50 hover:text-googleBlue rounded-full text-gray-700 font-medium transition-colors">📍 BRS Nagar</a>
+        <a href="map.html" class="px-3 py-1 bg-gray-100 hover:bg-blue-50 hover:text-googleBlue rounded-full text-gray-700 font-medium transition-colors">📍 PAU / Ferozepur Rd</a>
+        <a href="map.html" class="px-3 py-1 bg-gray-100 hover:bg-blue-50 hover:text-googleBlue rounded-full text-gray-700 font-medium transition-colors">📍 Model Town Ext.</a>
+        <a href="map.html" class="px-3 py-1 bg-gray-100 hover:bg-blue-50 hover:text-googleBlue rounded-full text-gray-700 font-medium transition-colors">📍 South City Canal</a>
+      </div>
+
     </div>
-
-    <!-- Google Quick Filter Pills -->
-    <div class="pointer-events-auto flex items-center gap-1.5 overflow-x-auto pb-1 max-w-[calc(100vw-30px)] sm:max-w-[540px] no-scrollbar">
-      <button onclick="filterCategory('all')" id="pill-all" class="filter-pill bg-white hover:bg-gray-50 text-gray-800 shadow-google px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 flex items-center gap-1.5 whitespace-nowrap active:bg-gray-100">
-        <span class="text-googleRed">📍</span> All Chargers (<span id="totalPinCount">8</span>)
-      </button>
-      <button onclick="filterCategory('7.4kw')" id="pill-7.4kw" class="filter-pill bg-white hover:bg-gray-50 text-gray-700 shadow-google px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 flex items-center gap-1.5 whitespace-nowrap">
-        <span>⚡</span> 7.4 kW Fast AC
-      </button>
-      <button onclick="filterCategory('15a')" id="pill-15a" class="filter-pill bg-white hover:bg-gray-50 text-gray-700 shadow-google px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 flex items-center gap-1.5 whitespace-nowrap">
-        <span>🔌</span> 15A Socket (3.3kW)
-      </button>
-      <button onclick="selectCity('jalandhar')" id="pill-jalandhar" class="filter-pill bg-blue-50 text-googleBlue border-googleBlue shadow-google px-3 py-1.5 rounded-full text-xs font-medium border flex items-center gap-1 whitespace-nowrap">
-        Jalandhar
-      </button>
-      <button onclick="selectCity('ludhiana')" id="pill-ludhiana" class="filter-pill bg-white hover:bg-gray-50 text-gray-700 shadow-google px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 flex items-center gap-1 whitespace-nowrap">
-        Ludhiana
-      </button>
-    </div>
-
   </header>
 
-  <!-- TOP-RIGHT: Satellite Toggle Button (Redundant "Map" button removed) -->
-  <div class="absolute top-3 right-3 sm:right-4 z-20 flex items-center gap-2">
-    <button id="btnLayerSat" onclick="toggleSatelliteLayer()" class="bg-white hover:bg-gray-50 text-gray-700 rounded-lg shadow-google border border-gray-200 px-3 py-2 text-xs font-medium flex items-center gap-1.5 transition-all" title="Toggle Satellite Imagery">
-      <svg class="w-4 h-4 text-googleGray" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
-      </svg>
-      <span id="satBtnLabel">Satellite</span>
-    </button>
-  </div>
-
-  <!-- BOTTOM-RIGHT: Authentic Google Maps Zoom & Recenter Controls -->
-  <div class="absolute bottom-6 right-3 sm:right-4 z-20 flex flex-col items-center gap-2.5">
-    <!-- Recenter / Locate Me Button -->
-    <button onclick="recenterOnUser()" title="Show your location" class="bg-white text-googleGray hover:text-googleBlue w-10 h-10 rounded-full shadow-google border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors">
-      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/>
-      </svg>
-    </button>
-
-    <!-- Zoom In & Zoom Out Split Button -->
-    <div class="bg-white rounded-lg shadow-google border border-gray-200 flex flex-col overflow-hidden w-10">
-      <button onclick="zoomInMap()" title="Zoom in" class="w-10 h-10 flex items-center justify-center text-googleGray hover:text-black hover:bg-gray-50 text-xl font-bold border-b border-gray-200">
-        +
-      </button>
-      <button onclick="zoomOutMap()" title="Zoom out" class="w-10 h-10 flex items-center justify-center text-googleGray hover:text-black hover:bg-gray-50 text-xl font-bold">
-        −
-      </button>
+  <!-- Live Stats Bar -->
+  <section class="bg-gray-900 text-white py-6 border-y border-gray-800">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+        <div>
+          <div class="font-mono text-2xl sm:text-3xl font-black text-emerald-400" id="statChargersCount">15+</div>
+          <div class="text-xs text-gray-400 mt-0.5">Ludhiana Driveways</div>
+        </div>
+        <div>
+          <div class="font-mono text-2xl sm:text-3xl font-black text-googleBlue">₹12 - ₹24</div>
+          <div class="text-xs text-gray-400 mt-0.5">Affordable Hourly Rates</div>
+        </div>
+        <div>
+          <div class="font-mono text-2xl sm:text-3xl font-black text-amber-400">100% Gated</div>
+          <div class="text-xs text-gray-400 mt-0.5">Safe Overnight Parking</div>
+        </div>
+        <div>
+          <div class="font-mono text-2xl sm:text-3xl font-black text-emerald-400">₹50,000</div>
+          <div class="text-xs text-gray-400 mt-0.5">Community Surge Escrow</div>
+        </div>
+      </div>
     </div>
-  </div>
+  </section>
 
-  <!-- FLOATING GOOGLE MAPS PLACE CARD / DETAIL DRAWER -->
-  <aside id="placeCard" class="hidden absolute bottom-3 left-3 right-3 sm:bottom-6 sm:left-4 sm:right-auto sm:w-[380px] z-30 bg-white rounded-2xl shadow-googleCard border border-gray-200 overflow-hidden transition-all duration-200 ease-out">
-    
-    <!-- Place Card Header Banner with Google Pin -->
-    <div class="relative bg-gradient-to-r from-blue-600 to-indigo-700 p-4 text-white">
-      <button onclick="closePlaceCard()" title="Close" class="absolute top-3 right-3 text-white/80 hover:text-white bg-black/20 hover:bg-black/30 rounded-full w-7 h-7 flex items-center justify-center text-sm font-bold">
-        ✕
-      </button>
-
-      <div class="flex items-center gap-2 mb-1">
-        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-white/20 text-white flex items-center gap-1">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-          Community EV Charger
-        </span>
-        <span class="text-xs text-blue-100 font-medium" id="cardConnectorBadge">Type-2 AC</span>
+  <!-- The Problem & Solution (College Exhibition Angle) -->
+  <section class="py-14 bg-white border-b border-gray-200">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <span class="text-xs font-bold uppercase tracking-wider text-googleBlue block mb-1">Urban EV Challenge</span>
+        <h2 class="text-2xl sm:text-3xl font-bold font-google text-gray-900">
+          Why Community Charger Sharing Matters
+        </h2>
+        <p class="text-xs sm:text-sm text-gray-500 mt-2">
+          Modeled after Co Charger UK to bridge the urban infrastructure gap across Indian cities.
+        </p>
       </div>
 
-      <h2 class="text-lg font-bold tracking-tight text-white pr-6" id="cardTitle">
-        Model Town Kothi Wallbox
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        <!-- The Driveway Gap -->
+        <div class="bg-rose-50/60 border border-rose-200 rounded-2xl p-6 sm:p-8 space-y-4">
+          <div class="w-12 h-12 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center text-2xl">
+            🚫
+          </div>
+          <h3 class="text-lg font-bold text-gray-900 font-google">The "No-Driveway" Dilemma</h3>
+          <p class="text-xs sm:text-sm text-gray-600 leading-relaxed">
+            Over 60% of urban EV owners in cities like Ludhiana live in multi-story apartments, builder floors, or rented townhomes. DISCOM rules and shared parking make installing personal 7.4 kW chargers nearly impossible.
+          </p>
+          <ul class="text-xs text-gray-600 space-y-1.5 pt-2">
+            <li class="flex items-center gap-2"><span class="text-rose-500 font-bold">✕</span> Waiting hours at expensive public DC fast chargers</li>
+            <li class="flex items-center gap-2"><span class="text-rose-500 font-bold">✕</span> Battery degradation from excessive DC fast charging</li>
+            <li class="flex items-center gap-2"><span class="text-rose-500 font-bold">✕</span> Unsafe hanging extension cables across streets</li>
+          </ul>
+        </div>
+
+        <!-- The Community Solution -->
+        <div class="bg-emerald-50/60 border border-emerald-200 rounded-2xl p-6 sm:p-8 space-y-4">
+          <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-2xl">
+            🤝
+          </div>
+          <h3 class="text-lg font-bold text-gray-900 font-google">The VoltShare Solution</h3>
+          <p class="text-xs sm:text-sm text-gray-600 leading-relaxed">
+            Neighborhood homeowners with private driveways, solar arrays, or idle wallboxes list their chargers on VoltShare. Non-driveway neighbors book overnight slots, plug in, and walk home.
+          </p>
+          <ul class="text-xs text-gray-600 space-y-1.5 pt-2">
+            <li class="flex items-center gap-2"><span class="text-emerald-600 font-bold">✓</span> Safe, enclosed overnight driveway parking</li>
+            <li class="flex items-center gap-2"><span class="text-emerald-600 font-bold">✓</span> Gentle 7.4 kW AC charging preserves EV battery health</li>
+            <li class="flex items-center gap-2"><span class="text-emerald-600 font-bold">✓</span> Hosts earn 90% net payout on surplus solar power</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- How It Works (3 Steps) -->
+  <section class="py-14 bg-gray-50 border-b border-gray-200">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <span class="text-xs font-bold uppercase tracking-wider text-googleBlue block mb-1">Simple Workflow</span>
+        <h2 class="text-2xl sm:text-3xl font-bold font-google text-gray-900">
+          How VoltShare Works in 3 Steps
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Step 1 -->
+        <div class="bg-white rounded-2xl p-6 shadow-google border border-gray-200 space-y-3 flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded-full bg-blue-100 text-googleBlue font-black text-sm flex items-center justify-center mb-4">
+              1
+            </div>
+            <h3 class="text-base font-bold text-gray-900 font-google">Discover & Book</h3>
+            <p class="text-xs text-gray-600 leading-relaxed mt-1.5">
+              Open the interactive Google Map, filter by connector type (Type-2 AC or 15A Socket), pick an arrival slot, and confirm with safe escrow hold.
+            </p>
+          </div>
+          <span class="text-xs font-bold text-googleBlue pt-2 block">Interactive Map & Filters →</span>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="bg-white rounded-2xl p-6 shadow-google border border-gray-200 space-y-3 flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 font-black text-sm flex items-center justify-center mb-4">
+              2
+            </div>
+            <h3 class="text-base font-bold text-gray-900 font-google">4-Digit PIN Handshake</h3>
+            <p class="text-xs text-gray-600 leading-relaxed mt-1.5">
+              Drive into the host's driveway. Hand over your secret 4-digit booking token to unlock power and verify the charging handshake.
+            </p>
+          </div>
+          <span class="text-xs font-bold text-emerald-700 pt-2 block">Zero Fraud Handshake →</span>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="bg-white rounded-2xl p-6 shadow-google border border-gray-200 space-y-3 flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded-full bg-amber-100 text-amber-700 font-black text-sm flex items-center justify-center mb-4">
+              3
+            </div>
+            <h3 class="text-base font-bold text-gray-900 font-google">Protected Payout & Reviews</h3>
+            <p class="text-xs text-gray-600 leading-relaxed mt-1.5">
+              Funds are released to the host upon successful charge completion. Leave a verified neighbor review and rate host hospitality.
+            </p>
+          </div>
+          <span class="text-xs font-bold text-amber-700 pt-2 block">Community Social Proof →</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Community Voices / Demo Profiles -->
+  <section class="py-14 bg-white border-b border-gray-200">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <span class="text-xs font-bold uppercase tracking-wider text-googleBlue block mb-1">Real Neighbors</span>
+        <h2 class="text-2xl sm:text-3xl font-bold font-google text-gray-900">
+          Meet the Ludhiana Pilot Users
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- User 1: Chargee Amanjot -->
+        <div class="bg-gray-50 border border-gray-200 rounded-2xl p-5 space-y-3">
+          <div class="flex items-center gap-3">
+            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=160&q=80" class="w-11 h-11 rounded-full object-cover border-2 border-googleBlue">
+            <div>
+              <div class="font-bold text-sm text-gray-900">Amanjot Virdi</div>
+              <div class="text-[11px] text-googleBlue font-bold uppercase">Chargee • Tata Nexon EV</div>
+            </div>
+          </div>
+          <p class="text-xs text-gray-600 italic">
+            "I live in an apartment on Pakhowal Road. Without VoltShare, I'd have to sit at mall fast chargers twice a week. Now I charge overnight at Harpreet ji's driveway in Sarabha Nagar."
+          </p>
+          <div class="text-[11px] text-gray-400 font-mono">Verified Chargee • 18+ Sessions</div>
+        </div>
+
+        <!-- User 2: Host Harpreet -->
+        <div class="bg-gray-50 border border-gray-200 rounded-2xl p-5 space-y-3">
+          <div class="flex items-center gap-3">
+            <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=160&q=80" class="w-11 h-11 rounded-full object-cover border-2 border-emerald-500">
+            <div>
+              <div class="font-bold text-sm text-gray-900">Harpreet Singh</div>
+              <div class="text-[11px] text-emerald-700 font-bold uppercase">Host • 6 Wallboxes</div>
+            </div>
+          </div>
+          <p class="text-xs text-gray-600 italic">
+            "My 7.4 kW home wallbox was sitting idle 20 hours a day. Sharing it with my neighbors earns me over ₹4,000 every month while helping EV adoption in Ludhiana."
+          </p>
+          <div class="text-[11px] text-gray-400 font-mono">PSPCL Verified Host • 4.9 ★ Rating</div>
+        </div>
+
+        <!-- User 3: Host Gurmeet -->
+        <div class="bg-gray-50 border border-gray-200 rounded-2xl p-5 space-y-3">
+          <div class="flex items-center gap-3">
+            <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=160&q=80" class="w-11 h-11 rounded-full object-cover border-2 border-emerald-500">
+            <div>
+              <div class="font-bold text-sm text-gray-900">Gurmeet Kaur</div>
+              <div class="text-[11px] text-emerald-700 font-bold uppercase">Host • Solar Rooftop PAU</div>
+            </div>
+          </div>
+          <p class="text-xs text-gray-600 italic">
+            "We generate excess solar units daily on Ferozepur Road. Renting out our shaded socket means 100% clean green power directly into local electric scooters and cars."
+          </p>
+          <div class="text-[11px] text-gray-400 font-mono">100% Solar Host • 5.0 ★ Rating</div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Exhibition Quick Launch Banner -->
+  <section class="py-12 bg-gradient-to-r from-blue-600 to-indigo-700 text-white text-center">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+      <h2 class="text-2xl sm:text-3xl font-bold font-google">
+        Ready for the College Project Exhibition?
       </h2>
-      <p class="text-xs text-blue-100 mt-0.5" id="cardHostName">
-        Hosted by Harpreet Singh • Punjab DISCOM Landed
+      <p class="text-xs sm:text-sm text-blue-100 max-w-lg mx-auto">
+        Explore the live Ludhiana map, test the booking handshake with fake UPI, and simulate host payouts in real time.
       </p>
+      <div class="pt-2 flex flex-wrap items-center justify-center gap-3">
+        <a href="map.html" class="px-6 py-3 bg-white hover:bg-gray-100 text-googleBlue font-bold text-xs rounded-full shadow-google transition-all flex items-center gap-1.5">
+          <span>🗺️</span> Launch Map Experience
+        </a>
+        <a href="login.html" class="px-6 py-3 bg-blue-500 hover:bg-blue-400 text-white font-bold text-xs rounded-full shadow-sm transition-all border border-blue-400 flex items-center gap-1.5">
+          <span>✨</span> 1-Click Test Logins
+        </a>
+      </div>
     </div>
+  </section>
 
-    <!-- Place Details Body (Google Maps Style) -->
-    <div class="p-4 space-y-3.5 text-xs text-gray-700 max-h-[60vh] overflow-y-auto">
-      
-      <!-- Ratings & Pricing Row -->
-      <div class="flex items-center justify-between pb-3 border-b border-gray-100">
-        <div class="flex items-center gap-1.5">
-          <span class="font-bold text-gray-900 text-sm">4.9</span>
-          <div class="flex text-amber-400 text-xs">★★★★★</div>
-          <span class="text-gray-500">(32 reviews)</span>
-        </div>
-        <div class="text-right">
-          <span class="font-mono text-base font-bold text-emerald-600" id="cardHourlyRate">₹20.00</span>
-          <span class="text-gray-500 text-[11px]">/ hr</span>
-        </div>
-      </div>
-
-      <!-- Address with Google Pin Icon -->
-      <div class="flex items-start gap-2.5 text-gray-700">
-        <div class="mt-0.5 text-googleRed">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-          </svg>
-        </div>
-        <div>
-          <div class="font-medium text-gray-900" id="cardAddress">House 142-A, Model Town, Jalandhar</div>
-          <div class="text-[11px] text-gray-500">Verified residential driveway • Safe overnight parking</div>
-        </div>
-      </div>
-
-      <!-- Charging Power & Sockets -->
-      <div class="flex items-center gap-2.5 text-gray-700">
-        <div class="text-googleBlue">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-          </svg>
-        </div>
-        <div>
-          <span class="font-medium text-gray-900" id="cardPower">7.4 kW Dedicated AC Wallbox</span>
-          <span class="text-gray-500 block text-[11px]">Compatible with Tata Nexon, MG Windsor, Ather, Ola</span>
-        </div>
-      </div>
-
-      <!-- Quick Action Buttons (Google Maps Style: Directions, Book, Call) -->
-      <div class="grid grid-cols-2 gap-2 pt-1">
-        <button onclick="calculateRoadRouteAndNavigate()" class="py-2.5 bg-googleBlue hover:bg-googleBlueHover text-white font-medium rounded-full flex items-center justify-center gap-1.5 transition-colors shadow-sm text-xs">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M21.71 11.29l-9-9c-.39-.39-1.02-.39-1.41 0l-9 9c-.39.39-.39 1.02 0 1.41l9 9c.39.39 1.02.39 1.41 0l9-9c.39-.38.39-1.01 0-1.41zM14 14.5V12h-4v3H8v-4c0-.55.45-1 1-1h5V7.5l3.5 3.5-3.5 3.5z"/>
-          </svg>
-          Directions
-        </button>
-
-        <button onclick="openBookingHandshake()" class="py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-full flex items-center justify-center gap-1.5 transition-colors shadow-sm text-xs">
-          <span>⚡</span>
-          Start Charging
-        </button>
-      </div>
-
-      <!-- Surge & Protection Shield -->
-      <div class="bg-gray-50 rounded-lg p-2.5 border border-gray-200 flex items-center gap-2 text-[11px] text-gray-600">
-        <span class="text-emerald-600 font-bold">🛡️</span>
-        <span>Covered by VoltShare Community Surge Protection (₹50,000 guarantee)</span>
-      </div>
-
-    </div>
-  </aside>
-
-  <!-- GOOGLE MAPS NAVIGATION HEADER (Turn-by-turn banner) -->
-  <div id="navHeader" class="hidden absolute top-3 left-3 right-3 sm:left-4 sm:right-auto sm:w-[420px] z-30 bg-[#0F9D58] text-white rounded-2xl shadow-googleCard overflow-hidden transition-all duration-200">
-    <div class="p-3.5 flex items-start justify-between gap-3">
-      <div class="flex items-start gap-3">
-        <!-- Turn Arrow Icon -->
-        <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-xl shrink-0 font-bold" id="navTurnIcon">
-          ↱
-        </div>
-        <div>
-          <div class="text-[11px] font-semibold text-emerald-100 uppercase tracking-wider" id="navStepDist">In 280 m</div>
-          <div class="text-base font-bold leading-tight" id="navStepInstruction">Turn right onto Ferozepur Rd</div>
-          <div class="text-[11px] text-emerald-100 mt-0.5" id="navNextStep">Then continue 1.2 km to host driveway</div>
-        </div>
-      </div>
-      <button onclick="exitNavigation()" title="Exit Navigation" class="text-white/80 hover:text-white bg-black/20 hover:bg-black/30 rounded-full w-7 h-7 flex items-center justify-center text-sm font-bold shrink-0">
-        ✕
-      </button>
-    </div>
-  </div>
-
-  <!-- GOOGLE MAPS NAVIGATION BOTTOM BAR (ETA & Controls) -->
-  <div id="navBottomBar" class="hidden absolute bottom-4 left-3 right-3 sm:left-1/2 sm:-translate-x-1/2 sm:w-[460px] z-30 bg-white rounded-2xl shadow-googleCard border border-gray-200 p-3.5 transition-all">
-    <div class="flex items-center justify-between gap-3">
-      <div>
-        <div class="flex items-baseline gap-2">
-          <span class="text-xl font-bold text-[#0F9D58]" id="navEta">6 min</span>
-          <span class="text-sm text-gray-500 font-medium" id="navDistance">(2.4 km)</span>
-          <span class="text-xs text-gray-400 font-mono" id="navClock">2:45 PM</span>
-        </div>
-        <div class="text-xs text-gray-600 font-medium truncate max-w-[220px]" id="navRouteDesc">
-          via Main Market Rd & Ferozepur Rd
-        </div>
-      </div>
-
+  <!-- Footer -->
+  <footer class="bg-gray-100 text-gray-500 text-xs py-8 border-t border-gray-200 mt-auto">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-2">
-        <button id="btnSimulateDrive" onclick="toggleDriveSimulation()" class="px-4 py-2 bg-googleBlue hover:bg-googleBlueHover text-white font-medium text-xs rounded-full flex items-center gap-1.5 shadow-sm transition-all">
-          <span id="playIcon">▶</span> <span id="playText">Simulate Drive</span>
-        </button>
-        <button onclick="exitNavigation()" class="w-8 h-8 rounded-full border border-gray-300 text-gray-500 hover:text-black hover:bg-gray-100 flex items-center justify-center text-xs">
-          ✕
-        </button>
+        <span class="text-base text-googleBlue font-bold">⚡ VoltShare</span>
+        <span>• Ludhiana Community EV Sharing Network</span>
+      </div>
+      <div class="flex items-center gap-4 text-[11px]">
+        <a href="map.html" class="hover:text-googleBlue">Map View</a>
+        <a href="my-bookings.html" class="hover:text-googleBlue">My Bookings</a>
+        <a href="host-dashboard.html" class="hover:text-googleBlue">Host Dashboard</a>
+        <a href="login.html" class="hover:text-googleBlue">Switch Profile</a>
       </div>
     </div>
-  </div>
+  </footer>
 
-  <!-- POPUP MODAL: Booking Handshake & PIN (Triggered on 'Start Charging') -->
-  <div id="handshakeModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl shadow-googleCard max-w-sm w-full p-5 space-y-4 border border-gray-100 text-center animate-in fade-in zoom-in duration-150">
-      
-      <div class="w-12 h-12 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto text-2xl">
-        ⚡
-      </div>
-
-      <div>
-        <h3 class="text-base font-bold text-gray-900" id="modalTitle">Charging Session Token</h3>
-        <p class="text-xs text-gray-500 mt-1">Provide this 4-digit PIN to the host upon arrival to unlock electricity:</p>
-      </div>
-
-      <div class="bg-gray-50 border-2 border-dashed border-emerald-500 rounded-xl py-3 px-4">
-        <span class="text-[11px] text-gray-500 uppercase tracking-widest block font-medium">Digital Charge Token</span>
-        <span class="font-mono text-3xl font-black text-emerald-700 tracking-widest" id="modalPinDisplay">8492</span>
-      </div>
-
-      <div class="text-xs text-gray-600 bg-blue-50 p-3 rounded-lg border border-blue-100 text-left space-y-1">
-        <div class="flex justify-between">
-          <span>Rate:</span>
-          <span class="font-semibold text-gray-900" id="modalRate">₹20 / hr</span>
-        </div>
-        <div class="flex justify-between">
-          <span>Estimated 2h Cost:</span>
-          <span class="font-semibold text-gray-900" id="modalCost">₹44.00 (Escrow Hold)</span>
-        </div>
-      </div>
-
-      <button onclick="closeHandshakeModal()" class="w-full py-2.5 bg-googleBlue hover:bg-googleBlueHover text-white font-medium text-xs rounded-full transition-colors shadow-sm">
-        Done / Return to Map
-      </button>
-
-    </div>
-  </div>
-
-  <!-- Application Logic -->
-  <script src="app.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/location-cookie.js"></script>
+  <script src="js/navbar.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      renderVoltNavbar('home');
+      // Update stats from localStorage
+      const chargers = VoltData.getChargers();
+      const counter = document.getElementById('statChargersCount');
+      if (counter) counter.textContent = `${chargers.length}+`;
+    });
+  </script>
 </body>
 </html>

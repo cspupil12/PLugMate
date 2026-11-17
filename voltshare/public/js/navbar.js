@@ -4,6 +4,13 @@
  */
 
 function renderVoltNavbar(activePage = '') {
+  // Ensure location cookie script is mounted
+  if (!window.VoltLocation && !document.querySelector('script[src*="location-cookie.js"]')) {
+    const locScript = document.createElement('script');
+    locScript.src = 'js/location-cookie.js';
+    document.head.appendChild(locScript);
+  }
+
   const mountEl = document.getElementById('voltNavbarMount');
   if (!mountEl) return;
 
@@ -34,7 +41,10 @@ function renderVoltNavbar(activePage = '') {
 
             <!-- Desktop Nav Links -->
             <div class="hidden md:flex items-center gap-1 ml-6 border-l border-gray-200 pl-6 text-xs font-medium">
-              <a href="index.html" class="px-3 py-2 rounded-full flex items-center gap-1.5 transition-colors ${activePage === 'map' ? 'bg-blue-50 text-googleBlue font-bold' : 'text-gray-700 hover:bg-gray-100'}">
+              <a href="index.html" class="px-3 py-2 rounded-full flex items-center gap-1.5 transition-colors ${activePage === 'home' ? 'bg-blue-50 text-googleBlue font-bold' : 'text-gray-700 hover:bg-gray-100'}">
+                <span>🏠</span> Home
+              </a>
+              <a href="map.html" class="px-3 py-2 rounded-full flex items-center gap-1.5 transition-colors ${activePage === 'map' ? 'bg-blue-50 text-googleBlue font-bold' : 'text-gray-700 hover:bg-gray-100'}">
                 <span>🗺️</span> Explore Map
               </a>
               <a href="my-bookings.html" class="px-3 py-2 rounded-full flex items-center gap-1.5 transition-colors ${activePage === 'bookings' ? 'bg-blue-50 text-googleBlue font-bold' : 'text-gray-700 hover:bg-gray-100'}">
@@ -104,6 +114,27 @@ function renderVoltNavbar(activePage = '') {
                   ${currentUser.id === 'user_host_2' ? '<span class="text-emerald-600 font-bold">✓</span>' : ''}
                 </button>
 
+                <!-- Location Tracking Cookie Section in Dropdown -->
+                <div class="px-4 py-2.5 border-t border-gray-100 bg-blue-50/40 text-xs">
+                  <div class="flex items-center justify-between">
+                    <span class="font-bold text-gray-800 flex items-center gap-1">🍪 Location Cookie</span>
+                    <span class="text-[10px] font-bold px-1.5 py-0.5 rounded ${window.VoltLocation && VoltLocation.hasConsent() ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-200 text-gray-700'}">
+                      ${window.VoltLocation && VoltLocation.hasConsent() ? 'Active (GPS)' : 'Ludhiana'}
+                    </span>
+                  </div>
+                  <div class="text-[10px] text-gray-500 mt-1 font-mono">
+                    Cookie: voltshare_user_lat & lng
+                  </div>
+                  <div class="mt-1.5 flex items-center gap-3">
+                    <button onclick="if(window.VoltLocation){VoltLocation.acceptLocationConsent();}" class="text-[11px] text-googleBlue font-bold hover:underline">
+                      Update GPS
+                    </button>
+                    <button onclick="if(window.VoltLocation){VoltLocation.resetLocationCookies();}" class="text-[11px] text-rose-600 hover:underline">
+                      Clear Cookie
+                    </button>
+                  </div>
+                </div>
+
                 <div class="border-t border-gray-100 mt-1 pt-1">
                   <a href="login.html" class="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-50">
                     Switch / Login with another account →
@@ -116,7 +147,7 @@ function renderVoltNavbar(activePage = '') {
             </div>
 
             <!-- Return to Map Button -->
-            <a href="index.html" class="px-3.5 py-1.5 bg-googleBlue hover:bg-googleBlueHover text-white text-xs font-medium rounded-full shadow-sm flex items-center gap-1.5 transition-colors">
+            <a href="map.html" class="px-3.5 py-1.5 bg-googleBlue hover:bg-googleBlueHover text-white text-xs font-medium rounded-full shadow-sm flex items-center gap-1.5 transition-colors">
               <span>📍</span> Map View
             </a>
           </div>
@@ -145,7 +176,8 @@ function renderVoltNavbar(activePage = '') {
           </div>
           <a href="login.html" class="text-xs text-googleBlue font-medium">Switch</a>
         </div>
-        <a href="index.html" class="block py-2 text-xs font-medium text-gray-700 hover:text-googleBlue">🗺️ Explore Map</a>
+        <a href="index.html" class="block py-2 text-xs font-medium text-gray-700 hover:text-googleBlue">🏠 Home</a>
+        <a href="map.html" class="block py-2 text-xs font-medium text-gray-700 hover:text-googleBlue">🗺️ Explore Map</a>
         <a href="my-bookings.html" class="block py-2 text-xs font-medium text-gray-700 hover:text-googleBlue">📅 My Bookings</a>
         <a href="host-dashboard.html" class="block py-2 text-xs font-medium text-gray-700 hover:text-emerald-600">⚡ Host Dashboard</a>
         <div class="pt-2 border-t border-gray-100">
@@ -193,7 +225,7 @@ function resetDemoDataPrompt() {
     VoltData.resetToSeed();
     showToast("Demo data reset to fresh seeds!");
     setTimeout(() => {
-      window.location.href = 'index.html';
+      window.location.href = 'map.html';
     }, 600);
   }
 }
