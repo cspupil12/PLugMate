@@ -198,7 +198,10 @@
     <a href="host-dashboard.html" class="bg-white hover:bg-gray-50 text-emerald-700 rounded-lg shadow-google border border-emerald-200 px-3 py-2 text-xs font-bold flex items-center gap-1.5 transition-all">
       <span>⚡</span> <span class="hidden md:inline">Host Mode</span>
     </a>
-    <button onclick="if(window.VoltLocation){VoltLocation.showLocationManagerModal();}" id="btnMapCookieStatus" class="bg-blue-50 hover:bg-blue-100 text-googleBlue rounded-lg shadow-google border border-blue-200 px-3 py-2 text-xs font-bold flex items-center gap-1.5 transition-all" title="Location Tracking Cookie (GPS)">
+    <button onclick="enablePinpointHouseMode()" id="btnPinpointHouse" class="bg-blue-50 hover:bg-blue-100 text-googleBlue rounded-lg shadow-google border border-blue-300 px-3 py-2 text-xs font-bold flex items-center gap-1.5 transition-all" title="Click on map or drag blue pin to set exact house location under 5m">
+      <span>🎯</span> <span class="hidden sm:inline">Set Exact House (≤5m)</span>
+    </button>
+    <button onclick="if(window.VoltLocation){VoltLocation.showLocationManagerModal();}" id="btnMapCookieStatus" class="bg-white hover:bg-gray-50 text-googleGray rounded-lg shadow-google border border-gray-200 px-3 py-2 text-xs font-medium flex items-center gap-1.5 transition-all" title="Location Tracking Cookie (GPS)">
       <span>🍪</span> <span class="hidden lg:inline">GPS Cookie</span>
     </button>
     <button id="btnLayerSat" onclick="toggleSatelliteLayer()" class="bg-white hover:bg-gray-50 text-gray-700 rounded-lg shadow-google border border-gray-200 px-3 py-2 text-xs font-medium flex items-center gap-1.5 transition-all" title="Toggle Satellite Imagery">

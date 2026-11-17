@@ -159,9 +159,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Sync user location from Location Cookies if available
-  if (window.VoltLocation && typeof VoltLocation.getLocationCookie === 'function') {
-    const locCookie = VoltLocation.getLocationCookie();
+  // Sync user location from temporary session location storage if available
+  if (window.VoltLocation && typeof VoltLocation.getLocation === 'function') {
+    const locCookie = VoltLocation.getLocation();
     if (locCookie && !isNaN(locCookie.lat) && !isNaN(locCookie.lng)) {
       STATE.userLocation = { lat: locCookie.lat, lng: locCookie.lng };
     }
@@ -169,17 +169,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   initGoogleMap();
   renderAllChargerPins();
-  
+
   const countEl = document.getElementById('totalPinCount');
   if (countEl) countEl.textContent = CHARGERS_DATA.length;
 
-  // Listen for live cookie location updates
+  // Listen for live session location tracking updates
   window.addEventListener('voltshare:locationUpdated', (e) => {
-    if (e.detail && STATE.userMarker) {
+    if (e.detail && !isNaN(e.detail.lat) && !isNaN(e.detail.lng)) {
       STATE.userLocation = { lat: e.detail.lat, lng: e.detail.lng };
-      STATE.userMarker.setLatLng([e.detail.lat, e.detail.lng]);
-      if (STATE.map) {
-        STATE.map.flyTo([e.detail.lat, e.detail.lng], 15, { duration: 0.8 });
+      if (STATE.userMarker) {
+        STATE.userMarker.setLatLng([e.detail.lat, e.detail.lng]);
+      }
+      // Center map on user location if not actively routing a drive
+      if (STATE.map && !STATE.isSimulatingDrive) {
+        STATE.map.panTo([e.detail.lat, e.detail.lng]);
       }
     }
   });
@@ -211,12 +214,17 @@ function checkUrlNavigationTrigger() {
 
 // Initialize Leaflet with Official Google Maps Raster Tiles
 function initGoogleMap() {
-  const city = STATE.cities[STATE.city];
+  const city = STATE.cities[STATE.city] || { lat: 30.8950, lng: 75.8050, zoom: 14 };
+
+  // Always center on user location if available
+  const initialCenter = (STATE.userLocation && !isNaN(STATE.userLocation.lat))
+    ? [STATE.userLocation.lat, STATE.userLocation.lng]
+    : [city.lat, city.lng];
 
   STATE.map = L.map('map', {
     zoomControl: false, // We use authentic Google zoom controls
     attributionControl: true
-  }).setView([city.lat, city.lng], city.zoom);
+  }).setView(initialCenter, 15);
 
   // Set initial Google Roadmap tiles
   setMapLayer('roadmap');
@@ -224,9 +232,14 @@ function initGoogleMap() {
   // Add Google Maps User Location Blue Dot
   addUserLocationMarker();
 
-  // Resize watchdog
+  // Resize watchdog and ensure focus on user location
   setTimeout(() => {
-    if (STATE.map) STATE.map.invalidateSize();
+    if (STATE.map) {
+      STATE.map.invalidateSize();
+      if (STATE.userLocation && !isNaN(STATE.userLocation.lat)) {
+        STATE.map.setView([STATE.userLocation.lat, STATE.userLocation.lng], 15);
+      }
+    }
   }, 200);
 }
 
@@ -345,12 +358,12 @@ function renderAllChargerPins(filteredList = null) {
   });
 }
 
-// Add Pulsing Google Blue Dot for User Location
+// Add Pulsing Google Blue Dot for User Location (with ≤5m Draggable House Precision)
 function addUserLocationMarker() {
   const userIcon = L.divIcon({
     className: 'google-user-icon',
     html: `
-      <div class="google-user-dot">
+      <div class="google-user-dot" style="cursor: grab;" title="Drag me to your exact house doorstep!">
         <div class="pulse"></div>
         <div class="dot"></div>
       </div>`,
@@ -359,16 +372,83 @@ function addUserLocationMarker() {
   });
 
   if (!STATE.userLocation || isNaN(STATE.userLocation.lat)) {
-    const city = STATE.cities[STATE.city];
-    STATE.userLocation = { lat: city.lat + 0.006, lng: city.lng - 0.004 };
+    const city = STATE.cities[STATE.city] || { lat: 30.8950, lng: 75.8050 };
+    STATE.userLocation = { lat: city.lat + 0.006, lng: city.lng - 0.004, accuracy: 5 };
   }
 
   if (STATE.userMarker && STATE.map) {
     STATE.map.removeLayer(STATE.userMarker);
   }
+  if (STATE.userAccuracyCircle && STATE.map) {
+    STATE.map.removeLayer(STATE.userAccuracyCircle);
+  }
 
-  STATE.userMarker = L.marker([STATE.userLocation.lat, STATE.userLocation.lng], { icon: userIcon }).addTo(STATE.map);
-  STATE.userMarker.bindTooltip('Your Location (EV) • Tracked by Cookie', { direction: 'bottom', offset: [0, 8] });
+  // Draw 5m - 20m high-accuracy circle
+  const accRadius = Math.min(Math.max(STATE.userLocation.accuracy || 8, 4), 25);
+  STATE.userAccuracyCircle = L.circle([STATE.userLocation.lat, STATE.userLocation.lng], {
+    radius: accRadius,
+    color: '#1A73E8',
+    fillColor: '#1A73E8',
+    fillOpacity: 0.12,
+    weight: 1
+  }).addTo(STATE.map);
+
+  STATE.userMarker = L.marker([STATE.userLocation.lat, STATE.userLocation.lng], {
+    icon: userIcon,
+    draggable: true,
+    autoPan: true
+  }).addTo(STATE.map);
+
+  STATE.userMarker.bindTooltip(
+    '<div style="font-size:11px; font-weight:600; color:#202124;">📍 Your Location<br><span style="color:#1A73E8; font-weight:700;">Drag to set exact house (≤5m)</span></div>',
+    { direction: 'bottom', offset: [0, 8] }
+  );
+
+  // When dragged, snap coordinates exactly to the house doorstep
+  STATE.userMarker.on('dragend', function (e) {
+    const newPos = e.target.getLatLng();
+    STATE.userLocation = { lat: newPos.lat, lng: newPos.lng, accuracy: 3 };
+    if (STATE.userAccuracyCircle) {
+      STATE.userAccuracyCircle.setLatLng(newPos);
+      STATE.userAccuracyCircle.setRadius(5);
+    }
+    if (window.VoltLocation) {
+      VoltLocation.saveLocation(newPos.lat, newPos.lng, 'ludhiana', 3);
+    }
+    if (typeof showToast === 'function') {
+      showToast("Exact house pin saved (within 5m precision)!", "🎯");
+    }
+  });
+}
+
+// Pinpoint exact house mode (≤5m precision)
+function enablePinpointHouseMode() {
+  if (!STATE.map) return;
+
+  STATE.map.flyTo([STATE.userLocation.lat, STATE.userLocation.lng], 18, { duration: 0.8 });
+
+  if (typeof showToast === 'function') {
+    showToast("Zoomed in! Drag the blue dot or tap your exact house driveway", "🎯");
+  }
+
+  STATE.map.once('click', function (e) {
+    const lat = e.latlng.lat;
+    const lng = e.latlng.lng;
+    STATE.userLocation = { lat, lng, accuracy: 3 };
+    if (STATE.userMarker) {
+      STATE.userMarker.setLatLng([lat, lng]);
+    }
+    if (STATE.userAccuracyCircle) {
+      STATE.userAccuracyCircle.setLatLng([lat, lng]);
+      STATE.userAccuracyCircle.setRadius(5);
+    }
+    if (window.VoltLocation) {
+      VoltLocation.saveLocation(lat, lng, 'ludhiana', 3);
+    }
+    if (typeof showToast === 'function') {
+      showToast("House doorstep locked (under 5 meters accuracy)!", "🏠");
+    }
+  });
 }
 
 // Open Floating Google Maps Place Card
@@ -684,32 +764,13 @@ function zoomOutMap() {
 }
 
 // Recenter Map on User Location & Update Tracking Cookies
+// Recenter Map on User Location & Activate Tracking
 function recenterOnUser() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const lat = pos.coords.latitude;
-        const lng = pos.coords.longitude;
-        STATE.userLocation = { lat, lng };
-        if (STATE.userMarker) {
-          STATE.userMarker.setLatLng([lat, lng]);
-        }
-        if (window.VoltLocation) {
-          VoltLocation.saveLocationCookies(lat, lng, 'ludhiana');
-        }
-        if (STATE.map) {
-          STATE.map.flyTo([lat, lng], 15, { duration: 0.8 });
-        }
-      },
-      () => {
-        if (STATE.map && STATE.userLocation) {
-          STATE.map.flyTo([STATE.userLocation.lat, STATE.userLocation.lng], 14, { duration: 0.8 });
-        }
-      },
-      { timeout: 4000 }
-    );
-  } else if (STATE.map && STATE.userLocation) {
-    STATE.map.flyTo([STATE.userLocation.lat, STATE.userLocation.lng], 14, { duration: 0.8 });
+  if (window.VoltLocation) {
+    VoltLocation.startTracking();
+  }
+  if (STATE.map && STATE.userLocation && !isNaN(STATE.userLocation.lat)) {
+    STATE.map.flyTo([STATE.userLocation.lat, STATE.userLocation.lng], 15, { duration: 0.8 });
   }
 }
 

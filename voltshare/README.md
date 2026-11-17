@@ -32,18 +32,31 @@ You can directly open `voltshare/public/index.html` in Chrome, Firefox, or Edge.
 
 ---
 
-## 🍪 Location Tracking & Cookie System
+## 🍪 Location Tracking & Temporary Session Cookie System
 
-VoltShare includes a location tracking cookie manager in [`js/location-cookie.js`](file:///d:/My%20projects/Let%20Me%20Plug%20In/voltshare/public/js/location-cookie.js) to track user proximity to chargers and estimate walking times in Ludhiana.
+VoltShare includes a location tracking cookie manager in [`js/location-cookie.js`](file:///d:/My%20projects/Let%20Me%20Plug%20In/voltshare/public/js/location-cookie.js) to track user proximity to chargers, center the map directly on your location, and estimate walking times in Ludhiana.
 
-### Active Cookies:
-| Cookie Key | Value Example | Description |
+### How the Session Storage & Cookies Work:
+1. **On First Visit of a Session**: A prompt appears asking for location tracking consent.
+2. **Accepted**:
+   - Location and consent are stored in **Session Cookies** (no expiration date) + **`sessionStorage`**.
+   - Continuous real-time location tracking (`navigator.geolocation.watchPosition` with `maximumAge: 0`) activates with a target accuracy of **under 5 meters**.
+   - The map immediately loads and centers directly on **your location** (with the pulsing blue location dot and accuracy halo).
+   - **Precision Doorstep Pinpointing (≤5m)**: If desktop/Wi-Fi positioning is approximate, you can **drag the blue dot** or click **"🎯 Set Exact House (≤5m)"** to snap the pin directly onto your driveway. This exact point is saved to your session cookies.
+3. **On Page Reloads (`F5` / Refresh / Navigating Pages)**:
+   - Preserves the session without prompting again. Tracking resumes automatically and stays locked on your house pin.
+4. **When Website/Tab is Closed & Reopened**:
+   - The temporary session storage and session cookies expire.
+   - Only on a fresh open does it ask for location permission again.
+
+### Active Temporary Cookies:
+| Cookie Key | Value Example | Storage Lifecycle |
 | :--- | :--- | :--- |
-| `voltshare_loc_consent` | `granted` / `declined` | 30-day user consent state for proximity tracking |
-| `voltshare_user_lat` | `30.88720` | Tracked latitude (defaults to Sarabha Nagar / Ludhiana) |
+| `voltshare_loc_consent` | `granted` / `declined` | Temporary Session (clears on tab close) |
+| `voltshare_user_lat` | `30.88720` | Tracked latitude in Ludhiana |
 | `voltshare_user_lng` | `75.81150` | Tracked longitude |
 | `voltshare_user_city` | `ludhiana` | Active municipality boundary |
-| `voltshare_loc_timestamp`| `2026-11-17T...` | ISO timestamp of the last GPS / location update |
+| `voltshare_loc_timestamp`| `2026-11-17T...` | ISO timestamp of the last GPS update |
 
 ### Features:
 1. **Cookie Consent Banner**: Appears non-intrusively at the bottom if consent hasn't been set, prompting users to allow location cookies.

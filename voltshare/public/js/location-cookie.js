@@ -1,27 +1,41 @@
 /**
- * VoltShare — Location Tracking & Cookie Consent Manager
- * Handles HTTP/document cookies for user location tracking, proximity calculations,
- * and user consent persistence across sessions.
+ * VoltShare — Temporary Session Location Tracking & Cookie Consent Manager
+ * - Persists location & consent temporarily for the duration of the browser session.
+ * - Does NOT prompt on page reload (preserves session in sessionStorage & session cookies).
+ * - Prompts again when the website/tab is closed and reopened.
+ * - Continuously tracks real-time user location when permission is granted.
  */
 
 const VoltLocation = {
-  COOKIE_NAMES: {
+  KEYS: {
     CONSENT: 'voltshare_loc_consent',
     LAT: 'voltshare_user_lat',
     LNG: 'voltshare_user_lng',
+    ACC: 'voltshare_user_acc',
     CITY: 'voltshare_user_city',
     TIMESTAMP: 'voltshare_loc_timestamp'
   },
 
-  // Cookie Helpers
-  setCookie(name, value, days = 30) {
-    const d = new Date();
-    d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
-    const expires = "expires=" + d.toUTCString();
-    document.cookie = `${name}=${encodeURIComponent(value)};${expires};path=/;SameSite=Lax`;
+  watchId: null,
+
+  // Temporary Session Storage & Cookie Helpers (No expires = Session duration only)
+  setSessionValue(name, value) {
+    // 1. Session Cookie (cleared by browser on tab/window close)
+    document.cookie = `${name}=${encodeURIComponent(value)};path=/;SameSite=Lax`;
+    // 2. SessionStorage (guaranteed temporary session persistence across reloads)
+    try {
+      sessionStorage.setItem(name, String(value));
+    } catch (e) {}
   },
 
-  getCookie(name) {
+  getSessionValue(name) {
+    // Check sessionStorage first
+    try {
+      const sVal = sessionStorage.getItem(name);
+      if (sVal !== null && sVal !== undefined) return sVal;
+    } catch (e) {}
+
+    // Fallback to cookie
     const cname = name + "=";
     const decodedCookie = decodeURIComponent(document.cookie);
     const ca = decodedCookie.split(';');
@@ -34,57 +48,115 @@ const VoltLocation = {
     return null;
   },
 
-  deleteCookie(name) {
+  deleteSessionValue(name) {
     document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;SameSite=Lax`;
+    try {
+      sessionStorage.removeItem(name);
+    } catch (e) {}
   },
 
-  // Location Cookie State
+  // Consent State
   hasConsent() {
-    return this.getCookie(this.COOKIE_NAMES.CONSENT) === 'granted';
+    return this.getSessionValue(this.KEYS.CONSENT) === 'granted';
   },
 
   isDeclined() {
-    return this.getCookie(this.COOKIE_NAMES.CONSENT) === 'declined';
+    return this.getSessionValue(this.KEYS.CONSENT) === 'declined';
   },
 
-  getLocationCookie() {
-    const lat = parseFloat(this.getCookie(this.COOKIE_NAMES.LAT));
-    const lng = parseFloat(this.getCookie(this.COOKIE_NAMES.LNG));
-    const city = this.getCookie(this.COOKIE_NAMES.CITY) || 'ludhiana';
-    const timestamp = this.getCookie(this.COOKIE_NAMES.TIMESTAMP);
+  // Get active tracked location
+  getLocation() {
+    const lat = parseFloat(this.getSessionValue(this.KEYS.LAT));
+    const lng = parseFloat(this.getSessionValue(this.KEYS.LNG));
+    const acc = parseFloat(this.getSessionValue(this.KEYS.ACC)) || 5;
+    const city = this.getSessionValue(this.KEYS.CITY) || 'ludhiana';
+    const timestamp = this.getSessionValue(this.KEYS.TIMESTAMP);
 
     if (!isNaN(lat) && !isNaN(lng)) {
-      return { lat, lng, city, timestamp, consent: true };
+      return { lat, lng, accuracy: acc, city, timestamp, consent: this.hasConsent() };
     }
-    // Default Ludhiana coordinates if not yet set
-    return { lat: 30.8950, lng: 75.8050, city: 'ludhiana', timestamp: null, consent: false };
+    // Default Ludhiana coordinates (Sarabha Nagar community hub)
+    return { lat: 30.8872, lng: 75.8115, accuracy: 5, city: 'ludhiana', timestamp: null, consent: false };
   },
 
-  saveLocationCookies(lat, lng, city = 'ludhiana') {
-    this.setCookie(this.COOKIE_NAMES.CONSENT, 'granted', 30);
-    this.setCookie(this.COOKIE_NAMES.LAT, lat.toFixed(5), 30);
-    this.setCookie(this.COOKIE_NAMES.LNG, lng.toFixed(5), 30);
-    this.setCookie(this.COOKIE_NAMES.CITY, city, 30);
-    this.setCookie(this.COOKIE_NAMES.TIMESTAMP, new Date().toISOString(), 30);
+  // Backward compatible alias
+  getLocationCookie() {
+    return this.getLocation();
+  },
 
-    // Dispatch global event for map listener
+  // Save location to temporary session storage
+  saveLocation(lat, lng, city = 'ludhiana', accuracy = 5) {
+    this.setSessionValue(this.KEYS.CONSENT, 'granted');
+    this.setSessionValue(this.KEYS.LAT, lat.toFixed(6));
+    this.setSessionValue(this.KEYS.LNG, lng.toFixed(6));
+    this.setSessionValue(this.KEYS.ACC, Math.round(accuracy));
+    this.setSessionValue(this.KEYS.CITY, city);
+    this.setSessionValue(this.KEYS.TIMESTAMP, new Date().toISOString());
+
+    // Dispatch global event for Leaflet map & navbar listeners
     window.dispatchEvent(new CustomEvent('voltshare:locationUpdated', {
-      detail: { lat, lng, city }
+      detail: { lat, lng, city, accuracy: Math.round(accuracy) }
     }));
   },
 
-  showLocationManagerModal() {
-    const loc = this.getLocationCookie();
-    const action = confirm(
-      `🍪 VoltShare Location Tracking Cookie\n\n` +
-      `Status: ${this.hasConsent() ? 'Active (GPS Tracking Granted)' : 'Default Ludhiana Coordinates'}\n` +
-      `Coordinates: ${loc.lat.toFixed(4)}° N, ${loc.lng.toFixed(4)}° E\n` +
-      `City: ${loc.city.toUpperCase()}\n` +
-      `Last Updated: ${loc.timestamp ? new Date(loc.timestamp).toLocaleTimeString() : 'Initial Session'}\n\n` +
-      `Click OK to refresh live device GPS location into cookie, or Cancel to keep.`
+  // Backward compatible alias
+  saveLocationCookies(lat, lng, city = 'ludhiana', accuracy = 5) {
+    this.saveLocation(lat, lng, city, accuracy);
+  },
+
+  // Active Real-Time Geolocation Tracking with High Precision (under 5m target)
+  startTracking() {
+    if (!navigator.geolocation) {
+      console.warn("Geolocation API not supported by browser");
+      return;
+    }
+
+    if (this.watchId !== null) {
+      navigator.geolocation.clearWatch(this.watchId);
+    }
+
+    const geoOptions = {
+      enableHighAccuracy: true,
+      timeout: 15000,
+      maximumAge: 0 // Do not use stale cache: forces live GPS / Wi-Fi trilateration
+    };
+
+    // 1. Immediate fresh position fix
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        const acc = pos.coords.accuracy || 5;
+        this.saveLocation(lat, lng, 'ludhiana', acc);
+      },
+      (err) => {
+        console.warn("High-accuracy location fetch note:", err.message);
+        if (!this.getSessionValue(this.KEYS.LAT)) {
+          this.saveLocation(30.8872, 75.8115, 'ludhiana', 15);
+        }
+      },
+      geoOptions
     );
-    if (action) {
-      this.acceptLocationConsent();
+
+    // 2. Real-time watchPosition updates as user moves
+    this.watchId = navigator.geolocation.watchPosition(
+      (pos) => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        const acc = pos.coords.accuracy || 5;
+        this.saveLocation(lat, lng, 'ludhiana', acc);
+      },
+      (err) => {
+        console.warn("watchPosition update note:", err.message);
+      },
+      geoOptions
+    );
+  },
+
+  stopTracking() {
+    if (this.watchId !== null) {
+      navigator.geolocation.clearWatch(this.watchId);
+      this.watchId = null;
     }
   },
 
@@ -93,55 +165,49 @@ const VoltLocation = {
     const banner = document.getElementById('voltCookieBanner');
     if (banner) banner.remove();
 
-    // Try HTML5 Geolocation API
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const lat = pos.coords.latitude;
-          const lng = pos.coords.longitude;
-          this.saveLocationCookies(lat, lng, 'ludhiana');
-          if (typeof showToast === 'function') {
-            showToast(`Location cookies saved (${lat.toFixed(3)}° N, ${lng.toFixed(3)}° E)`, "🍪");
-          }
-        },
-        (err) => {
-          console.warn("Geolocation denied or unavailable, using Ludhiana community default:", err);
-          // Default to Sarabha Nagar, Ludhiana
-          this.saveLocationCookies(30.8872, 75.8115, 'ludhiana');
-          if (typeof showToast === 'function') {
-            showToast("Location cookie saved for Ludhiana neighborhood", "🍪");
-          }
-        },
-        { timeout: 5000 }
-      );
-    } else {
-      this.saveLocationCookies(30.8872, 75.8115, 'ludhiana');
-      if (typeof showToast === 'function') {
-        showToast("Location cookie saved for Ludhiana neighborhood", "🍪");
-      }
+    this.startTracking();
+
+    if (typeof showToast === 'function') {
+      showToast("Live location tracking active for this session", "📍");
     }
   },
 
   declineLocationConsent() {
-    this.setCookie(this.COOKIE_NAMES.CONSENT, 'declined', 7);
+    this.setSessionValue(this.KEYS.CONSENT, 'declined');
     const banner = document.getElementById('voltCookieBanner');
     if (banner) banner.remove();
     if (typeof showToast === 'function') {
-      showToast("Location cookies declined. Using city center.", "ℹ️");
+      showToast("Location tracking declined for this session", "ℹ️");
     }
   },
 
   resetLocationCookies() {
-    Object.values(this.COOKIE_NAMES).forEach(c => this.deleteCookie(c));
+    this.stopTracking();
+    Object.values(this.KEYS).forEach(k => this.deleteSessionValue(k));
     if (typeof showToast === 'function') {
-      showToast("Location tracking cookies cleared!", "🗑️");
+      showToast("Session location cookies cleared!", "🗑️");
     }
     setTimeout(() => window.location.reload(), 400);
   },
 
-  // Inject Non-Intrusive Cookie Consent Banner
+  showLocationManagerModal() {
+    const loc = this.getLocation();
+    const action = confirm(
+      `🍪 VoltShare Session Location Tracking\n\n` +
+      `Status: ${this.hasConsent() ? 'Active (Live GPS Tracking)' : 'Default Ludhiana Coordinates'}\n` +
+      `Coordinates: ${loc.lat.toFixed(4)}° N, ${loc.lng.toFixed(4)}° E\n` +
+      `City: ${loc.city.toUpperCase()}\n` +
+      `Storage: Temporary Session (clears when browser tab is closed)\n\n` +
+      `Click OK to refresh live GPS position, or Cancel to keep current.`
+    );
+    if (action) {
+      this.acceptLocationConsent();
+    }
+  },
+
+  // Mount Non-Intrusive Banner ONLY if no session consent yet
   mountCookieBanner() {
-    // If user already granted or declined, don't show prompt
+    // If user already granted or declined during this browser session, DO NOT PROMPT
     if (this.hasConsent() || this.isDeclined()) return;
     if (document.getElementById('voltCookieBanner')) return;
 
@@ -152,22 +218,22 @@ const VoltLocation = {
     banner.innerHTML = `
       <div class="flex items-start gap-3">
         <div class="w-10 h-10 rounded-xl bg-blue-50 text-googleBlue flex items-center justify-center text-xl shrink-0">
-          🍪
+          📍
         </div>
         <div class="space-y-1.5 flex-1 text-xs">
           <div class="flex items-center justify-between">
-            <h4 class="font-bold text-gray-900 font-google">Location Tracking Cookies</h4>
-            <span class="text-[10px] text-googleBlue bg-blue-50 font-bold px-2 py-0.5 rounded-full">Ludhiana EV Grid</span>
+            <h4 class="font-bold text-gray-900 font-google">Allow Location Tracking?</h4>
+            <span class="text-[10px] text-googleBlue bg-blue-50 font-bold px-2 py-0.5 rounded-full">Session Only</span>
           </div>
           <p class="text-[11px] text-gray-600 leading-relaxed">
-            VoltShare stores cookies to track your proximity to nearby community chargers in Ludhiana and calculate walking distances from your driveway.
+            VoltShare tracks your position to center the map on your location and find nearest driveway EV chargers in Ludhiana. Stored temporarily for this visit.
           </p>
           <div class="pt-1.5 flex items-center gap-2">
             <button onclick="VoltLocation.acceptLocationConsent()" class="px-4 py-1.5 bg-googleBlue hover:bg-googleBlueHover text-white text-xs font-bold rounded-full shadow-google transition-all">
-              Allow Location Cookies
+              Allow Location
             </button>
             <button onclick="VoltLocation.declineLocationConsent()" class="px-3 py-1.5 border border-gray-300 hover:bg-gray-100 text-gray-700 text-xs font-semibold rounded-full transition-colors">
-              Decline
+              Not Now
             </button>
           </div>
         </div>
@@ -175,12 +241,23 @@ const VoltLocation = {
     `;
 
     document.body.appendChild(banner);
+  },
+
+  // Initialize
+  init() {
+    if (this.hasConsent()) {
+      // Permission already active for this session: resume tracking silently without asking!
+      this.startTracking();
+    } else if (!this.isDeclined()) {
+      // First visit of the session: mount banner after brief delay
+      setTimeout(() => {
+        this.mountCookieBanner();
+      }, 700);
+    }
   }
 };
 
-// Auto-run banner check when DOM is ready
+// Auto-run on DOM Ready
 document.addEventListener('DOMContentLoaded', () => {
-  setTimeout(() => {
-    VoltLocation.mountCookieBanner();
-  }, 800);
+  VoltLocation.init();
 });
