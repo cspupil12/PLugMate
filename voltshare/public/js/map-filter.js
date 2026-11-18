@@ -92,7 +92,9 @@
     const topBar = document.querySelector('.absolute.top-3.right-3');
     if (!topBar || document.getElementById('voltMapNavPillGroup') || topBar.querySelector('a[href="my-bookings.html"]')) return;
 
-    const currentUser = window.VoltData ? VoltData.getCurrentUser() : { name: 'Amanjot', role: 'chargee' };
+    const currentUser = (window.VoltData && typeof VoltData.getCurrentUser === 'function') 
+      ? VoltData.getCurrentUser() 
+      : null;
 
     const navGroup = document.createElement('div');
     navGroup.id = 'voltMapNavPillGroup';
@@ -110,7 +112,7 @@
 
       <a href="login.html" class="bg-blue-50 hover:bg-blue-100 text-googleBlue rounded-lg shadow-google border border-blue-200 px-3 py-2 text-xs font-bold flex items-center gap-1.5 transition-all" title="User Account">
         <span>👤</span>
-        <span class="hidden md:inline">${currentUser.name.split(' ')[0]}</span>
+        <span class="hidden md:inline">${currentUser ? currentUser.name.split(' ')[0] : 'Sign In'}</span>
       </a>
     `;
 

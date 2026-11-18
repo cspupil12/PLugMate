@@ -14,8 +14,8 @@ function renderVoltNavbar(activePage = '') {
   const mountEl = document.getElementById('voltNavbarMount');
   if (!mountEl) return;
 
-  const currentUser = (window.VoltData && typeof VoltData.getCurrentUser === 'function') 
-    ? VoltData.getCurrentUser() 
+  const currentUser = (window.VoltData && typeof VoltData.getCurrentUser === 'function')
+    ? VoltData.getCurrentUser()
     : null;
   const isHost = currentUser && currentUser.role === 'host';
 
@@ -187,18 +187,32 @@ function toggleUserRole() {
     const cur = VoltData.getCurrentUser();
     if (cur) {
       const nextRole = cur.role === 'host' ? 'chargee' : 'host';
-      VoltData.setUserRole(nextRole);
+      if (typeof VoltData.setUserRole === 'function') {
+        VoltData.setUserRole(nextRole);
+      } else if (typeof VoltData.setCurrentUser === 'function') {
+        cur.role = nextRole;
+        VoltData.setCurrentUser(cur);
+      }
       window.location.reload();
+      return;
     }
   }
+  window.location.href = 'login.html';
 }
 
 function handleSignOut() {
-  if (window.VoltData && typeof VoltData.logout === 'function') {
-    VoltData.logout();
-  }
+  try {
+    if (window.VoltData && typeof VoltData.logout === 'function') {
+      VoltData.logout();
+    }
+    localStorage.removeItem('plugmate_current_user_v1');
+    localStorage.removeItem('voltshare_current_user_v1');
+  } catch (e) { }
+
   if (window.Clerk && typeof Clerk.signOut === 'function') {
     Clerk.signOut().then(() => {
+      window.location.href = 'index.html';
+    }).catch(() => {
       window.location.href = 'index.html';
     });
   } else {

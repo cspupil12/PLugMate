@@ -53,13 +53,13 @@
         <img id="hostProfileAvatar" src="" class="w-14 h-14 rounded-full object-cover border-2 border-emerald-500 shadow-sm">
         <div>
           <div class="flex items-center gap-2">
-            <h1 class="text-xl font-bold font-google text-gray-900" id="hostProfileName">Harpreet Singh</h1>
+            <h1 class="text-xl font-bold font-google text-gray-900" id="hostProfileName">Community Host</h1>
             <span class="bg-emerald-100 text-emerald-800 text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border border-emerald-200">
               Host Mode
             </span>
           </div>
           <p class="text-xs text-gray-500 mt-0.5" id="hostProfileAddress">
-            Green Park • Verified Community Host
+            Neighborhood Driveway • Verified Host
           </p>
         </div>
       </div>
@@ -231,11 +231,18 @@
   <script src="js/navbar.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // Ensure user is in Host mode
       const user = VoltData.getCurrentUser();
+      if (!user) {
+        window.location.href = 'login.html';
+        return;
+      }
       if (user.role !== 'host') {
-        // Switch to host Harpreet for demonstration
-        VoltData.loginAs('user_host_1');
+        if (typeof VoltData.setUserRole === 'function') {
+          VoltData.setUserRole('host');
+        } else {
+          user.role = 'host';
+          VoltData.setCurrentUser(user);
+        }
       }
 
       renderVoltNavbar('host');
@@ -244,17 +251,19 @@
 
     function renderHostDashboard() {
       const currentUser = VoltData.getCurrentUser();
-      document.getElementById('hostProfileName').textContent = currentUser.name;
-      document.getElementById('hostProfileAddress').textContent = `${currentUser.address || 'Green Park'} • ${currentUser.badge || 'Verified Community Host'}`;
+      if (!currentUser) {
+        window.location.href = 'login.html';
+        return;
+      }
+      document.getElementById('hostProfileName').textContent = currentUser.name || 'Community Host';
+      document.getElementById('hostProfileAddress').textContent = `${currentUser.address || 'Neighborhood'} • ${currentUser.badge || 'Community Host'}`;
       document.getElementById('hostProfileAvatar').src = currentUser.avatar || 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=160&q=80';
 
       const allChargers = VoltData.getChargers();
-      // Show chargers owned by current host or all if demo
-      const hostChargers = allChargers.filter(c => c.host_id === currentUser.id || allChargers.length <= 8);
+      const hostChargers = allChargers.filter(c => c.host_id === currentUser.id);
 
       const allBookings = VoltData.getBookings();
-      // Host bookings
-      const hostBookings = allBookings.filter(b => b.host_id === currentUser.id || true);
+      const hostBookings = allBookings.filter(b => b.host_id === currentUser.id);
 
       // Compute metrics
       const completedBookings = hostBookings.filter(b => b.status === 'completed');

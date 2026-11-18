@@ -58,7 +58,7 @@
           <span>📅</span> My EV Charging Bookings
         </h1>
         <p class="text-xs text-gray-500 mt-0.5" id="userHeaderSubtitle">
-          Managing charge sessions for Amanjot Virdi • Tata Nexon EV
+          Review your EV charging reservations and history
         </p>
       </div>
 
@@ -146,11 +146,17 @@
 
     function renderBookings() {
       const currentUser = VoltData.getCurrentUser();
-      document.getElementById('userHeaderSubtitle').textContent = `Managing charge sessions for ${currentUser.name} • ${currentUser.vehicle ? currentUser.vehicle.model : 'EV Community Member'}`;
+      if (currentUser) {
+        document.getElementById('userHeaderSubtitle').textContent = `Managing charge sessions for ${currentUser.name} • ${currentUser.vehicle ? currentUser.vehicle.model : 'EV Community Member'}`;
+      } else {
+        document.getElementById('userHeaderSubtitle').textContent = 'Please sign in to view your charging reservations.';
+      }
 
       const allBookings = VoltData.getBookings();
-      // Filter for current user or show all if demo
-      const userBookings = allBookings.filter(b => b.user_id === currentUser.id || currentUser.role === 'host' ? true : true);
+      // Filter for current user or show all if host
+      const userBookings = currentUser
+        ? allBookings.filter(b => b.user_id === currentUser.id || b.host_id === currentUser.id)
+        : [];
 
       const upCount = userBookings.filter(b => b.status === 'upcoming').length;
       const compCount = userBookings.filter(b => b.status === 'completed').length;

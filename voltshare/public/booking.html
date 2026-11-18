@@ -159,13 +159,13 @@
               <label class="block font-medium text-gray-700 mb-1">Driver Name</label>
               <input type="text" id="driverName"
                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue"
-                value="Amanjot Virdi">
+                placeholder="Enter your name">
             </div>
             <div>
               <label class="block font-medium text-gray-700 mb-1">Mobile (for Host SMS)</label>
               <input type="tel" id="driverPhone"
                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue"
-                value="+91 98888 12345">
+                placeholder="+91 Mobile number">
             </div>
           </div>
 
@@ -173,7 +173,7 @@
             <label class="block font-medium text-gray-700 mb-1">EV Vehicle Model & Plate</label>
             <input type="text" id="driverVehicle"
               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue"
-              value="Tata Nexon EV Empowered+ (PB-10-AZ-4521)">
+              placeholder="e.g. Tata Nexon EV, MG ZS EV">
           </div>
         </div>
 
@@ -357,7 +357,7 @@
             8492
           </div>
           <p class="text-xs text-gray-600">
-            Show this PIN to host <b id="confHostName">Harpreet Singh</b> upon arrival to activate the driveway charger.
+            Show this PIN to host <b id="confHostName">Verified Host</b> upon arrival to activate the driveway charger.
           </p>
         </div>
 
@@ -446,10 +446,12 @@
 
       // Set user values
       const user = VoltData.getCurrentUser();
-      document.getElementById('driverName').value = user.name;
-      document.getElementById('driverPhone').value = user.phone || '+91 98888 12345';
-      if (user.vehicle) {
-        document.getElementById('driverVehicle').value = `${user.vehicle.make} ${user.vehicle.model} (${user.vehicle.reg_no})`;
+      if (user) {
+        document.getElementById('driverName').value = user.name || '';
+        document.getElementById('driverPhone').value = user.phone || '';
+        if (user.vehicle) {
+          document.getElementById('driverVehicle').value = `${user.vehicle.make || ''} ${user.vehicle.model || ''} (${user.vehicle.reg_no || ''})`.trim();
+        }
       }
 
       // Time slots
