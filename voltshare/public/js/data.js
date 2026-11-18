@@ -85,6 +85,36 @@ const VoltData = {
 
   // Initialize storage structures (clean, zero mock data)
   init() {
+    // Check if user just redirected from Clerk authentication portal
+    if (typeof window !== 'undefined' && window.location && window.location.search) {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const clerkId = params.get('clerk_user_id');
+        if (clerkId) {
+          const userObj = {
+            id: clerkId,
+            name: params.get('name') || 'PlugMate User',
+            email: params.get('email') || '',
+            role: params.get('role') || 'chargee',
+            avatar: params.get('avatar') || '',
+            phone: params.get('phone') || ''
+          };
+          this.setCurrentUser(userObj);
+          if (window.history && window.history.replaceState) {
+            params.delete('clerk_user_id');
+            params.delete('name');
+            params.delete('email');
+            params.delete('role');
+            params.delete('avatar');
+            params.delete('phone');
+            const remaining = params.toString();
+            const cleanUrl = window.location.pathname + (remaining ? '?' + remaining : '');
+            window.history.replaceState({}, document.title, cleanUrl);
+          }
+        }
+      } catch (e) { }
+    }
+
     if (!localStorage.getItem(PLUGMATE_STORAGE_KEYS.CHARGERS)) {
       localStorage.setItem(PLUGMATE_STORAGE_KEYS.CHARGERS, '[]');
     }

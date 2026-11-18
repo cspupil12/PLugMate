@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +9,9 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=Google+Sans:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=Google+Sans:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap"
+    rel="stylesheet">
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -40,21 +43,25 @@
   </script>
   <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body class="bg-gray-50 min-h-screen flex flex-col font-sans text-gray-800">
 
   <!-- Shared Navbar Mount -->
   <div id="voltNavbarMount"></div>
 
   <main class="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
-    
+
     <!-- Top Host Banner -->
-    <div class="bg-white rounded-2xl p-5 shadow-google border border-gray-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div
+      class="bg-white rounded-2xl p-5 shadow-google border border-gray-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div class="flex items-center gap-3.5">
-        <img id="hostProfileAvatar" src="" class="w-14 h-14 rounded-full object-cover border-2 border-emerald-500 shadow-sm">
+        <img id="hostProfileAvatar" src=""
+          class="w-14 h-14 rounded-full object-cover border-2 border-emerald-500 shadow-sm">
         <div>
           <div class="flex items-center gap-2">
             <h1 class="text-xl font-bold font-google text-gray-900" id="hostProfileName">Community Host</h1>
-            <span class="bg-emerald-100 text-emerald-800 text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border border-emerald-200">
+            <span
+              class="bg-emerald-100 text-emerald-800 text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border border-emerald-200">
               Host Mode
             </span>
           </div>
@@ -65,10 +72,12 @@
       </div>
 
       <div class="flex items-center gap-2">
-        <button onclick="openAddChargerModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-full shadow-google transition-colors flex items-center gap-1.5">
+        <button onclick="openAddChargerModal()"
+          class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-full shadow-google transition-colors flex items-center gap-1.5">
           <span>⚡</span> Add New Charger
         </button>
-        <a href="map.html" class="px-3.5 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 text-xs font-semibold rounded-full transition-colors flex items-center gap-1">
+        <a href="map.html"
+          class="px-3.5 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 text-xs font-semibold rounded-full transition-colors flex items-center gap-1">
           <span>🗺️</span> View Map
         </a>
       </div>
@@ -76,7 +85,7 @@
 
     <!-- Earnings & Performance Metrics -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-      
+
       <!-- Metric 1 -->
       <div class="bg-white rounded-2xl p-4 shadow-google border border-gray-200">
         <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider block">Net Host Payouts</span>
@@ -142,8 +151,9 @@
             Set pricing per hour, configure operating hours, and toggle driveway availability.
           </p>
         </div>
-        
-        <button onclick="openAddChargerModal()" class="px-3.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full transition-colors flex items-center gap-1">
+
+        <button onclick="openAddChargerModal()"
+          class="px-3.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full transition-colors flex items-center gap-1">
           <span>+</span> Add Charger
         </button>
       </div>
@@ -156,9 +166,11 @@
   </main>
 
   <!-- ADD / EDIT CHARGER MODAL -->
-  <div id="chargerModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl shadow-googleCard max-w-lg w-full p-6 space-y-4 border border-gray-200 max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in-95 duration-150">
-      
+  <div id="chargerModal"
+    class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div
+      class="bg-white rounded-2xl shadow-googleCard max-w-lg w-full p-6 space-y-4 border border-gray-200 max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in-95 duration-150">
+
       <div class="flex items-center justify-between border-b border-gray-100 pb-3">
         <h3 class="text-base font-bold text-gray-900 font-google" id="modalChargerHeading">Add New Driveway Charger</h3>
         <button onclick="closeChargerModal()" class="text-gray-400 hover:text-gray-700 text-lg font-bold">✕</button>
@@ -169,18 +181,21 @@
 
         <div>
           <label class="block font-medium text-gray-700 mb-1">Charger Title</label>
-          <input type="text" id="formTitle" required placeholder="e.g. Model Town Kothi Wallbox" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue">
+          <input type="text" id="formTitle" required placeholder="e.g. Model Town Kothi Wallbox"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue">
         </div>
 
         <div>
           <label class="block font-medium text-gray-700 mb-1">Driveway Address</label>
-          <input type="text" id="formAddress" required placeholder="e.g. 45 Pinecrest Drive, Model Town" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue">
+          <input type="text" id="formAddress" required placeholder="e.g. 45 Pinecrest Drive, Model Town"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue">
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block font-medium text-gray-700 mb-1">Connector Type</label>
-            <select id="formConnector" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue">
+            <select id="formConnector"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue">
               <option value="Type-2 AC">Type-2 AC (Universal 4-Wheeler)</option>
               <option value="15A-3Pin">15A-3Pin Standard Socket (3.3 kW)</option>
               <option value="CCS-2 DC">CCS-2 DC Rapid Charger</option>
@@ -188,36 +203,44 @@
           </div>
           <div>
             <label class="block font-medium text-gray-700 mb-1">Power Output (kW)</label>
-            <input type="number" step="0.1" id="formPower" required value="7.4" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue">
+            <input type="number" step="0.1" id="formPower" required value="7.4"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue">
           </div>
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block font-medium text-gray-700 mb-1">Rate per Hour (₹)</label>
-            <input type="number" step="1" id="formRate" required value="22" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue">
+            <input type="number" step="1" id="formRate" required value="22"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue">
           </div>
           <div>
             <label class="block font-medium text-gray-700 mb-1">Available Hours</label>
-            <input type="text" id="formHours" required value="06:00 AM - 11:30 PM" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue">
+            <input type="text" id="formHours" required value="06:00 AM - 11:30 PM"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue">
           </div>
         </div>
 
         <div>
           <label class="block font-medium text-gray-700 mb-1">Photo URL (Optional)</label>
-          <input type="url" id="formPhoto" placeholder="https://..." value="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=800&q=80" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue">
+          <input type="url" id="formPhoto" placeholder="https://..."
+            value="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=800&q=80"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue">
         </div>
 
         <div>
           <label class="block font-medium text-gray-700 mb-1">Vehicle Compatibility</label>
-          <input type="text" id="formCompatibility" value="Tata Nexon, MG Windsor, Ather, Ola" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue">
+          <input type="text" id="formCompatibility" value="Tata Nexon, MG Windsor, Ather, Ola"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue">
         </div>
 
         <div class="pt-3 border-t border-gray-100 flex items-center justify-end gap-2">
-          <button type="button" onclick="closeChargerModal()" class="px-4 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-full font-medium">
+          <button type="button" onclick="closeChargerModal()"
+            class="px-4 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-full font-medium">
             Cancel
           </button>
-          <button type="submit" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full font-bold shadow-google">
+          <button type="submit"
+            class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full font-bold shadow-google">
             Save Charger
           </button>
         </div>
@@ -233,7 +256,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       const user = VoltData.getCurrentUser();
       if (!user) {
-        window.location.href = 'login.html';
+        window.location.href = 'http://localhost:5173';
         return;
       }
       if (user.role !== 'host') {
@@ -252,7 +275,7 @@
     function renderHostDashboard() {
       const currentUser = VoltData.getCurrentUser();
       if (!currentUser) {
-        window.location.href = 'login.html';
+        window.location.href = 'http://localhost:5173';
         return;
       }
       document.getElementById('hostProfileName').textContent = currentUser.name || 'Community Host';
@@ -477,4 +500,5 @@
     }
   </script>
 </body>
+
 </html>

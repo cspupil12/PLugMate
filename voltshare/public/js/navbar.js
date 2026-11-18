@@ -86,35 +86,9 @@ function renderVoltNavbar(activePage = '') {
                     </div>
                   </div>
 
-                  <!-- Role Switcher -->
-                  <div class="px-2 py-1.5">
-                    <button onclick="toggleUserRole()" class="w-full text-left px-3 py-2 text-xs hover:bg-gray-50 rounded-lg flex items-center justify-between text-gray-700">
-                      <span>Switch to ${isHost ? '🚗 Chargee Mode' : '⚡ Host Mode'}</span>
-                      <span class="text-xs text-googleBlue font-bold">⇄</span>
-                    </button>
-                  </div>
-
-                  <!-- Location Cookie Section -->
-                  <div class="px-4 py-2.5 border-t border-gray-100 bg-gray-50/70 text-xs">
-                    <div class="flex items-center justify-between">
-                      <span class="font-bold text-gray-800 flex items-center gap-1">Location Tracking</span>
-                      <span class="text-[10px] font-bold px-1.5 py-0.5 rounded ${window.VoltLocation && VoltLocation.hasConsent() ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-200 text-gray-700'}">
-                        ${window.VoltLocation && VoltLocation.hasConsent() ? 'GPS Active' : 'Session'}
-                      </span>
-                    </div>
-                    <div class="mt-1.5 flex items-center gap-3">
-                      <button onclick="if(window.VoltLocation){VoltLocation.acceptLocationConsent();}" class="text-[11px] text-googleBlue font-bold hover:underline">
-                        Update GPS
-                      </button>
-                      <button onclick="if(window.VoltLocation){VoltLocation.resetLocationCookies();}" class="text-[11px] text-rose-600 hover:underline">
-                        Reset
-                      </button>
-                    </div>
-                  </div>
-
-                  <!-- Sign Out / Switch -->
-                  <div class="border-t border-gray-100 mt-1 pt-1 px-2">
-                    <button onclick="handleSignOut()" class="w-full text-left px-3 py-2 text-xs text-rose-600 hover:bg-rose-50 rounded-lg flex items-center gap-1.5 font-medium">
+                  <!-- Sign Out -->
+                  <div class="px-2 py-1">
+                    <button onclick="handleSignOut()" class="w-full text-left px-3 py-2 text-xs text-rose-600 hover:bg-rose-50 rounded-lg flex items-center gap-1.5 font-medium transition-colors">
                       <span>🚪</span> Sign Out
                     </button>
                   </div>
@@ -122,7 +96,7 @@ function renderVoltNavbar(activePage = '') {
               </div>
             ` : `
               <!-- Sign In Button -->
-              <a href="login.html" class="px-4 py-2 bg-googleBlue hover:bg-googleBlueHover text-white text-xs font-bold rounded-full shadow-sm transition-colors flex items-center gap-1.5">
+              <a href="http://localhost:5173" onclick="this.href='http://localhost:5173/?return_to=' + encodeURIComponent(window.location.href)" class="px-4 py-2 bg-googleBlue hover:bg-googleBlueHover text-white text-xs font-bold rounded-full shadow-sm transition-colors flex items-center gap-1.5">
                 <span>🔒</span> Sign In with Clerk
               </a>
             `}
@@ -160,7 +134,7 @@ function renderVoltNavbar(activePage = '') {
           </div>
         ` : `
           <div class="py-2 border-b border-gray-100">
-            <a href="login.html" class="block text-center py-2 bg-googleBlue text-white rounded-lg text-xs font-bold">Sign In with Clerk</a>
+            <a href="http://localhost:5173" onclick="this.href='http://localhost:5173/?return_to=' + encodeURIComponent(window.location.href)" class="block text-center py-2 bg-googleBlue text-white rounded-lg text-xs font-bold">Sign In with Clerk</a>
           </div>
         `}
         <a href="index.html" class="block py-2 text-xs font-medium text-gray-700 hover:text-googleBlue">🏠 Home</a>
@@ -197,7 +171,7 @@ function toggleUserRole() {
       return;
     }
   }
-  window.location.href = 'login.html';
+  window.location.href = 'http://localhost:5173';
 }
 
 function handleSignOut() {
@@ -211,12 +185,12 @@ function handleSignOut() {
 
   if (window.Clerk && typeof Clerk.signOut === 'function') {
     Clerk.signOut().then(() => {
-      window.location.href = 'index.html';
+      window.location.href = 'http://localhost:5173';
     }).catch(() => {
-      window.location.href = 'index.html';
+      window.location.href = 'http://localhost:5173';
     });
   } else {
-    window.location.href = 'index.html';
+    window.location.href = 'http://localhost:5173';
   }
 }
 
