@@ -59,46 +59,55 @@ function renderVoltNavbar(activePage = '') {
           <div class="hidden sm:flex items-center gap-3">
             
             ${currentUser ? `
-              <!-- Profile Dropdown -->
-              <div class="relative">
-                <button onclick="toggleUserDropdown()" class="flex items-center gap-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-full py-1.5 pl-2 pr-3 text-xs text-gray-700 transition-colors">
-                  <img src="${currentUser.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=160&q=80'}" alt="${currentUser.name}" class="w-6 h-6 rounded-full object-cover border border-gray-300">
-                  <div class="text-left">
-                    <span class="font-bold text-gray-900 block leading-tight max-w-[120px] truncate">${currentUser.name}</span>
-                    <span class="text-[10px] uppercase font-semibold ${isHost ? 'text-emerald-600' : 'text-googleBlue'}">
-                      ${isHost ? 'Host' : 'Chargee'}
-                    </span>
-                  </div>
-                  <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                  </svg>
-                </button>
-
-                <!-- Dropdown Menu -->
-                <div id="userDropdownMenu" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-googleCard border border-gray-200 py-2 z-50">
-                  <div class="px-4 py-2 border-b border-gray-100">
-                    <div class="text-xs font-semibold text-gray-900 truncate">${currentUser.name}</div>
-                    <div class="text-[11px] text-gray-500 truncate">${currentUser.email || 'Verified Account'}</div>
-                    <div class="mt-1 flex items-center justify-between">
-                      <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold ${isHost ? 'bg-emerald-100 text-emerald-800' : 'bg-blue-100 text-googleBlue'}">
-                        ${isHost ? '⚡ Host Mode' : '🚗 Chargee (Driver)'}
+              <!-- Profile & Clerk UserButton -->
+              <div class="flex items-center gap-2">
+                <div id="clerkUserButtonMount" class="flex items-center"></div>
+                <div class="relative">
+                  <button onclick="toggleUserDropdown()" class="flex items-center gap-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-full py-1.5 pl-2 pr-3 text-xs text-gray-700 transition-colors">
+                    <img src="${currentUser.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=160&q=80'}" alt="${currentUser.name}" class="w-6 h-6 rounded-full object-cover border border-gray-300">
+                    <div class="text-left">
+                      <span class="font-bold text-gray-900 block leading-tight max-w-[120px] truncate">${currentUser.name}</span>
+                      <span class="text-[10px] uppercase font-semibold ${isHost ? 'text-emerald-600' : 'text-googleBlue'}">
+                        ${isHost ? 'Host' : 'Chargee'}
                       </span>
                     </div>
-                  </div>
+                    <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                  </button>
 
-                  <!-- Sign Out -->
-                  <div class="px-2 py-1">
-                    <button onclick="handleSignOut()" class="w-full text-left px-3 py-2 text-xs text-rose-600 hover:bg-rose-50 rounded-lg flex items-center gap-1.5 font-medium transition-colors">
-                      <span>🚪</span> Sign Out
-                    </button>
+                  <!-- Dropdown Menu -->
+                  <div id="userDropdownMenu" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-googleCard border border-gray-200 py-2 z-50">
+                    <div class="px-4 py-2 border-b border-gray-100">
+                      <div class="text-xs font-semibold text-gray-900 truncate">${currentUser.name}</div>
+                      <div class="text-[11px] text-gray-500 truncate">${currentUser.email || 'Verified Account'}</div>
+                      <div class="mt-1 flex items-center justify-between">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold ${isHost ? 'bg-emerald-100 text-emerald-800' : 'bg-blue-100 text-googleBlue'}">
+                          ${isHost ? '⚡ Host Mode' : '🚗 Chargee (Driver)'}
+                        </span>
+                        <button onclick="toggleUserRole()" class="text-[10px] text-googleBlue hover:underline font-semibold">Switch Role</button>
+                      </div>
+                    </div>
+
+                    <!-- Sign Out -->
+                    <div class="px-2 py-1">
+                      <button onclick="handleSignOut()" class="w-full text-left px-3 py-2 text-xs text-rose-600 hover:bg-rose-50 rounded-lg flex items-center gap-1.5 font-medium transition-colors">
+                        <span>🚪</span> Sign Out
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
             ` : `
-              <!-- Sign In Button -->
-              <a href="https://clerk.jaspreet.dpdns.org/sign-in" onclick="this.href='https://clerk.jaspreet.dpdns.org/sign-in?redirect_url=' + encodeURIComponent(window.location.href)" class="px-4 py-2 bg-googleBlue hover:bg-googleBlueHover text-white text-xs font-bold rounded-full shadow-sm transition-colors flex items-center gap-1.5">
-                <span>🔒</span> Sign In with Clerk
-              </a>
+              <!-- Sign In / Sign Up Modal Triggers -->
+              <div class="flex items-center gap-2">
+                <button onclick="openPlugMateSignIn()" class="px-3 py-1.5 text-xs font-semibold text-gray-700 hover:text-googleBlue hover:bg-gray-100 rounded-full transition-colors">
+                  Sign In
+                </button>
+                <button onclick="openPlugMateSignUp()" class="px-3.5 py-1.5 bg-googleBlue hover:bg-googleBlueHover text-white text-xs font-bold rounded-full shadow-sm transition-colors flex items-center gap-1.5">
+                  <span>⚡</span> Sign Up
+                </button>
+              </div>
             `}
 
             <!-- Map View Shortcut -->
@@ -133,8 +142,9 @@ function renderVoltNavbar(activePage = '') {
             <button onclick="toggleUserRole()" class="text-xs text-googleBlue font-medium">Switch Role</button>
           </div>
         ` : `
-          <div class="py-2 border-b border-gray-100">
-            <a href="https://clerk.jaspreet.dpdns.org/sign-in" onclick="this.href='https://clerk.jaspreet.dpdns.org/sign-in?redirect_url=' + encodeURIComponent(window.location.href)" class="block text-center py-2 bg-googleBlue text-white rounded-lg text-xs font-bold">Sign In with Clerk</a>
+          <div class="py-2 border-b border-gray-100 flex items-center gap-2">
+            <button onclick="openPlugMateSignIn()" class="flex-1 py-2 bg-gray-100 text-gray-800 rounded-lg text-xs font-bold hover:bg-gray-200">Sign In</button>
+            <button onclick="openPlugMateSignUp()" class="flex-1 py-2 bg-googleBlue text-white rounded-lg text-xs font-bold hover:bg-googleBlueHover">Sign Up</button>
           </div>
         `}
         <a href="index.html" class="block py-2 text-xs font-medium text-gray-700 hover:text-googleBlue">🏠 Home</a>
@@ -171,7 +181,38 @@ function toggleUserRole() {
       return;
     }
   }
-  window.location.href = 'https://clerk.jaspreet.dpdns.org/sign-in';
+  openPlugMateSignIn();
+}
+
+// Clerk Modal Openers (No redirect to 404 pages)
+function openPlugMateSignIn() {
+  if (window.Clerk && typeof window.Clerk.openSignIn === 'function') {
+    try {
+      window.Clerk.openSignIn({
+        afterSignInUrl: window.location.origin + '/my-bookings.html',
+        afterSignUpUrl: window.location.origin + '/my-bookings.html'
+      });
+    } catch (e) {
+      window.Clerk.openSignIn();
+    }
+  } else {
+    alert('Authentication service is initializing. Please click again in a moment.');
+  }
+}
+
+function openPlugMateSignUp() {
+  if (window.Clerk && typeof window.Clerk.openSignUp === 'function') {
+    try {
+      window.Clerk.openSignUp({
+        afterSignInUrl: window.location.origin + '/my-bookings.html',
+        afterSignUpUrl: window.location.origin + '/my-bookings.html'
+      });
+    } catch (e) {
+      window.Clerk.openSignUp();
+    }
+  } else {
+    alert('Authentication service is initializing. Please click again in a moment.');
+  }
 }
 
 function handleSignOut() {
@@ -183,14 +224,14 @@ function handleSignOut() {
     localStorage.removeItem('voltshare_current_user_v1');
   } catch (e) { }
 
-  if (window.Clerk && typeof Clerk.signOut === 'function') {
-    Clerk.signOut().then(() => {
-      window.location.href = 'https://clerk.jaspreet.dpdns.org/sign-in';
+  if (window.Clerk && typeof window.Clerk.signOut === 'function') {
+    window.Clerk.signOut().then(() => {
+      window.location.reload();
     }).catch(() => {
-      window.location.href = 'https://clerk.jaspreet.dpdns.org/sign-in';
+      window.location.reload();
     });
   } else {
-    window.location.href = 'https://clerk.jaspreet.dpdns.org/sign-in';
+    window.location.reload();
   }
 }
 
@@ -204,35 +245,93 @@ document.addEventListener('click', (e) => {
   }
 });
 
-// Automatic Production Clerk Session Sync across all pages
-window.addEventListener('load', async () => {
+// Automatic Clerk Session Sync & Component Mount across all pages
+async function initPlugMateClerk() {
+  // Read publishable key from dynamic config (never hardcoded in source)
+  const publishableKey = (window.__PLUGMATE_CONFIG__ && window.__PLUGMATE_CONFIG__.clerkPublishableKey)
+    || (window.VoltConfig && window.VoltConfig.clerkPublishableKey)
+    || '';
+
+  if (!publishableKey) {
+    return;
+  }
+
+  // Poll briefly for Clerk CDN script to load
+  let attempts = 0;
+  while (!window.Clerk && attempts < 40) {
+    await new Promise(r => setTimeout(r, 100));
+    attempts++;
+  }
+
   if (window.Clerk) {
     try {
-      await Clerk.load();
-      if (Clerk.user) {
-        const primaryEmail = Clerk.user.primaryEmailAddress ? Clerk.user.primaryEmailAddress.emailAddress : '';
-        const fullName = Clerk.user.fullName || Clerk.user.firstName || (primaryEmail ? primaryEmail.split('@')[0] : 'EV Driver');
-        const role = Clerk.user.publicMetadata?.role || 'chargee';
-        const userData = {
-          id: Clerk.user.id,
-          name: fullName,
-          email: primaryEmail,
-          avatar: Clerk.user.imageUrl,
-          role: role,
-          phone: Clerk.user.primaryPhoneNumber ? Clerk.user.primaryPhoneNumber.phoneNumber : ''
-        };
-        if (window.VoltData && typeof VoltData.setCurrentUser === 'function') {
-          const current = VoltData.getCurrentUser();
-          if (!current || current.id !== userData.id) {
-            VoltData.setCurrentUser(userData);
+      if (typeof window.Clerk.load === 'function' && !window.Clerk.loaded) {
+        await window.Clerk.load({
+          publishableKey: publishableKey
+        });
+      }
+
+      const syncUserState = () => {
+        if (window.Clerk && window.Clerk.user) {
+          const user = window.Clerk.user;
+          const primaryEmail = user.primaryEmailAddress ? user.primaryEmailAddress.emailAddress : '';
+          const fullName = user.fullName || user.firstName || (primaryEmail ? primaryEmail.split('@')[0] : 'EV Driver');
+          const role = user.publicMetadata?.role || 'chargee';
+          const userData = {
+            id: user.id,
+            name: fullName,
+            email: primaryEmail,
+            avatar: user.imageUrl,
+            role: role,
+            phone: user.primaryPhoneNumber ? user.primaryPhoneNumber.phoneNumber : ''
+          };
+          if (window.VoltData && typeof VoltData.setCurrentUser === 'function') {
+            const current = VoltData.getCurrentUser();
+            if (!current || current.id !== userData.id) {
+              VoltData.setCurrentUser(userData);
+              if (typeof renderVoltNavbar === 'function') {
+                renderVoltNavbar();
+              }
+            }
+          }
+        }
+      };
+
+      syncUserState();
+
+      // Listen for auth state changes (sign in, sign out)
+      if (typeof window.Clerk.addListener === 'function') {
+        window.Clerk.addListener(({ user }) => {
+          if (user) {
+            syncUserState();
+          } else {
+            if (window.VoltData && typeof VoltData.logout === 'function') {
+              VoltData.logout();
+            }
             if (typeof renderVoltNavbar === 'function') {
               renderVoltNavbar();
             }
           }
-        }
+        });
+      }
+
+      // Mount Clerk's official UserButton if mount container is available
+      const mountEl = document.getElementById('clerkUserButtonMount');
+      if (mountEl && window.Clerk.user && typeof window.Clerk.mountUserButton === 'function') {
+        mountEl.innerHTML = '';
+        window.Clerk.mountUserButton(mountEl, {
+          afterSignOutUrl: window.location.origin
+        });
       }
     } catch (e) {
-      console.warn('Clerk sync notice:', e);
+      console.warn('[PlugMate] Clerk sync notice:', e.message || e);
     }
   }
-});
+}
+
+// Start Clerk initialization
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+  initPlugMateClerk();
+} else {
+  window.addEventListener('DOMContentLoaded', initPlugMateClerk);
+}

@@ -5,8 +5,9 @@ from flask import Flask, request, jsonify, send_from_directory, render_template_
 from flask_cors import CORS
 from dotenv import load_dotenv
 
-# Load environment variables from .env
-load_dotenv()
+# Load environment variables (.env.local takes priority for local development)
+load_dotenv('.env.local', override=True)
+load_dotenv('.env', override=False)
 
 # Initialize Flask
 app = Flask(__name__, static_folder='voltshare/public', static_url_path='')
@@ -38,8 +39,23 @@ LOCAL_BOOKINGS = []
 LOCAL_REVIEWS = []
 
 # -------------------------------------------------------------
-# Static Frontend Serving
+# Static Frontend Serving & Config Endpoint
 # -------------------------------------------------------------
+@app.route('/js/config.js')
+def config_js():
+    # Public publishable key only (never secret keys)
+    key = os.environ.get('VITE_CLERK_PUBLISHABLE_KEY') or os.environ.get('CLERK_PUBLISHABLE_KEY') or ''
+    response = app.response_class(
+        response=f"window.__PLUGMATE_CONFIG__ = {{ clerkPublishableKey: '{key}' }};",
+        status=200,
+        mimetype='application/javascript'
+    )
+    return response
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(app.static_folder, 'favicon.svg', mimetype='image/svg+xml')
+
 @app.route('/')
 def serve_index():
     return send_from_directory(app.static_folder, 'index.html')

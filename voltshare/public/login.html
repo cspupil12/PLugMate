@@ -9,8 +9,7 @@
     (function () {
       const params = new URLSearchParams(window.location.search);
       const returnTo = params.get('return_to');
-      const returnBase = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
-      let target = 'https://clerk.jaspreet.dpdns.org/sign-in?redirect_url=' + encodeURIComponent(window.location.origin + '/my-bookings.html');
+      let target = '/index.html?signin=1';
       if (returnTo) {
         target += '&return_to=' + encodeURIComponent(returnTo);
       }
