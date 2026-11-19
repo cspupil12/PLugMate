@@ -110,7 +110,7 @@
         <span class="hidden sm:inline">Host Mode</span>
       </a>
 
-      <a href="https://plugmate-auth.onrender.com" onclick="this.href='https://plugmate-auth.onrender.com/?return_to=' + encodeURIComponent(window.location.href)" class="bg-blue-50 hover:bg-blue-100 text-googleBlue rounded-lg shadow-google border border-blue-200 px-3 py-2 text-xs font-bold flex items-center gap-1.5 transition-all" title="User Account">
+      <a href="https://clerk.jaspreet.dpdns.org/sign-in" onclick="this.href='https://clerk.jaspreet.dpdns.org/sign-in?redirect_url=' + encodeURIComponent(window.location.href)" class="bg-blue-50 hover:bg-blue-100 text-googleBlue rounded-lg shadow-google border border-blue-200 px-3 py-2 text-xs font-bold flex items-center gap-1.5 transition-all" title="User Account">
         <span>👤</span>
         <span class="hidden md:inline">${currentUser ? currentUser.name.split(' ')[0] : 'Sign In'}</span>
       </a>

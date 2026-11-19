@@ -96,7 +96,7 @@ function renderVoltNavbar(activePage = '') {
               </div>
             ` : `
               <!-- Sign In Button -->
-              <a href="https://plugmate-auth.onrender.com" onclick="this.href='https://plugmate-auth.onrender.com/?return_to=' + encodeURIComponent(window.location.href)" class="px-4 py-2 bg-googleBlue hover:bg-googleBlueHover text-white text-xs font-bold rounded-full shadow-sm transition-colors flex items-center gap-1.5">
+              <a href="https://clerk.jaspreet.dpdns.org/sign-in" onclick="this.href='https://clerk.jaspreet.dpdns.org/sign-in?redirect_url=' + encodeURIComponent(window.location.href)" class="px-4 py-2 bg-googleBlue hover:bg-googleBlueHover text-white text-xs font-bold rounded-full shadow-sm transition-colors flex items-center gap-1.5">
                 <span>🔒</span> Sign In with Clerk
               </a>
             `}
@@ -134,7 +134,7 @@ function renderVoltNavbar(activePage = '') {
           </div>
         ` : `
           <div class="py-2 border-b border-gray-100">
-            <a href="https://plugmate-auth.onrender.com" onclick="this.href='https://plugmate-auth.onrender.com/?return_to=' + encodeURIComponent(window.location.href)" class="block text-center py-2 bg-googleBlue text-white rounded-lg text-xs font-bold">Sign In with Clerk</a>
+            <a href="https://clerk.jaspreet.dpdns.org/sign-in" onclick="this.href='https://clerk.jaspreet.dpdns.org/sign-in?redirect_url=' + encodeURIComponent(window.location.href)" class="block text-center py-2 bg-googleBlue text-white rounded-lg text-xs font-bold">Sign In with Clerk</a>
           </div>
         `}
         <a href="index.html" class="block py-2 text-xs font-medium text-gray-700 hover:text-googleBlue">🏠 Home</a>
@@ -171,7 +171,7 @@ function toggleUserRole() {
       return;
     }
   }
-  window.location.href = 'https://plugmate-auth.onrender.com';
+  window.location.href = 'https://clerk.jaspreet.dpdns.org/sign-in';
 }
 
 function handleSignOut() {
@@ -185,12 +185,12 @@ function handleSignOut() {
 
   if (window.Clerk && typeof Clerk.signOut === 'function') {
     Clerk.signOut().then(() => {
-      window.location.href = 'https://plugmate-auth.onrender.com';
+      window.location.href = 'https://clerk.jaspreet.dpdns.org/sign-in';
     }).catch(() => {
-      window.location.href = 'https://plugmate-auth.onrender.com';
+      window.location.href = 'https://clerk.jaspreet.dpdns.org/sign-in';
     });
   } else {
-    window.location.href = 'https://plugmate-auth.onrender.com';
+    window.location.href = 'https://clerk.jaspreet.dpdns.org/sign-in';
   }
 }
 
@@ -200,6 +200,39 @@ document.addEventListener('click', (e) => {
   if (menu && !menu.classList.contains('hidden')) {
     if (!e.target.closest('#userDropdownMenu') && !e.target.closest('button[onclick="toggleUserDropdown()"]')) {
       menu.classList.add('hidden');
+    }
+  }
+});
+
+// Automatic Production Clerk Session Sync across all pages
+window.addEventListener('load', async () => {
+  if (window.Clerk) {
+    try {
+      await Clerk.load();
+      if (Clerk.user) {
+        const primaryEmail = Clerk.user.primaryEmailAddress ? Clerk.user.primaryEmailAddress.emailAddress : '';
+        const fullName = Clerk.user.fullName || Clerk.user.firstName || (primaryEmail ? primaryEmail.split('@')[0] : 'EV Driver');
+        const role = Clerk.user.publicMetadata?.role || 'chargee';
+        const userData = {
+          id: Clerk.user.id,
+          name: fullName,
+          email: primaryEmail,
+          avatar: Clerk.user.imageUrl,
+          role: role,
+          phone: Clerk.user.primaryPhoneNumber ? Clerk.user.primaryPhoneNumber.phoneNumber : ''
+        };
+        if (window.VoltData && typeof VoltData.setCurrentUser === 'function') {
+          const current = VoltData.getCurrentUser();
+          if (!current || current.id !== userData.id) {
+            VoltData.setCurrentUser(userData);
+            if (typeof renderVoltNavbar === 'function') {
+              renderVoltNavbar();
+            }
+          }
+        }
+      }
+    } catch (e) {
+      console.warn('Clerk sync notice:', e);
     }
   }
 });
