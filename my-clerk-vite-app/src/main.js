@@ -17,7 +17,7 @@ try {
 // Discover Publishable Key from Vite env or fallback to PlugMate key
 const publishableKey =
   import.meta.env.VITE_CLERK_PUBLISHABLE_KEY ||
-  "pk_test_ZGVsaWNhdGUtc2t5bGFyay03MTU2LmNsZXJrLmFjY291bnRzLmRldiQ";
+  "pk_live_Y2xlcmsuamFzcHJlZXQuZHBkbnMub3JnJA";
 
 const clerk = new Clerk(publishableKey);
 
