@@ -12,11 +12,11 @@ try {
   if (initReturnBase) {
     sessionStorage.setItem("plugmate_return_base", initReturnBase);
   }
-} catch (e) {}
+} catch (e) { }
 
 // Discover Publishable Key from Vite env or fallback to PlugMate key
-const publishableKey = 
-  import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || 
+const publishableKey =
+  import.meta.env.VITE_CLERK_PUBLISHABLE_KEY ||
   "pk_test_ZGVsaWNhdGUtc2t5bGFyay03MTU2LmNsZXJrLmFjY291bnRzLmRldiQ";
 
 const clerk = new Clerk(publishableKey);
@@ -27,7 +27,7 @@ function syncSessionToBackend(user) {
     try {
       localStorage.removeItem("plugmate_current_user_v1");
       localStorage.removeItem("voltshare_current_user_v1");
-    } catch (e) {}
+    } catch (e) { }
     return;
   }
   const primaryEmail = user.primaryEmailAddress ? user.primaryEmailAddress.emailAddress : "";
@@ -45,7 +45,7 @@ function syncSessionToBackend(user) {
     localStorage.setItem("plugmate_current_user_v1", JSON.stringify(userData));
     localStorage.setItem("voltshare_current_user_v1", JSON.stringify(userData));
     localStorage.setItem("clerk_publishable_key", publishableKey);
-  } catch (e) {}
+  } catch (e) { }
 }
 
 async function initClerk() {
@@ -81,16 +81,16 @@ function renderUI() {
     try {
       const urlParams = new URLSearchParams(window.location.search);
       returnTo = urlParams.get("return_to") || sessionStorage.getItem("plugmate_return_to") || "";
-    } catch (e) {}
+    } catch (e) { }
 
-    // 2. Fall back to document referrer if valid and not localhost:5173
+    // 2. Fall back to document referrer if valid and not the auth domain itself
     if (!returnTo && document.referrer) {
       try {
         const ref = new URL(document.referrer);
-        if (ref.port !== "5173") {
+        if (ref.hostname !== "plugmate-auth.onrender.com" && ref.port !== "5173") {
           returnTo = document.referrer;
         }
-      } catch (e) {}
+      } catch (e) { }
     }
 
     let destination = "";
@@ -113,10 +113,12 @@ function renderUI() {
       try {
         const urlParams = new URLSearchParams(window.location.search);
         returnBase = urlParams.get("return_base") || sessionStorage.getItem("plugmate_return_base") || "";
-      } catch (e) {}
+      } catch (e) { }
 
       if (!returnBase) {
-        returnBase = "http://localhost:5000/";
+        returnBase = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
+          ? "http://localhost:5000/"
+          : "https://plugmate.onrender.com/";
       }
       const baseWithSlash = returnBase.endsWith("/") ? returnBase : `${returnBase}/`;
       destination = `${baseWithSlash}my-bookings.html?clerk_user_id=${encodeURIComponent(clerk.user.id)}&name=${encodeURIComponent(fullName)}&email=${encodeURIComponent(primaryEmail)}&role=${encodeURIComponent(role)}`;

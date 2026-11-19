@@ -96,7 +96,7 @@ function renderVoltNavbar(activePage = '') {
               </div>
             ` : `
               <!-- Sign In Button -->
-              <a href="http://localhost:5173" onclick="this.href='http://localhost:5173/?return_to=' + encodeURIComponent(window.location.href)" class="px-4 py-2 bg-googleBlue hover:bg-googleBlueHover text-white text-xs font-bold rounded-full shadow-sm transition-colors flex items-center gap-1.5">
+              <a href="https://plugmate-auth.onrender.com" onclick="this.href='https://plugmate-auth.onrender.com/?return_to=' + encodeURIComponent(window.location.href)" class="px-4 py-2 bg-googleBlue hover:bg-googleBlueHover text-white text-xs font-bold rounded-full shadow-sm transition-colors flex items-center gap-1.5">
                 <span>🔒</span> Sign In with Clerk
               </a>
             `}
@@ -134,7 +134,7 @@ function renderVoltNavbar(activePage = '') {
           </div>
         ` : `
           <div class="py-2 border-b border-gray-100">
-            <a href="http://localhost:5173" onclick="this.href='http://localhost:5173/?return_to=' + encodeURIComponent(window.location.href)" class="block text-center py-2 bg-googleBlue text-white rounded-lg text-xs font-bold">Sign In with Clerk</a>
+            <a href="https://plugmate-auth.onrender.com" onclick="this.href='https://plugmate-auth.onrender.com/?return_to=' + encodeURIComponent(window.location.href)" class="block text-center py-2 bg-googleBlue text-white rounded-lg text-xs font-bold">Sign In with Clerk</a>
           </div>
         `}
         <a href="index.html" class="block py-2 text-xs font-medium text-gray-700 hover:text-googleBlue">🏠 Home</a>
@@ -171,7 +171,7 @@ function toggleUserRole() {
       return;
     }
   }
-  window.location.href = 'http://localhost:5173';
+  window.location.href = 'https://plugmate-auth.onrender.com';
 }
 
 function handleSignOut() {
@@ -185,12 +185,12 @@ function handleSignOut() {
 
   if (window.Clerk && typeof Clerk.signOut === 'function') {
     Clerk.signOut().then(() => {
-      window.location.href = 'http://localhost:5173';
+      window.location.href = 'https://plugmate-auth.onrender.com';
     }).catch(() => {
-      window.location.href = 'http://localhost:5173';
+      window.location.href = 'https://plugmate-auth.onrender.com';
     });
   } else {
-    window.location.href = 'http://localhost:5173';
+    window.location.href = 'https://plugmate-auth.onrender.com';
   }
 }
 

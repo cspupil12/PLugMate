@@ -256,7 +256,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       const user = VoltData.getCurrentUser();
       if (!user) {
-        window.location.href = 'http://localhost:5173';
+        window.location.href = 'https://plugmate-auth.onrender.com';
         return;
       }
       if (user.role !== 'host') {
@@ -275,7 +275,7 @@
     function renderHostDashboard() {
       const currentUser = VoltData.getCurrentUser();
       if (!currentUser) {
-        window.location.href = 'http://localhost:5173';
+        window.location.href = 'https://plugmate-auth.onrender.com';
         return;
       }
       document.getElementById('hostProfileName').textContent = currentUser.name || 'Community Host';
