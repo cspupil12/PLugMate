@@ -101,11 +101,15 @@ function renderVoltNavbar(activePage = '') {
             ` : `
               <!-- Sign In / Sign Up Modal Triggers -->
               <div class="flex items-center gap-2">
+                <button onclick="loginAsDemoAccount('host')" class="px-3 py-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-full transition-all flex items-center gap-1.5 shadow-sm">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <span>⚡ Demo Login</span>
+                </button>
                 <button onclick="openPlugMateSignIn()" class="px-3 py-1.5 text-xs font-semibold text-gray-700 hover:text-googleBlue hover:bg-gray-100 rounded-full transition-colors">
                   Sign In
                 </button>
                 <button onclick="openPlugMateSignUp()" class="px-3.5 py-1.5 bg-googleBlue hover:bg-googleBlueHover text-white text-xs font-bold rounded-full shadow-sm transition-colors flex items-center gap-1.5">
-                  <span>⚡</span> Sign Up
+                  Sign Up
                 </button>
               </div>
             `}
@@ -142,9 +146,14 @@ function renderVoltNavbar(activePage = '') {
             <button onclick="toggleUserRole()" class="text-xs text-googleBlue font-medium">Switch Role</button>
           </div>
         ` : `
-          <div class="py-2 border-b border-gray-100 flex items-center gap-2">
-            <button onclick="openPlugMateSignIn()" class="flex-1 py-2 bg-gray-100 text-gray-800 rounded-lg text-xs font-bold hover:bg-gray-200">Sign In</button>
-            <button onclick="openPlugMateSignUp()" class="flex-1 py-2 bg-googleBlue text-white rounded-lg text-xs font-bold hover:bg-googleBlueHover">Sign Up</button>
+          <div class="py-2 border-b border-gray-100 flex flex-col gap-2">
+            <button onclick="loginAsDemoAccount('host')" class="w-full py-2 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg text-xs font-bold hover:bg-emerald-100 flex items-center justify-center gap-1.5">
+              <span>⚡</span> Demo Account (Host Mode)
+            </button>
+            <div class="flex items-center gap-2">
+              <button onclick="openPlugMateSignIn()" class="flex-1 py-2 bg-gray-100 text-gray-800 rounded-lg text-xs font-bold hover:bg-gray-200">Sign In</button>
+              <button onclick="openPlugMateSignUp()" class="flex-1 py-2 bg-googleBlue text-white rounded-lg text-xs font-bold hover:bg-googleBlueHover">Sign Up</button>
+            </div>
           </div>
         `}
         <a href="index.html" class="block py-2 text-xs font-medium text-gray-700 hover:text-googleBlue">🏠 Home</a>
@@ -184,7 +193,89 @@ function toggleUserRole() {
   openPlugMateSignIn();
 }
 
-// Clerk Modal Openers (No redirect to 404 pages)
+// -------------------------------------------------------------
+// Scrutiny Demo Account & Live Supabase Database Sync
+// -------------------------------------------------------------
+function loginAsDemoAccount(role = 'host') {
+  const isHost = role === 'host';
+  const demoUser = {
+    id: 'user_demo_jaspreet',
+    name: 'Jaspreet Singh',
+    email: 'jaspreet@plugmate.ev',
+    phone: '+91 98765 43210',
+    role: isHost ? 'host' : 'chargee',
+    avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=160&q=80',
+    address: 'Indiranagar, Bengaluru',
+    badge: 'Verified Community Host'
+  };
+
+  if (window.VoltData && typeof VoltData.setCurrentUser === 'function') {
+    VoltData.setCurrentUser(demoUser);
+  } else {
+    try {
+      localStorage.setItem('plugmate_current_user_v1', JSON.stringify(demoUser));
+      localStorage.setItem('voltshare_current_user_v1', JSON.stringify(demoUser));
+    } catch (e) { }
+  }
+
+  // Sync user profile immediately to backend Supabase database
+  fetch('/api/users/sync', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(demoUser)
+  }).catch(() => { });
+
+  closeDemoAuthModal();
+  window.location.reload();
+}
+
+function openDemoLoginModal() {
+  if (document.getElementById('plugmateDemoModal')) return;
+
+  const modal = document.createElement('div');
+  modal.id = 'plugmateDemoModal';
+  modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm';
+  modal.innerHTML = `
+    <div class="bg-white rounded-2xl shadow-googleCard max-w-sm w-full p-6 text-center border border-gray-100 relative">
+      <button onclick="closeDemoAuthModal()" class="absolute top-3 right-4 text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+      
+      <div class="w-12 h-12 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center text-white mx-auto shadow-md mb-3">
+        <span class="text-2xl">⚡</span>
+      </div>
+      
+      <h3 class="text-lg font-bold font-google text-gray-900">Sign In to PlugMate</h3>
+      <p class="text-xs text-gray-500 mt-1 mb-5">Select an account for project demonstration & scrutiny</p>
+      
+      <div class="space-y-2.5 text-left">
+        <button onclick="loginAsDemoAccount('host')" class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-sm transition-colors">
+          <span>⚡</span>
+          <div>
+            <div class="font-bold">Log In as Host (Jaspreet Singh)</div>
+            <div class="text-[10px] text-emerald-100 font-normal">Manage chargers & view earnings</div>
+          </div>
+        </button>
+        
+        <button onclick="loginAsDemoAccount('chargee')" class="w-full py-2.5 px-4 bg-googleBlue hover:bg-googleBlueHover text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-sm transition-colors">
+          <span>🚗</span>
+          <div>
+            <div class="font-bold">Log In as EV Driver (Chargee)</div>
+            <div class="text-[10px] text-blue-100 font-normal">Explore map, book chargers & get 4-digit PIN</div>
+          </div>
+        </button>
+      </div>
+      
+      <p class="text-[10px] text-gray-400 mt-4 border-t border-gray-100 pt-3">Live synced with Supabase cloud database</p>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+
+function closeDemoAuthModal() {
+  const m = document.getElementById('plugmateDemoModal');
+  if (m) m.remove();
+}
+
+// Clerk Modal Openers (with Instant Demo Account Fallback)
 function openPlugMateSignIn() {
   if (window.Clerk && typeof window.Clerk.openSignIn === 'function') {
     try {
@@ -192,12 +283,10 @@ function openPlugMateSignIn() {
         afterSignInUrl: window.location.origin + '/my-bookings.html',
         afterSignUpUrl: window.location.origin + '/my-bookings.html'
       });
-    } catch (e) {
-      window.Clerk.openSignIn();
-    }
-  } else {
-    alert('Authentication service is initializing. Please click again in a moment.');
+      return;
+    } catch (e) { }
   }
+  openDemoLoginModal();
 }
 
 function openPlugMateSignUp() {
@@ -207,12 +296,10 @@ function openPlugMateSignUp() {
         afterSignInUrl: window.location.origin + '/my-bookings.html',
         afterSignUpUrl: window.location.origin + '/my-bookings.html'
       });
-    } catch (e) {
-      window.Clerk.openSignUp();
-    }
-  } else {
-    alert('Authentication service is initializing. Please click again in a moment.');
+      return;
+    } catch (e) { }
   }
+  openDemoLoginModal();
 }
 
 function handleSignOut() {

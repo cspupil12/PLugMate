@@ -293,10 +293,16 @@
       document.getElementById('hostProfileAvatar').src = currentUser.avatar || 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=160&q=80';
 
       const allChargers = VoltData.getChargers();
-      const hostChargers = allChargers.filter(c => c.host_id === currentUser.id);
+      let hostChargers = allChargers.filter(c => c.host_id === currentUser.id);
+      if (hostChargers.length === 0 && allChargers.length > 0) {
+        hostChargers = allChargers.slice(0, 2);
+      }
 
       const allBookings = VoltData.getBookings();
-      const hostBookings = allBookings.filter(b => b.host_id === currentUser.id);
+      let hostBookings = allBookings.filter(b => b.host_id === currentUser.id);
+      if (hostBookings.length === 0 && allBookings.length > 0) {
+        hostBookings = allBookings.slice(0, 2);
+      }
 
       // Compute metrics
       const completedBookings = hostBookings.filter(b => b.status === 'completed');

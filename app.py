@@ -45,8 +45,22 @@ LOCAL_REVIEWS = []
 def config_js():
     # Public publishable key only (never secret keys)
     key = os.environ.get('VITE_CLERK_PUBLISHABLE_KEY') or os.environ.get('CLERK_PUBLISHABLE_KEY') or ''
+    js_content = f"""
+window.__PLUGMATE_CONFIG__ = {{ clerkPublishableKey: '{key}' }};
+(function() {{
+  var k = '{key}';
+  if (!k) return;
+  if (document.querySelector('script[data-clerk-publishable-key]')) return;
+  var s = document.createElement('script');
+  s.setAttribute('data-clerk-publishable-key', k);
+  s.src = 'https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js';
+  s.async = true;
+  s.crossOrigin = 'anonymous';
+  document.head.appendChild(s);
+}})();
+"""
     response = app.response_class(
-        response=f"window.__PLUGMATE_CONFIG__ = {{ clerkPublishableKey: '{key}' }};",
+        response=js_content.strip(),
         status=200,
         mimetype='application/javascript'
     )
