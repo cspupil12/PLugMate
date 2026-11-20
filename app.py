@@ -33,9 +33,188 @@ else:
     print("[PlugMate] Notice: SUPABASE_URL or SUPABASE_PUBLISHABLE_KEY not set in .env yet.")
     print("[PlugMate] Running in local demo mode with instant fallback. Add credentials to .env to persist to Supabase cloud.")
 
-# Clean in-memory storage for session data if database is offline (starts 100% empty)
-LOCAL_CHARGERS = []
-LOCAL_BOOKINGS = []
+# Default community chargers & bookings for live demo
+LOCAL_CHARGERS = [
+    {
+        "id": 1,
+        "host_id": "user_demo_jaspreet",
+        "host_name": "Jaspreet Singh (Host)",
+        "title": "Green Park Driveway Wallbox",
+        "tagline": "7.4 kW Level 2 Fast AC Charger with dedicated shaded parking",
+        "address": "House 142, Green Park Avenue, Near Community Centre",
+        "city": "community",
+        "lat": 30.8895,
+        "lng": 75.8140,
+        "connector_type": "Type-2 AC (7.4 kW)",
+        "power_kw": 7.4,
+        "hourly_rate": 22.0,
+        "is_available": True,
+        "available_hours": "06:00 AM - 11:30 PM",
+        "photo": "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=800&q=80",
+        "amenities": ["Gated Driveway", "CCTV Monitor", "WiFi Access", "Covered Canopy"],
+        "rating": 4.9,
+        "reviews_count": 18,
+        "compatibility": "Tata Nexon EV, MG ZS EV, Mahindra XUV400, Hyundai Ioniq 5",
+        "surge_guarantee": True
+    },
+    {
+        "id": 2,
+        "host_id": "user_demo_jaspreet",
+        "host_name": "Jaspreet Singh (Host)",
+        "title": "Model Town Rapid AC Socket",
+        "tagline": "11 kW high-speed 3-phase charger in secure gated residential compound",
+        "address": "B-48, Model Town Extension, Opp. Gurdwara",
+        "city": "community",
+        "lat": 30.8845,
+        "lng": 75.8080,
+        "connector_type": "Type-2 AC (11 kW)",
+        "power_kw": 11.0,
+        "hourly_rate": 25.0,
+        "is_available": True,
+        "available_hours": "24/7 All Day",
+        "photo": "https://images.unsplash.com/photo-1558441719-8b489c63f7d1?auto=format&fit=crop&w=800&q=80",
+        "amenities": ["24/7 Access", "Security Guard", "Well-lit Area", "Overnight Allowed"],
+        "rating": 5.0,
+        "reviews_count": 24,
+        "compatibility": "All Type-2 AC Compatible EVs",
+        "surge_guarantee": True
+    },
+    {
+        "id": 3,
+        "host_id": "user_host_rahul",
+        "host_name": "Rahul Sharma",
+        "title": "Sunrise Villa Smart 15A Socket",
+        "tagline": "Economical 3.3 kW socket ideal for two-wheelers and overnight hybrid charging",
+        "address": "Plot 12, Sunrise Enclave, Main Road",
+        "city": "community",
+        "lat": 30.8920,
+        "lng": 75.8190,
+        "connector_type": "15A Smart Socket (3.3 kW)",
+        "power_kw": 3.3,
+        "hourly_rate": 14.0,
+        "is_available": True,
+        "available_hours": "07:00 AM - 10:00 PM",
+        "photo": "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80",
+        "amenities": ["15A Industrial Plug", "Waterproof Cover", "Ground-Floor Access"],
+        "rating": 4.8,
+        "reviews_count": 9,
+        "compatibility": "Ather, Ola S1, TVS iQube, Nexon EV (portable brick)",
+        "surge_guarantee": True
+    },
+    {
+        "id": 4,
+        "host_id": "user_host_ananya",
+        "host_name": "Ananya Verma",
+        "title": "EcoCharge Solar Driveway Port",
+        "tagline": "100% Rooftop Solar-powered clean green energy charging",
+        "address": "Eco Haven, Street 7, Sector 32",
+        "city": "community",
+        "lat": 30.8810,
+        "lng": 75.8155,
+        "connector_type": "Type-2 AC (7.4 kW)",
+        "power_kw": 7.4,
+        "hourly_rate": 19.0,
+        "is_available": True,
+        "available_hours": "08:00 AM - 08:00 PM",
+        "photo": "https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80",
+        "amenities": ["100% Solar Green Energy", "Drinking Water", "EV Rest Bench"],
+        "rating": 5.0,
+        "reviews_count": 12,
+        "compatibility": "All Standard Indian Four-Wheeler EVs",
+        "surge_guarantee": True
+    },
+    {
+        "id": 5,
+        "host_id": "user_host_vikram",
+        "host_name": "Vikram Malhotra",
+        "title": "Metro Gate Fast AC Charger",
+        "tagline": "22 kW High output commercial grade wallbox inside gated society",
+        "address": "Tower 4 Driveway, Metro Greens Society",
+        "city": "community",
+        "lat": 30.8965,
+        "lng": 75.8095,
+        "connector_type": "Type-2 AC (22 kW)",
+        "power_kw": 22.0,
+        "hourly_rate": 28.0,
+        "is_available": True,
+        "available_hours": "24/7 Gated",
+        "photo": "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=800&q=80",
+        "amenities": ["22 kW High Speed", "Security Intercom", "Waiting Lounge"],
+        "rating": 4.9,
+        "reviews_count": 31,
+        "compatibility": "Type-2 AC Fast Charging Capable EVs",
+        "surge_guarantee": True
+    },
+    {
+        "id": 6,
+        "host_id": "user_host_simran",
+        "host_name": "Simran Kaur",
+        "title": "Lakeview Residency Plug",
+        "tagline": "Cozy driveway parking slot with secure 3.3 kW socket and surge protector",
+        "address": "House 89, Lakeview Road, Near Club",
+        "city": "community",
+        "lat": 30.8830,
+        "lng": 75.8230,
+        "connector_type": "15A Smart Socket (3.3 kW)",
+        "power_kw": 3.3,
+        "hourly_rate": 15.0,
+        "is_available": True,
+        "available_hours": "06:00 AM - Midnight",
+        "photo": "https://images.unsplash.com/photo-1558441719-8b489c63f7d1?auto=format&fit=crop&w=800&q=80",
+        "amenities": ["Surge Protection", "CCTV Covered", "Ample Turning Space"],
+        "rating": 4.7,
+        "reviews_count": 7,
+        "compatibility": "Two-wheelers & Standard 15A Plug-in Vehicles",
+        "surge_guarantee": True
+    }
+]
+
+LOCAL_BOOKINGS = [
+    {
+        "id": "PM-8821",
+        "charger_id": 1,
+        "charger_title": "Green Park Driveway Wallbox",
+        "charger_address": "House 142, Green Park Avenue",
+        "host_id": "user_demo_jaspreet",
+        "host_name": "Jaspreet Singh (Host)",
+        "user_id": "user_driver_arjun",
+        "user_name": "Arjun Mehta",
+        "user_phone": "+91 98111 22334",
+        "user_vehicle": "Tata Nexon EV Max",
+        "date": "2026-11-20",
+        "time_slot": "02:00 PM - 04:00 PM",
+        "duration_hours": 2.0,
+        "hourly_rate": 22.0,
+        "total_amount": 48.40,
+        "pin": "4821",
+        "status": "upcoming",
+        "payment_status": "Held in Escrow",
+        "connector_type": "Type-2 AC (7.4 kW)",
+        "created_at": datetime.now().isoformat()
+    },
+    {
+        "id": "PM-7104",
+        "charger_id": 2,
+        "charger_title": "Model Town Rapid AC Socket",
+        "charger_address": "B-48, Model Town Extension",
+        "host_id": "user_demo_jaspreet",
+        "host_name": "Jaspreet Singh (Host)",
+        "user_id": "user_driver_neha",
+        "user_name": "Neha Kapoor",
+        "user_phone": "+91 98222 33445",
+        "user_vehicle": "MG ZS EV",
+        "date": "2026-11-19",
+        "time_slot": "06:00 PM - 08:30 PM",
+        "duration_hours": 2.5,
+        "hourly_rate": 25.0,
+        "total_amount": 68.75,
+        "pin": "7392",
+        "status": "completed",
+        "payment_status": "Released to Host",
+        "connector_type": "Type-2 AC (11 kW)",
+        "created_at": datetime.now().isoformat()
+    }
+]
 LOCAL_REVIEWS = []
 
 # -------------------------------------------------------------
@@ -101,7 +280,7 @@ def get_chargers():
     if supabase:
         try:
             res = supabase.table('chargers').select('*').order('id', desc=False).execute()
-            if res.data is not None:
+            if res.data and len(res.data) > 0:
                 return jsonify(res.data)
         except Exception as e:
             print(f"[PlugMate] Supabase fetch chargers error: {e}")
@@ -211,13 +390,13 @@ def get_bookings():
             if host_id:
                 query = query.eq('host_id', host_id)
             res = query.execute()
-            if res.data is not None:
+            if res.data and len(res.data) > 0:
                 return jsonify(res.data)
         except Exception as e:
             print(f"[PlugMate] Supabase get bookings error: {e}")
 
     # Fallback in-memory
-    filtered = LOCAL_BOOKINGS
+    filtered = list(LOCAL_BOOKINGS)
     if user_id:
         filtered = [b for b in filtered if b.get('user_id') == user_id]
     if host_id:
