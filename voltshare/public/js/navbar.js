@@ -175,16 +175,20 @@ function toggleMobileNav() {
   if (menu) menu.classList.toggle('hidden');
 }
 
-function toggleUserRole() {
+async function toggleUserRole() {
   if (window.VoltData && typeof VoltData.getCurrentUser === 'function') {
     const cur = VoltData.getCurrentUser();
     if (cur) {
       const nextRole = cur.role === 'host' ? 'chargee' : 'host';
+      cur.role = nextRole;
       if (typeof VoltData.setUserRole === 'function') {
         VoltData.setUserRole(nextRole);
-      } else if (typeof VoltData.setCurrentUser === 'function') {
-        cur.role = nextRole;
-        VoltData.setCurrentUser(cur);
+      }
+      if (typeof VoltData.setCurrentUser === 'function') {
+        await Promise.race([
+          Promise.resolve(VoltData.setCurrentUser(cur)),
+          new Promise(r => setTimeout(r, 800))
+        ]);
       }
       window.location.reload();
       return;
@@ -196,7 +200,7 @@ function toggleUserRole() {
 // -------------------------------------------------------------
 // Scrutiny Demo Account & Live Supabase Database Sync
 // -------------------------------------------------------------
-function loginAsDemoAccount(role = 'host') {
+async function loginAsDemoAccount(role = 'host') {
   const isHost = role === 'host';
   const demoUser = {
     id: 'user_demo_jaspreet',
@@ -210,20 +214,22 @@ function loginAsDemoAccount(role = 'host') {
   };
 
   if (window.VoltData && typeof VoltData.setCurrentUser === 'function') {
-    VoltData.setCurrentUser(demoUser);
+    await Promise.race([
+      Promise.resolve(VoltData.setCurrentUser(demoUser)),
+      new Promise(r => setTimeout(r, 800))
+    ]);
   } else {
     try {
       localStorage.setItem('plugmate_current_user_v1', JSON.stringify(demoUser));
       localStorage.setItem('voltshare_current_user_v1', JSON.stringify(demoUser));
     } catch (e) { }
+    await fetch('/api/users/sync', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      keepalive: true,
+      body: JSON.stringify(demoUser)
+    }).catch(() => { });
   }
-
-  // Sync user profile immediately to backend Supabase database
-  fetch('/api/users/sync', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(demoUser)
-  }).catch(() => { });
 
   closeDemoAuthModal();
   window.location.reload();

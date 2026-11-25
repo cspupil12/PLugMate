@@ -278,6 +278,7 @@
 
       renderVoltNavbar('host');
       renderHostDashboard();
+      window.addEventListener('plugmate:dataSynced', renderHostDashboard);
     });
 
     function renderHostDashboard() {
@@ -294,13 +295,13 @@
 
       const allChargers = VoltData.getChargers();
       let hostChargers = allChargers.filter(c => c.host_id === currentUser.id);
-      if (hostChargers.length === 0 && allChargers.length > 0) {
+      if (hostChargers.length === 0 && currentUser.id === 'user_demo_jaspreet' && allChargers.length > 0) {
         hostChargers = allChargers.slice(0, 2);
       }
 
       const allBookings = VoltData.getBookings();
       let hostBookings = allBookings.filter(b => b.host_id === currentUser.id);
-      if (hostBookings.length === 0 && allBookings.length > 0) {
+      if (hostBookings.length === 0 && currentUser.id === 'user_demo_jaspreet' && allBookings.length > 0) {
         hostBookings = allBookings.slice(0, 2);
       }
 

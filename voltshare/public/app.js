@@ -26,37 +26,103 @@ const CHARGERS_DATA = (typeof DEFAULT_CHARGERS !== 'undefined' && Array.isArray(
   : [
       {
         id: 1,
-        host_id: 'user_demo_jaspreet',
-        host_name: 'Jaspreet Singh (Host)',
+        host_id: 'user_host_1',
+        host_name: 'Harpreet Singh',
         title: 'Green Park Driveway Wallbox',
-        tagline: '7.4 kW Level 2 Fast AC Charger with dedicated shaded parking',
-        address: 'House 142, Green Park Avenue, Near Community Centre',
+        tagline: 'Gated wide porch with shade, 5 mins from community center',
+        address: '84 Main Market Avenue, Green Park',
         city: 'community',
-        lat: 30.8895,
-        lng: 75.8140,
-        connector_type: 'Type-2 AC (7.4 kW)',
+        lat: 30.8872,
+        lng: 75.8115,
+        connector_type: 'Type-2 AC',
         power_kw: 7.4,
         hourly_rate: 22.0,
         is_available: true,
         available_hours: '06:00 AM - 11:30 PM',
         photo: 'https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=800&q=80',
-        amenities: ['Gated Driveway', 'CCTV Monitor', 'WiFi Access', 'Covered Canopy'],
+        amenities: ['Gated Driveway', 'CCTV Monitor', 'Covered Porch', 'Drinking Water', 'Restroom'],
         rating: 4.9,
-        reviews_count: 18,
-        compatibility: 'Tata Nexon EV, MG ZS EV, Mahindra XUV400, Hyundai Ioniq 5',
+        reviews_count: 32,
+        compatibility: 'Tata Nexon/Curvv, MG ZS/Windsor, Hyundai Ioniq, Mahindra XUV400',
         surge_guarantee: true
       },
       {
-        id: 2,
+        id: 3,
+        host_id: 'user_host_2',
+        host_name: 'Gurmeet Kaur',
+        title: 'University Enclave Solar Plug',
+        tagline: 'Clean 100% solar surplus charging on quiet residential street',
+        address: '18 University Road, West Enclave',
+        city: 'community',
+        lat: 30.9015,
+        lng: 75.8201,
+        connector_type: '15A-3Pin',
+        power_kw: 3.3,
+        hourly_rate: 13.0,
+        is_available: true,
+        available_hours: '07:00 AM - 10:00 PM',
+        photo: 'https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80',
+        amenities: ['100% Solar Energy', 'Safe Overnight Parking', 'EV 2-Wheeler Friendly'],
+        rating: 5.0,
+        reviews_count: 41,
+        compatibility: 'Ather 450X, Ola S1, TVS iQube, MG Comet, Tata Tiago EV',
+        surge_guarantee: true
+      },
+      {
+        id: 4,
+        host_id: 'user_host_1',
+        host_name: 'Harpreet Singh',
+        title: 'Pinecrest High-Power Wallbox',
+        tagline: '11 kW 3-phase home wallbox for faster charging turnarounds',
+        address: '4 Pinecrest Avenue, Northridge',
+        city: 'community',
+        lat: 30.892,
+        lng: 75.834,
+        connector_type: 'Type-2 AC',
+        power_kw: 11.0,
+        hourly_rate: 26.0,
+        is_available: true,
+        available_hours: '05:00 AM - Midnight',
+        photo: 'https://images.unsplash.com/photo-1558441719-8b489c63f736?auto=format&fit=crop&w=800&q=80',
+        amenities: ['11 kW 3-Phase', 'CCTV Monitor', 'Easy Reversing Space'],
+        rating: 4.9,
+        reviews_count: 19,
+        compatibility: 'BYD Atto 3/Seal, Hyundai Ioniq 5, Kia EV6, Audi e-tron',
+        surge_guarantee: true
+      },
+      {
+        id: 5,
+        host_id: 'user_host_2',
+        host_name: 'Gurmeet Kaur',
+        title: 'Heritage Gardens Porch Socket',
+        tagline: 'Quiet residential porch opposite neighborhood park',
+        address: '14 Heritage Walk, Civic Center',
+        city: 'community',
+        lat: 30.908,
+        lng: 75.845,
+        connector_type: '15A-3Pin',
+        power_kw: 3.3,
+        hourly_rate: 12.0,
+        is_available: true,
+        available_hours: '08:00 AM - 08:00 PM',
+        photo: 'https://images.unsplash.com/photo-1590674899484-d5640e854abe?auto=format&fit=crop&w=800&q=80',
+        amenities: ['Shaded Carport', 'Drinking Water Provided', 'WiFi Access'],
+        rating: 4.7,
+        reviews_count: 15,
+        compatibility: 'All 15A Industrial Plug EV Chargers',
+        surge_guarantee: true
+      },
+      {
+        id: 6,
         host_id: 'user_demo_jaspreet',
-        host_name: 'Jaspreet Singh (Host)',
+        host_name: 'Jaspreet Singh',
         title: 'Model Town Rapid AC Socket',
         tagline: '11 kW high-speed 3-phase charger in secure gated residential compound',
         address: 'B-48, Model Town Extension, Opp. Gurdwara',
         city: 'community',
         lat: 30.8845,
         lng: 75.8080,
-        connector_type: 'Type-2 AC (11 kW)',
+        connector_type: 'Type-2 AC',
         power_kw: 11.0,
         hourly_rate: 25.0,
         is_available: true,
@@ -69,38 +135,16 @@ const CHARGERS_DATA = (typeof DEFAULT_CHARGERS !== 'undefined' && Array.isArray(
         surge_guarantee: true
       },
       {
-        id: 3,
-        host_id: 'user_host_rahul',
-        host_name: 'Rahul Sharma',
-        title: 'Sunrise Villa Smart 15A Socket',
-        tagline: 'Economical 3.3 kW socket ideal for two-wheelers and overnight hybrid charging',
-        address: 'Plot 12, Sunrise Enclave, Main Road',
-        city: 'community',
-        lat: 30.8920,
-        lng: 75.8190,
-        connector_type: '15A Smart Socket (3.3 kW)',
-        power_kw: 3.3,
-        hourly_rate: 14.0,
-        is_available: true,
-        available_hours: '07:00 AM - 10:00 PM',
-        photo: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80',
-        amenities: ['15A Industrial Plug', 'Waterproof Cover', 'Ground-Floor Access'],
-        rating: 4.8,
-        reviews_count: 9,
-        compatibility: 'Ather, Ola S1, TVS iQube, Nexon EV (portable brick)',
-        surge_guarantee: true
-      },
-      {
-        id: 4,
-        host_id: 'user_host_ananya',
-        host_name: 'Ananya Verma',
+        id: 7,
+        host_id: 'user_demo_jaspreet',
+        host_name: 'Jaspreet Singh',
         title: 'EcoCharge Solar Driveway Port',
         tagline: '100% Rooftop Solar-powered clean green energy charging',
         address: 'Eco Haven, Street 7, Sector 32',
         city: 'community',
         lat: 30.8810,
         lng: 75.8155,
-        connector_type: 'Type-2 AC (7.4 kW)',
+        connector_type: 'Type-2 AC',
         power_kw: 7.4,
         hourly_rate: 19.0,
         is_available: true,
@@ -109,51 +153,7 @@ const CHARGERS_DATA = (typeof DEFAULT_CHARGERS !== 'undefined' && Array.isArray(
         amenities: ['100% Solar Green Energy', 'Drinking Water', 'EV Rest Bench'],
         rating: 5.0,
         reviews_count: 12,
-        compatibility: 'All Standard Indian Four-Wheeler EVs',
-        surge_guarantee: true
-      },
-      {
-        id: 5,
-        host_id: 'user_host_vikram',
-        host_name: 'Vikram Malhotra',
-        title: 'Metro Gate Fast AC Charger',
-        tagline: '22 kW High output commercial grade wallbox inside gated society',
-        address: 'Tower 4 Driveway, Metro Greens Society',
-        city: 'community',
-        lat: 30.8965,
-        lng: 75.8095,
-        connector_type: 'Type-2 AC (22 kW)',
-        power_kw: 22.0,
-        hourly_rate: 28.0,
-        is_available: true,
-        available_hours: '24/7 Gated',
-        photo: 'https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=800&q=80',
-        amenities: ['22 kW High Speed', 'Security Intercom', 'Waiting Lounge'],
-        rating: 4.9,
-        reviews_count: 31,
-        compatibility: 'Type-2 AC Fast Charging Capable EVs',
-        surge_guarantee: true
-      },
-      {
-        id: 6,
-        host_id: 'user_host_simran',
-        host_name: 'Simran Kaur',
-        title: 'Lakeview Residency Plug',
-        tagline: 'Cozy driveway parking slot with secure 3.3 kW socket and surge protector',
-        address: 'House 89, Lakeview Road, Near Club',
-        city: 'community',
-        lat: 30.8830,
-        lng: 75.8230,
-        connector_type: '15A Smart Socket (3.3 kW)',
-        power_kw: 3.3,
-        hourly_rate: 15.0,
-        is_available: true,
-        available_hours: '06:00 AM - Midnight',
-        photo: 'https://images.unsplash.com/photo-1558441719-8b489c63f7d1?auto=format&fit=crop&w=800&q=80',
-        amenities: ['Surge Protection', 'CCTV Covered', 'Ample Turning Space'],
-        rating: 4.7,
-        reviews_count: 7,
-        compatibility: 'Two-wheelers & Standard 15A Plug-in Vehicles',
+        compatibility: 'Tata Nexon EV, MG ZS EV, Mahindra XUV400',
         surge_guarantee: true
       }
     ];
@@ -182,6 +182,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const countEl = document.getElementById('totalPinCount');
   if (countEl) countEl.textContent = CHARGERS_DATA.length;
+
+  // Refresh map pins when live Supabase sync finishes
+  window.addEventListener('plugmate:dataSynced', () => {
+    if (window.VoltData && typeof VoltData.getChargers === 'function') {
+      const syncedChargers = VoltData.getChargers();
+      if (syncedChargers && syncedChargers.length > 0) {
+        CHARGERS_DATA.length = 0;
+        syncedChargers.forEach(c => CHARGERS_DATA.push(c));
+        filterCategory(STATE.activeFilter || 'all');
+        const pinEl = document.getElementById('totalPinCount');
+        if (pinEl) pinEl.textContent = CHARGERS_DATA.length;
+      }
+    }
+  });
 
   // Listen for live session location tracking updates
   window.addEventListener('voltshare:locationUpdated', (e) => {
@@ -805,6 +819,10 @@ function filterCategory(type) {
     filtered = CHARGERS_DATA.filter(c => c.power_kw >= 7.0);
   } else if (type === '15a') {
     filtered = CHARGERS_DATA.filter(c => c.power_kw < 7.0);
+  } else if (type === 'solar') {
+    filtered = CHARGERS_DATA.filter(c =>
+      ((c.title || '') + ' ' + (c.tagline || '') + ' ' + (c.amenities || []).join(' ')).toLowerCase().includes('solar')
+    );
   }
 
   renderAllChargerPins(filtered);

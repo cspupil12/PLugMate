@@ -33,41 +33,107 @@ const API_BASE = (function () {
   return '';
 })();
 
-// Default Community EV Chargers for live demo & immediate display
+// Default Community EV Chargers (aligned with Supabase seed records for offline fallback)
 const DEFAULT_CHARGERS = [
   {
     id: 1,
-    host_id: 'user_demo_jaspreet',
-    host_name: 'Jaspreet Singh (Host)',
+    host_id: 'user_host_1',
+    host_name: 'Harpreet Singh',
     title: 'Green Park Driveway Wallbox',
-    tagline: '7.4 kW Level 2 Fast AC Charger with dedicated shaded parking',
-    address: 'House 142, Green Park Avenue, Near Community Centre',
+    tagline: 'Gated wide porch with shade, 5 mins from community center',
+    address: '84 Main Market Avenue, Green Park',
     city: 'community',
-    lat: 30.8895,
-    lng: 75.8140,
-    connector_type: 'Type-2 AC (7.4 kW)',
+    lat: 30.8872,
+    lng: 75.8115,
+    connector_type: 'Type-2 AC',
     power_kw: 7.4,
     hourly_rate: 22.0,
     is_available: true,
     available_hours: '06:00 AM - 11:30 PM',
     photo: 'https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=800&q=80',
-    amenities: ['Gated Driveway', 'CCTV Monitor', 'WiFi Access', 'Covered Canopy'],
+    amenities: ['Gated Driveway', 'CCTV Monitor', 'Covered Porch', 'Drinking Water', 'Restroom'],
     rating: 4.9,
-    reviews_count: 18,
-    compatibility: 'Tata Nexon EV, MG ZS EV, Mahindra XUV400, Hyundai Ioniq 5',
+    reviews_count: 32,
+    compatibility: 'Tata Nexon/Curvv, MG ZS/Windsor, Hyundai Ioniq, Mahindra XUV400',
     surge_guarantee: true
   },
   {
-    id: 2,
+    id: 3,
+    host_id: 'user_host_2',
+    host_name: 'Gurmeet Kaur',
+    title: 'University Enclave Solar Plug',
+    tagline: 'Clean 100% solar surplus charging on quiet residential street',
+    address: '18 University Road, West Enclave',
+    city: 'community',
+    lat: 30.9015,
+    lng: 75.8201,
+    connector_type: '15A-3Pin',
+    power_kw: 3.3,
+    hourly_rate: 13.0,
+    is_available: true,
+    available_hours: '07:00 AM - 10:00 PM',
+    photo: 'https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80',
+    amenities: ['100% Solar Energy', 'Safe Overnight Parking', 'EV 2-Wheeler Friendly'],
+    rating: 5.0,
+    reviews_count: 41,
+    compatibility: 'Ather 450X, Ola S1, TVS iQube, MG Comet, Tata Tiago EV',
+    surge_guarantee: true
+  },
+  {
+    id: 4,
+    host_id: 'user_host_1',
+    host_name: 'Harpreet Singh',
+    title: 'Pinecrest High-Power Wallbox',
+    tagline: '11 kW 3-phase home wallbox for faster charging turnarounds',
+    address: '4 Pinecrest Avenue, Northridge',
+    city: 'community',
+    lat: 30.892,
+    lng: 75.834,
+    connector_type: 'Type-2 AC',
+    power_kw: 11.0,
+    hourly_rate: 26.0,
+    is_available: true,
+    available_hours: '05:00 AM - Midnight',
+    photo: 'https://images.unsplash.com/photo-1558441719-8b489c63f736?auto=format&fit=crop&w=800&q=80',
+    amenities: ['11 kW 3-Phase', 'CCTV Monitor', 'Easy Reversing Space'],
+    rating: 4.9,
+    reviews_count: 19,
+    compatibility: 'BYD Atto 3/Seal, Hyundai Ioniq 5, Kia EV6, Audi e-tron',
+    surge_guarantee: true
+  },
+  {
+    id: 5,
+    host_id: 'user_host_2',
+    host_name: 'Gurmeet Kaur',
+    title: 'Heritage Gardens Porch Socket',
+    tagline: 'Quiet residential porch opposite neighborhood park',
+    address: '14 Heritage Walk, Civic Center',
+    city: 'community',
+    lat: 30.908,
+    lng: 75.845,
+    connector_type: '15A-3Pin',
+    power_kw: 3.3,
+    hourly_rate: 12.0,
+    is_available: true,
+    available_hours: '08:00 AM - 08:00 PM',
+    photo: 'https://images.unsplash.com/photo-1590674899484-d5640e854abe?auto=format&fit=crop&w=800&q=80',
+    amenities: ['Shaded Carport', 'Drinking Water Provided', 'WiFi Access'],
+    rating: 4.7,
+    reviews_count: 15,
+    compatibility: 'All 15A Industrial Plug EV Chargers',
+    surge_guarantee: true
+  },
+  {
+    id: 6,
     host_id: 'user_demo_jaspreet',
-    host_name: 'Jaspreet Singh (Host)',
+    host_name: 'Jaspreet Singh',
     title: 'Model Town Rapid AC Socket',
     tagline: '11 kW high-speed 3-phase charger in secure gated residential compound',
     address: 'B-48, Model Town Extension, Opp. Gurdwara',
     city: 'community',
     lat: 30.8845,
     lng: 75.8080,
-    connector_type: 'Type-2 AC (11 kW)',
+    connector_type: 'Type-2 AC',
     power_kw: 11.0,
     hourly_rate: 25.0,
     is_available: true,
@@ -80,38 +146,16 @@ const DEFAULT_CHARGERS = [
     surge_guarantee: true
   },
   {
-    id: 3,
-    host_id: 'user_host_rahul',
-    host_name: 'Rahul Sharma',
-    title: 'Sunrise Villa Smart 15A Socket',
-    tagline: 'Economical 3.3 kW socket ideal for two-wheelers and overnight hybrid charging',
-    address: 'Plot 12, Sunrise Enclave, Main Road',
-    city: 'community',
-    lat: 30.8920,
-    lng: 75.8190,
-    connector_type: '15A Smart Socket (3.3 kW)',
-    power_kw: 3.3,
-    hourly_rate: 14.0,
-    is_available: true,
-    available_hours: '07:00 AM - 10:00 PM',
-    photo: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80',
-    amenities: ['15A Industrial Plug', 'Waterproof Cover', 'Ground-Floor Access'],
-    rating: 4.8,
-    reviews_count: 9,
-    compatibility: 'Ather, Ola S1, TVS iQube, Nexon EV (portable brick)',
-    surge_guarantee: true
-  },
-  {
-    id: 4,
-    host_id: 'user_host_ananya',
-    host_name: 'Ananya Verma',
+    id: 7,
+    host_id: 'user_demo_jaspreet',
+    host_name: 'Jaspreet Singh',
     title: 'EcoCharge Solar Driveway Port',
     tagline: '100% Rooftop Solar-powered clean green energy charging',
     address: 'Eco Haven, Street 7, Sector 32',
     city: 'community',
     lat: 30.8810,
     lng: 75.8155,
-    connector_type: 'Type-2 AC (7.4 kW)',
+    connector_type: 'Type-2 AC',
     power_kw: 7.4,
     hourly_rate: 19.0,
     is_available: true,
@@ -120,51 +164,7 @@ const DEFAULT_CHARGERS = [
     amenities: ['100% Solar Green Energy', 'Drinking Water', 'EV Rest Bench'],
     rating: 5.0,
     reviews_count: 12,
-    compatibility: 'All Standard Indian Four-Wheeler EVs',
-    surge_guarantee: true
-  },
-  {
-    id: 5,
-    host_id: 'user_host_vikram',
-    host_name: 'Vikram Malhotra',
-    title: 'Metro Gate Fast AC Charger',
-    tagline: '22 kW High output commercial grade wallbox inside gated society',
-    address: 'Tower 4 Driveway, Metro Greens Society',
-    city: 'community',
-    lat: 30.8965,
-    lng: 75.8095,
-    connector_type: 'Type-2 AC (22 kW)',
-    power_kw: 22.0,
-    hourly_rate: 28.0,
-    is_available: true,
-    available_hours: '24/7 Gated',
-    photo: 'https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=800&q=80',
-    amenities: ['22 kW High Speed', 'Security Intercom', 'Waiting Lounge'],
-    rating: 4.9,
-    reviews_count: 31,
-    compatibility: 'Type-2 AC Fast Charging Capable EVs',
-    surge_guarantee: true
-  },
-  {
-    id: 6,
-    host_id: 'user_host_simran',
-    host_name: 'Simran Kaur',
-    title: 'Lakeview Residency Plug',
-    tagline: 'Cozy driveway parking slot with secure 3.3 kW socket and surge protector',
-    address: 'House 89, Lakeview Road, Near Club',
-    city: 'community',
-    lat: 30.8830,
-    lng: 75.8230,
-    connector_type: '15A Smart Socket (3.3 kW)',
-    power_kw: 3.3,
-    hourly_rate: 15.0,
-    is_available: true,
-    available_hours: '06:00 AM - Midnight',
-    photo: 'https://images.unsplash.com/photo-1558441719-8b489c63f7d1?auto=format&fit=crop&w=800&q=80',
-    amenities: ['Surge Protection', 'CCTV Covered', 'Ample Turning Space'],
-    rating: 4.7,
-    reviews_count: 7,
-    compatibility: 'Two-wheelers & Standard 15A Plug-in Vehicles',
+    compatibility: 'Tata Nexon EV, MG ZS EV, Mahindra XUV400',
     surge_guarantee: true
   }
 ];
@@ -172,46 +172,46 @@ const DEFAULT_CHARGERS = [
 const DEFAULT_BOOKINGS = [
   {
     id: 'PM-8821',
-    charger_id: 1,
-    charger_title: 'Green Park Driveway Wallbox',
-    charger_address: 'House 142, Green Park Avenue',
+    charger_id: 6,
+    charger_title: 'Model Town Rapid AC Socket',
+    charger_address: 'B-48, Model Town Extension, Opp. Gurdwara',
     host_id: 'user_demo_jaspreet',
-    host_name: 'Jaspreet Singh (Host)',
-    user_id: 'user_driver_arjun',
-    user_name: 'Arjun Mehta',
-    user_phone: '+91 98111 22334',
-    user_vehicle: 'Tata Nexon EV Max',
-    date: '2026-11-20',
-    time_slot: '02:00 PM - 04:00 PM',
+    host_name: 'Jaspreet Singh',
+    user_id: 'user_chargee_1',
+    user_name: 'Amanjot Virdi',
+    user_phone: '+91 98888 12345',
+    user_vehicle: 'Tata Nexon EV Empowered+',
+    date: '2026-11-26',
+    time_slot: '02:00 PM (2 hrs)',
     duration_hours: 2,
-    hourly_rate: 22.0,
-    total_amount: 48.40,
+    hourly_rate: 25.0,
+    total_amount: 55.0,
     pin: '4821',
     status: 'upcoming',
     payment_status: 'Held in Escrow',
-    connector_type: 'Type-2 AC (7.4 kW)',
+    connector_type: 'Type-2 AC',
     created_at: new Date().toISOString()
   },
   {
     id: 'PM-7104',
-    charger_id: 2,
-    charger_title: 'Model Town Rapid AC Socket',
-    charger_address: 'B-48, Model Town Extension',
+    charger_id: 7,
+    charger_title: 'EcoCharge Solar Driveway Port',
+    charger_address: 'Eco Haven, Street 7, Sector 32',
     host_id: 'user_demo_jaspreet',
-    host_name: 'Jaspreet Singh (Host)',
-    user_id: 'user_driver_neha',
-    user_name: 'Neha Kapoor',
-    user_phone: '+91 98222 33445',
+    host_name: 'Jaspreet Singh',
+    user_id: 'user_demo_jaspreet',
+    user_name: 'Jaspreet Singh',
+    user_phone: '+91 98765 43210',
     user_vehicle: 'MG ZS EV',
-    date: '2026-11-19',
-    time_slot: '06:00 PM - 08:30 PM',
-    duration_hours: 2.5,
-    hourly_rate: 25.0,
-    total_amount: 68.75,
+    date: '2026-11-24',
+    time_slot: '06:00 PM (2 hrs)',
+    duration_hours: 2,
+    hourly_rate: 19.0,
+    total_amount: 41.8,
     pin: '7392',
     status: 'completed',
     payment_status: 'Released to Host',
-    connector_type: 'Type-2 AC (11 kW)',
+    connector_type: 'Type-2 AC',
     created_at: new Date(Date.now() - 86400000).toISOString()
   }
 ];
@@ -223,19 +223,27 @@ const VoltData = {
   _hasSynced: false,
   _backendOffline: false,
 
-  // Robust API fetch helper that avoids console spam when running without backend proxy
+  // Robust API fetch helper that persists mutations reliably across navigation/reloads
   async _fetchApi(path, options = {}) {
-    if (this._backendOffline || API_BASE === null) return null;
+    if (API_BASE === null) return null;
+    const method = (options.method || 'GET').toUpperCase();
+    if (method === 'GET' && this._backendOffline) return null;
     try {
       const url = `${API_BASE}${path}`;
-      const res = await fetch(url, options);
-      if (res.status === 404) {
+      const fetchOpts = method !== 'GET'
+        ? { keepalive: true, ...options }
+        : options;
+      const res = await fetch(url, fetchOpts);
+      if (res.status === 404 && path === '/api/health') {
         this._backendOffline = true;
         return null;
       }
+      this._backendOffline = false;
       return res;
     } catch (e) {
-      this._backendOffline = true;
+      if (method === 'GET') {
+        this._backendOffline = true;
+      }
       return null;
     }
   },
@@ -300,11 +308,10 @@ const VoltData = {
 
   // Background Cloud Sync with Flask + Supabase API
   async syncWithBackend() {
-    if (this._hasSynced || this._backendOffline || API_BASE === null) return;
+    if (this._hasSynced || API_BASE === null) return;
     this._hasSynced = true;
 
     try {
-      // Probe health endpoint first; if down or static server 404, gracefully stop
       const health = await this._fetchApi('/api/health');
       if (!health || !health.ok) {
         this._backendOffline = true;
@@ -315,38 +322,50 @@ const VoltData = {
       return;
     }
 
+    const [chargersRes, bookingsRes, reviewsRes] = await Promise.all([
+      this._fetchApi('/api/chargers').catch(() => null),
+      this._fetchApi('/api/bookings').catch(() => null),
+      this._fetchApi('/api/reviews').catch(() => null)
+    ]);
+
+    let changed = false;
+
     try {
-      const res = await this._fetchApi('/api/chargers');
-      if (res && res.ok) {
-        const cloudChargers = await res.json();
-        if (Array.isArray(cloudChargers)) {
+      if (chargersRes && chargersRes.ok) {
+        const cloudChargers = await chargersRes.json();
+        if (Array.isArray(cloudChargers) && cloudChargers.length > 0) {
           localStorage.setItem(PLUGMATE_STORAGE_KEYS.CHARGERS, JSON.stringify(cloudChargers));
           localStorage.setItem(VOLT_STORAGE_KEYS.CHARGERS, JSON.stringify(cloudChargers));
+          changed = true;
         }
       }
     } catch (e) { }
 
     try {
-      const res = await this._fetchApi('/api/bookings');
-      if (res && res.ok) {
-        const cloudBookings = await res.json();
+      if (bookingsRes && bookingsRes.ok) {
+        const cloudBookings = await bookingsRes.json();
         if (Array.isArray(cloudBookings)) {
           localStorage.setItem(PLUGMATE_STORAGE_KEYS.BOOKINGS, JSON.stringify(cloudBookings));
           localStorage.setItem(VOLT_STORAGE_KEYS.BOOKINGS, JSON.stringify(cloudBookings));
+          changed = true;
         }
       }
     } catch (e) { }
 
     try {
-      const res = await this._fetchApi('/api/reviews');
-      if (res && res.ok) {
-        const cloudReviews = await res.json();
+      if (reviewsRes && reviewsRes.ok) {
+        const cloudReviews = await reviewsRes.json();
         if (Array.isArray(cloudReviews)) {
           localStorage.setItem(PLUGMATE_STORAGE_KEYS.REVIEWS, JSON.stringify(cloudReviews));
           localStorage.setItem(VOLT_STORAGE_KEYS.REVIEWS, JSON.stringify(cloudReviews));
+          changed = true;
         }
       }
     } catch (e) { }
+
+    if (changed && typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('plugmate:dataSynced'));
+    }
   },
 
   // Users & Auth
@@ -374,17 +393,18 @@ const VoltData = {
     if (!user) {
       localStorage.removeItem(PLUGMATE_STORAGE_KEYS.CURRENT_USER);
       localStorage.removeItem(VOLT_STORAGE_KEYS.CURRENT_USER);
-      return;
+      return Promise.resolve(null);
     }
     localStorage.setItem(PLUGMATE_STORAGE_KEYS.CURRENT_USER, JSON.stringify(user));
     localStorage.setItem(VOLT_STORAGE_KEYS.CURRENT_USER, JSON.stringify(user));
     if (user.id) {
-      this._fetchApi('/api/users/sync', {
+      return this._fetchApi('/api/users/sync', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(user)
       });
     }
+    return Promise.resolve(null);
   },
 
   setUserRole(role) {
@@ -471,9 +491,9 @@ const VoltData = {
 
   addCharger(chargerData) {
     const chargers = this.getChargers();
-    const newId = chargers.reduce((max, c) => Math.max(max, c.id || 0), 0) + 1;
+    const tempId = chargers.reduce((max, c) => Math.max(max, c.id || 0), 0) + 1;
     const newCharger = {
-      id: newId,
+      id: tempId,
       rating: 5.0,
       reviews_count: 0,
       is_available: true,
@@ -491,7 +511,23 @@ const VoltData = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newCharger)
-    });
+    }).then(async (res) => {
+      if (res && res.ok) {
+        const saved = await res.json().catch(() => null);
+        if (saved && saved.id) {
+          const latest = this.getChargers();
+          const idx = latest.findIndex(c => c.id === tempId);
+          if (idx !== -1) {
+            latest[idx] = saved;
+            localStorage.setItem(PLUGMATE_STORAGE_KEYS.CHARGERS, JSON.stringify(latest));
+            localStorage.setItem(VOLT_STORAGE_KEYS.CHARGERS, JSON.stringify(latest));
+            if (typeof window !== 'undefined') {
+              window.dispatchEvent(new CustomEvent('plugmate:dataSynced'));
+            }
+          }
+        }
+      }
+    }).catch(() => { });
 
     return newCharger;
   },

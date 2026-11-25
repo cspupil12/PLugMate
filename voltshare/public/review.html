@@ -162,23 +162,27 @@
     document.addEventListener('DOMContentLoaded', () => {
       renderVoltNavbar('bookings');
 
-      const urlParams = new URLSearchParams(window.location.search);
-      bookingId = urlParams.get('bookingId') || 'VS-LDH-8921';
-      chargerId = urlParams.get('chargerId') || 1;
+      const loadReviewTarget = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        bookingId = urlParams.get('bookingId') || 'PM-8921';
+        chargerId = urlParams.get('chargerId') || 1;
 
-      const booking = VoltData.getBookingById(bookingId);
-      const charger = VoltData.getChargerById(chargerId);
+        const booking = VoltData.getBookingById(bookingId);
+        const charger = VoltData.getChargerById(chargerId);
 
-      if (booking) {
-        document.getElementById('revBookingId').textContent = booking.id;
-        document.getElementById('revChargerTitle').textContent = booking.charger_title;
-        document.getElementById('revHostDetails').textContent = `Hosted by ${booking.host_name} • ${booking.date}`;
-        chargerId = booking.charger_id;
-      } else if (charger) {
-        document.getElementById('revChargerTitle').textContent = charger.title;
-        document.getElementById('revHostDetails').textContent = `Hosted by ${charger.host_name} • Verified Host`;
-      }
+        if (booking) {
+          document.getElementById('revBookingId').textContent = booking.id;
+          document.getElementById('revChargerTitle').textContent = booking.charger_title;
+          document.getElementById('revHostDetails').textContent = `Hosted by ${booking.host_name} • ${booking.date}`;
+          chargerId = booking.charger_id;
+        } else if (charger) {
+          document.getElementById('revChargerTitle').textContent = charger.title;
+          document.getElementById('revHostDetails').textContent = `Hosted by ${charger.host_name} • Verified Host`;
+        }
+      };
 
+      loadReviewTarget();
+      window.addEventListener('plugmate:dataSynced', loadReviewTarget);
       setRating(5);
     });
 

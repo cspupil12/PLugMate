@@ -126,6 +126,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       renderVoltNavbar('bookings');
       renderBookings();
+      window.addEventListener('plugmate:dataSynced', renderBookings);
     });
 
     function switchTab(tab) {
@@ -262,17 +263,23 @@
               </div>
 
               <!-- Review State if Completed -->
-              ${isCompleted && b.reviewed ? `
-                <div class="p-3 bg-amber-50/70 border border-amber-200 rounded-xl text-xs space-y-1">
-                  <div class="flex items-center justify-between">
-                    <span class="font-bold text-gray-800 flex items-center gap-1">
-                      <span>★</span> Your Review: ${'★'.repeat(b.review_rating || 5)}
-                    </span>
-                    <span class="text-[10px] text-gray-400">Verified Chargee</span>
+              ${(() => {
+                if (!isCompleted || !b.reviewed) return '';
+                const matchedRev = VoltData.getReviews(b.charger_id).find(r => r.booking_id === b.id);
+                const revRating = b.review_rating || (matchedRev && matchedRev.rating) || 5;
+                const revComment = b.review_comment || (matchedRev && matchedRev.comment) || 'Verified charging session rated by driver.';
+                return `
+                  <div class="p-3 bg-amber-50/70 border border-amber-200 rounded-xl text-xs space-y-1">
+                    <div class="flex items-center justify-between">
+                      <span class="font-bold text-gray-800 flex items-center gap-1">
+                        <span>★</span> Your Review: ${'★'.repeat(revRating)}
+                      </span>
+                      <span class="text-[10px] text-gray-400">Verified Chargee</span>
+                    </div>
+                    <p class="text-gray-600 italic">"${revComment}"</p>
                   </div>
-                  <p class="text-gray-600 italic">"${b.review_comment}"</p>
-                </div>
-              ` : ''}
+                `;
+              })()}
 
               <!-- Action Buttons -->
               <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-gray-100 text-xs">

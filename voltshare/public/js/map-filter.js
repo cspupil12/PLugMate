@@ -61,6 +61,9 @@
 
     // 5. Sync Map User Location from Location Cookie
     syncMapFromLocationCookie();
+
+    // 6. Keep filters synchronized after Supabase data loads
+    window.addEventListener('plugmate:dataSynced', applyFilters);
   }
 
   function syncMapFromLocationCookie() {

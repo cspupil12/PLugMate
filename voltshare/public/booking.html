@@ -424,9 +424,14 @@
       '09:00 PM', '10:00 PM', '11:00 PM'
     ];
 
+    let bookingConfirmed = false;
+
     document.addEventListener('DOMContentLoaded', () => {
       renderVoltNavbar('bookings');
       setupBookingPage();
+      window.addEventListener('plugmate:dataSynced', () => {
+        if (!bookingConfirmed) setupBookingPage();
+      });
     });
 
     function getParam(key) {
@@ -580,9 +585,10 @@
 
     function executeFakePaymentAndConfirm() {
       const user = VoltData.getCurrentUser();
-      const driverName = document.getElementById('driverName').value.trim() || user.name;
-      const driverPhone = document.getElementById('driverPhone').value.trim() || user.phone;
+      const driverName = document.getElementById('driverName').value.trim() || (user && user.name) || 'EV Driver';
+      const driverPhone = document.getElementById('driverPhone').value.trim() || (user && user.phone) || '+91 98765 43210';
       const driverVehicle = document.getElementById('driverVehicle').value.trim() || 'Tata Nexon EV';
+      const userId = (user && user.id) ? user.id : 'user_demo_jaspreet';
 
       const rate = charger.hourly_rate;
       const base = rate * selectedDurationHours;
@@ -590,13 +596,14 @@
       const total = base + fee;
 
       // Create booking payload
+      bookingConfirmed = true;
       const booking = VoltData.createBooking({
         charger_id: charger.id,
         charger_title: charger.title,
         charger_address: charger.address,
         host_id: charger.host_id,
         host_name: charger.host_name,
-        user_id: user.id,
+        user_id: userId,
         user_name: driverName,
         user_phone: driverPhone,
         user_vehicle: driverVehicle,

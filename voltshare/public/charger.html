@@ -285,6 +285,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       renderVoltNavbar('map');
       loadChargerDetails();
+      window.addEventListener('plugmate:dataSynced', loadChargerDetails);
     });
 
     function getParam(key) {
