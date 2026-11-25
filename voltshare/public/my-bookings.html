@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PlugMate — My EV Bookings</title>
+  <title>PlugMate: My EV Bookings</title>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -50,7 +50,7 @@
     src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"></script>
 </head>
 
-<body class="bg-gray-50 min-h-screen flex flex-col font-sans text-gray-800">
+<body class="bg-gray-50 min-h-screen flex flex-col font-sans text-gray-800 overflow-x-hidden">
 
   <!-- Shared Navbar Mount -->
   <div id="voltNavbarMount"></div>
@@ -60,37 +60,37 @@
     <!-- Header Row -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
       <div>
-        <h1 class="text-xl sm:text-2xl font-bold font-google text-gray-900 tracking-tight flex items-center gap-2">
-          <span>📅</span> My EV Charging Bookings
+        <h1 class="text-xl sm:text-2xl font-bold font-google text-gray-900 tracking-tight">
+          My EV Charging Bookings
         </h1>
-        <p class="text-xs text-gray-500 mt-0.5" id="userHeaderSubtitle">
+        <p class="text-xs text-gray-600 mt-0.5" id="userHeaderSubtitle">
           Review your EV charging reservations and history
         </p>
       </div>
 
       <div class="flex items-center gap-2">
         <a href="map.html"
-          class="px-4 py-2 bg-googleBlue hover:bg-googleBlueHover text-white text-xs font-bold rounded-full shadow-google transition-colors flex items-center gap-1.5">
-          <span>⚡</span> Find Nearby Charger
+          class="px-4 py-2.5 min-h-[40px] bg-googleBlue hover:bg-googleBlueHover text-white text-xs font-bold rounded-full transition-colors flex items-center">
+          Find Nearby Charger
         </a>
       </div>
     </div>
 
     <!-- Tab Bar: Upcoming vs Past -->
-    <div class="flex items-center gap-2 border-b border-gray-200 pb-3 mb-6 overflow-x-auto text-xs font-medium">
-      <button onclick="switchTab('upcoming')" id="tabBtnUpcoming"
-        class="px-4 py-2 rounded-full font-bold bg-blue-50 text-googleBlue border border-googleBlue flex items-center gap-1.5 transition-all">
-        <span>🕒</span> Upcoming & Active (<span id="countUpcoming">0</span>)
+    <div class="flex items-center gap-2 border-b border-gray-200 pb-3 mb-6 overflow-x-auto text-xs font-medium" role="tablist" aria-label="Booking filter tabs">
+      <button type="button" onclick="switchTab('upcoming')" id="tabBtnUpcoming" role="tab" aria-selected="true"
+        class="px-4 py-2 min-h-[40px] rounded-full font-bold bg-blue-50 text-googleBlueHover border border-googleBlue flex items-center gap-1.5 transition-colors whitespace-nowrap">
+        Upcoming &amp; Active (<span id="countUpcoming">0</span>)
       </button>
 
-      <button onclick="switchTab('completed')" id="tabBtnCompleted"
-        class="px-4 py-2 rounded-full text-gray-600 hover:text-gray-900 hover:bg-gray-100 flex items-center gap-1.5 transition-all">
-        <span>✓</span> Past History (<span id="countCompleted">0</span>)
+      <button type="button" onclick="switchTab('completed')" id="tabBtnCompleted" role="tab" aria-selected="false"
+        class="px-4 py-2 min-h-[40px] rounded-full text-gray-700 hover:text-gray-900 hover:bg-gray-100 flex items-center gap-1.5 transition-colors whitespace-nowrap">
+        Past History (<span id="countCompleted">0</span>)
       </button>
 
-      <button onclick="switchTab('all')" id="tabBtnAll"
-        class="px-4 py-2 rounded-full text-gray-600 hover:text-gray-900 hover:bg-gray-100 flex items-center gap-1.5 transition-all">
-        <span>📋</span> All Bookings (<span id="countAll">0</span>)
+      <button type="button" onclick="switchTab('all')" id="tabBtnAll" role="tab" aria-selected="false"
+        class="px-4 py-2 min-h-[40px] rounded-full text-gray-700 hover:text-gray-900 hover:bg-gray-100 flex items-center gap-1.5 transition-colors whitespace-nowrap">
+        All Bookings (<span id="countAll">0</span>)
       </button>
     </div>
 
@@ -101,17 +101,14 @@
 
     <!-- Empty State -->
     <div id="emptyState"
-      class="hidden bg-white rounded-2xl p-8 text-center shadow-google border border-gray-200 space-y-3">
-      <div class="w-14 h-14 bg-blue-50 text-googleBlue rounded-full flex items-center justify-center mx-auto text-2xl">
-        🔌
-      </div>
+      class="hidden bg-white rounded-xl p-8 text-center border border-gray-200 space-y-3">
       <h3 class="text-base font-bold text-gray-900 font-google">No Bookings Found in this Category</h3>
-      <p class="text-xs text-gray-500 max-w-sm mx-auto">
-        Rent a neighbor's driveway charger to charge overnight without owning a garage.
+      <p class="text-xs text-gray-600 max-w-sm mx-auto">
+        Reserve a verified driveway charger in Jalandhar or your local neighborhood to charge overnight.
       </p>
       <a href="map.html"
-        class="inline-flex items-center gap-1.5 px-4 py-2 bg-googleBlue text-white text-xs font-bold rounded-full shadow-google hover:bg-googleBlueHover transition-colors mt-2">
-        <span>🗺️</span> Explore Chargers on Map
+        class="inline-flex items-center px-5 py-2.5 bg-googleBlue text-white text-xs font-bold rounded-full hover:bg-googleBlueHover transition-colors mt-2">
+        Explore Chargers on Map
       </a>
     </div>
 
@@ -141,11 +138,20 @@
       });
 
       if (tab === 'upcoming') {
-        btnUp.className = 'px-4 py-2 rounded-full font-bold bg-blue-50 text-googleBlue border border-googleBlue flex items-center gap-1.5 transition-all';
+        btnUp.className = 'px-4 py-2 min-h-[40px] rounded-full font-bold bg-blue-50 text-googleBlueHover border border-googleBlue flex items-center gap-1.5 transition-colors whitespace-nowrap';
+        btnUp.setAttribute('aria-selected', 'true');
+        btnComp.setAttribute('aria-selected', 'false');
+        btnAll.setAttribute('aria-selected', 'false');
       } else if (tab === 'completed') {
-        btnComp.className = 'px-4 py-2 rounded-full font-bold bg-emerald-50 text-emerald-700 border border-emerald-600 flex items-center gap-1.5 transition-all';
+        btnComp.className = 'px-4 py-2 min-h-[40px] rounded-full font-bold bg-emerald-50 text-emerald-800 border border-emerald-700 flex items-center gap-1.5 transition-colors whitespace-nowrap';
+        btnComp.setAttribute('aria-selected', 'true');
+        btnUp.setAttribute('aria-selected', 'false');
+        btnAll.setAttribute('aria-selected', 'false');
       } else {
-        btnAll.className = 'px-4 py-2 rounded-full font-bold bg-gray-100 text-gray-900 border border-gray-300 flex items-center gap-1.5 transition-all';
+        btnAll.className = 'px-4 py-2 min-h-[40px] rounded-full font-bold bg-gray-200 text-gray-900 border border-gray-400 flex items-center gap-1.5 transition-colors whitespace-nowrap';
+        btnAll.setAttribute('aria-selected', 'true');
+        btnUp.setAttribute('aria-selected', 'false');
+        btnComp.setAttribute('aria-selected', 'false');
       }
 
       renderBookings();
@@ -156,11 +162,10 @@
       if (currentUser) {
         document.getElementById('userHeaderSubtitle').textContent = `Managing charge sessions for ${currentUser.name} • ${currentUser.vehicle ? currentUser.vehicle.model : 'EV Community Member'}`;
       } else {
-        document.getElementById('userHeaderSubtitle').textContent = 'Please sign in to view your charging reservations.';
+        document.getElementById('userHeaderSubtitle').textContent = 'Sign in to view your charging reservations.';
       }
 
       const allBookings = VoltData.getBookings();
-      // Filter for current user or show all if host
       const userBookings = currentUser
         ? allBookings.filter(b => b.user_id === currentUser.id || b.host_id === currentUser.id)
         : [];
@@ -195,48 +200,48 @@
         const isCompleted = b.status === 'completed';
 
         return `
-          <div class="bg-white rounded-2xl shadow-google border border-gray-200 overflow-hidden transition-all hover:shadow-googleHover">
+          <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
             
             <!-- Card Header -->
-            <div class="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-gray-100 bg-gray-50/40">
+            <div class="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-gray-100 bg-gray-50">
               <div>
-                <div class="flex items-center gap-2 mb-1">
-                  <span class="font-mono text-xs font-bold text-googleBlue bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
+                <div class="flex items-center gap-2 mb-1 flex-wrap">
+                  <span class="font-mono text-xs font-bold text-googleBlueHover bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200">
                     ${b.id}
                   </span>
                   ${isUpcoming ? `
-                    <span class="inline-flex items-center gap-1 text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
-                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Confirmed & Active
+                    <span class="inline-flex items-center gap-1.5 text-[11px] uppercase font-bold px-2.5 py-0.5 rounded-md bg-emerald-100 text-emerald-800">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-700"></span> Confirmed &amp; Active
                     </span>
                   ` : ''}
                   ${isCompleted ? `
-                    <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">
-                      ✓ Completed
+                    <span class="text-[11px] uppercase font-bold px-2.5 py-0.5 rounded-md bg-gray-200 text-gray-800">
+                      Completed
                     </span>
                   ` : ''}
                   ${isCancelled ? `
-                    <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-rose-100 text-rose-800">
-                      ✕ Cancelled
+                    <span class="text-[11px] uppercase font-bold px-2.5 py-0.5 rounded-md bg-rose-100 text-rose-800">
+                      Cancelled
                     </span>
                   ` : ''}
                 </div>
                 <h3 class="text-base font-bold text-gray-900 font-google">${b.charger_title}</h3>
-                <p class="text-xs text-gray-500 mt-0.5 flex items-center gap-1">
-                  <span>📍 ${b.charger_address}</span>
+                <p class="text-xs text-gray-600 mt-0.5">
+                  ${b.charger_address}
                 </p>
               </div>
 
               <!-- Unlock PIN (For Upcoming sessions) -->
               ${isUpcoming ? `
-                <div class="bg-gradient-to-r from-emerald-50 to-teal-50 border-2 border-dashed border-emerald-500 rounded-xl px-4 py-2.5 text-center shrink-0">
-                  <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-800 block">Host Unlock PIN</span>
-                  <span class="font-mono text-2xl font-black text-emerald-700 tracking-wider">${b.pin}</span>
-                  <span class="text-[10px] text-emerald-600 block">Show to host on arrival</span>
+                <div class="bg-emerald-50 border-2 border-dashed border-emerald-600 rounded-xl px-4 py-2.5 text-center shrink-0">
+                  <span class="text-[11px] font-bold uppercase tracking-widest text-emerald-800 block">Host Unlock PIN</span>
+                  <span class="font-mono text-2xl font-black text-emerald-800 tracking-wider">${b.pin}</span>
+                  <span class="text-[11px] text-emerald-800 block">Show to host on arrival</span>
                 </div>
               ` : `
                 <div class="text-right">
-                  <span class="font-mono text-base font-bold text-gray-900">₹${b.total_amount.toFixed(2)}</span>
-                  <span class="text-[11px] text-gray-400 block">${b.payment_status}</span>
+                  <span class="font-mono text-base font-bold text-gray-900">₹${Number(b.total_amount).toFixed(2)}</span>
+                  <span class="text-[11px] text-gray-600 block">${b.payment_status}</span>
                 </div>
               `}
             </div>
@@ -244,21 +249,21 @@
             <!-- Card Body -->
             <div class="p-4 sm:p-5 space-y-3">
               <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-                <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-100">
-                  <span class="text-[11px] text-gray-400 block">Date</span>
-                  <span class="font-bold text-gray-800">${b.date}</span>
+                <div class="bg-gray-50 p-2.5 rounded-lg border border-gray-200">
+                  <span class="text-[11px] text-gray-600 block">Date</span>
+                  <span class="font-bold text-gray-900">${b.date}</span>
                 </div>
-                <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-100">
-                  <span class="text-[11px] text-gray-400 block">Slot Time</span>
-                  <span class="font-bold text-gray-800">${b.time_slot}</span>
+                <div class="bg-gray-50 p-2.5 rounded-lg border border-gray-200">
+                  <span class="text-[11px] text-gray-600 block">Slot Time</span>
+                  <span class="font-bold text-gray-900">${b.time_slot}</span>
                 </div>
-                <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-100">
-                  <span class="text-[11px] text-gray-400 block">Host</span>
-                  <span class="font-bold text-gray-800">${b.host_name}</span>
+                <div class="bg-gray-50 p-2.5 rounded-lg border border-gray-200">
+                  <span class="text-[11px] text-gray-600 block">Host</span>
+                  <span class="font-bold text-gray-900">${b.host_name}</span>
                 </div>
-                <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-100">
-                  <span class="text-[11px] text-gray-400 block">Vehicle</span>
-                  <span class="font-bold text-gray-800 truncate block">${b.user_vehicle || 'EV'}</span>
+                <div class="bg-gray-50 p-2.5 rounded-lg border border-gray-200">
+                  <span class="text-[11px] text-gray-600 block">Vehicle</span>
+                  <span class="font-bold text-gray-900 truncate block">${b.user_vehicle || 'EV'}</span>
                 </div>
               </div>
 
@@ -271,12 +276,12 @@
                 return `
                   <div class="p-3 bg-amber-50/70 border border-amber-200 rounded-xl text-xs space-y-1">
                     <div class="flex items-center justify-between">
-                      <span class="font-bold text-gray-800 flex items-center gap-1">
-                        <span>★</span> Your Review: ${'★'.repeat(revRating)}
+                      <span class="font-bold text-gray-900 flex items-center gap-1">
+                        <span aria-hidden="true">★</span> Your Review: ${'★'.repeat(revRating)}
                       </span>
-                      <span class="text-[10px] text-gray-400">Verified Chargee</span>
+                      <span class="text-[11px] text-gray-600">Verified Chargee</span>
                     </div>
-                    <p class="text-gray-600 italic">"${revComment}"</p>
+                    <p class="text-gray-700 italic">"${revComment}"</p>
                   </div>
                 `;
               })()}
@@ -285,25 +290,25 @@
               <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-gray-100 text-xs">
                 
                 <div class="flex items-center gap-2">
-                  <a href="map.html?navigate=${b.charger_id}" class="px-3.5 py-1.5 bg-blue-50 hover:bg-blue-100 text-googleBlue font-semibold rounded-full transition-colors flex items-center gap-1">
-                    <span>🗺️</span> Navigate on Map
+                  <a href="map.html?navigate=${b.charger_id}" class="px-3.5 py-2 bg-blue-50 hover:bg-blue-100 text-googleBlueHover font-semibold rounded-full transition-colors">
+                    Navigate on Map
                   </a>
 
-                  <button onclick="callHostMock('${b.host_name}')" class="px-3.5 py-1.5 border border-gray-200 hover:bg-gray-50 text-gray-700 font-medium rounded-full transition-colors flex items-center gap-1">
-                    <span>📞</span> Call Host
+                  <button type="button" onclick="callHostMock('${b.host_name}')" class="px-3.5 py-2 border border-gray-300 hover:bg-gray-50 text-gray-800 font-medium rounded-lg transition-colors">
+                    Call Host
                   </button>
                 </div>
 
                 <div class="flex items-center gap-2">
                   ${isUpcoming ? `
-                    <button onclick="cancelBookingPrompt('${b.id}')" class="px-3.5 py-1.5 text-rose-600 hover:bg-rose-50 border border-rose-200 rounded-full font-medium transition-colors">
+                    <button type="button" onclick="cancelBookingPrompt('${b.id}')" class="px-3.5 py-2 text-rose-700 hover:bg-rose-50 border border-rose-300 rounded-lg font-medium transition-colors">
                       Cancel Reservation
                     </button>
                   ` : ''}
 
                   ${isCompleted && !b.reviewed ? `
-                    <a href="review.html?bookingId=${b.id}&chargerId=${b.charger_id}" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-full shadow-sm transition-colors flex items-center gap-1">
-                      <span>★</span> Leave Rating & Review
+                    <a href="review.html?bookingId=${b.id}&chargerId=${b.charger_id}" class="px-4 py-2 bg-amber-700 hover:bg-amber-800 text-white font-bold rounded-full transition-colors">
+                      Leave Rating &amp; Review
                     </a>
                   ` : ''}
                 </div>

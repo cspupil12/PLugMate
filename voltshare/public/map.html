@@ -3,8 +3,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>PlugMate — EV Chargers on Google Maps</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PlugMate: EV Chargers on Google Maps</title>
 
   <!-- Google Font: Roboto (Authentic Google Maps Font) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,9 +28,9 @@
             googleBlue: '#1A73E8',
             googleBlueHover: '#1557B0',
             googleRed: '#EA4335',
-            googleGreen: '#0F9D58',
+            googleGreen: '#047857',
             googleYellow: '#FBBC04',
-            googleGray: '#5F6368',
+            googleGray: '#4B5563',
             googleBorder: '#DADCE0'
           },
           boxShadow: {
@@ -50,6 +50,7 @@
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="css/style.css">
   <!-- Dynamic Environment Config (safe public keys only) -->
   <script src="/js/config.js"></script>
   <!-- Clerk JavaScript SDK -->
@@ -172,34 +173,34 @@
 
     <!-- Google Search Box -->
     <div
-      class="pointer-events-auto flex items-center bg-white rounded-lg shadow-google h-12 w-full sm:w-[390px] px-3.5 border border-transparent hover:border-gray-200 transition-all">
-      <!-- Google Brand / Menu Icon -->
-      <button onclick="toggleCityDropdown()" title="Menu / Cities"
-        class="text-googleGray hover:text-gray-900 p-1.5 -ml-1 rounded-full hover:bg-gray-100">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      class="pointer-events-auto flex items-center bg-white rounded-lg shadow-google h-12 w-full sm:w-[390px] px-3.5 border border-gray-200 hover:border-gray-300 transition-colors">
+      <!-- Recenter / Reset View Icon -->
+      <button type="button" onclick="toggleCityDropdown()" aria-label="Center map on neighborhood" title="Center map"
+        class="text-googleGray hover:text-gray-900 p-2 -ml-1.5 rounded-lg hover:bg-gray-100 min-w-[40px] min-h-[40px] flex items-center justify-center">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
       </button>
 
       <!-- Search Input -->
-      <input type="text" id="mapSearchInput" onkeyup="handleSearchFilter(this.value)"
-        placeholder="Search EV chargers, streets, or connector types..."
-        class="flex-1 ml-2 text-sm text-gray-800 placeholder-gray-500 focus:outline-none font-normal" />
+      <input type="text" id="mapSearchInput" aria-label="Search EV chargers, streets, or cities" onkeyup="handleSearchFilter(this.value)"
+        placeholder="Search Jalandhar, streets, or plug types..."
+        class="flex-1 ml-2 text-sm text-gray-900 placeholder-gray-600 focus:outline-none font-normal bg-transparent" />
 
       <!-- Search Glass Icon -->
-      <div class="text-googleGray p-1">
+      <div class="text-googleGray p-1" aria-hidden="true">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"
             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
       </div>
 
-      <div class="h-6 w-[1px] bg-gray-200 mx-1.5"></div>
+      <div class="h-6 w-[1px] bg-gray-200 mx-1.5" aria-hidden="true"></div>
 
       <!-- Directions / Recenter Icon -->
-      <button onclick="recenterOnUser()" title="My Location"
-        class="text-googleBlue p-1.5 rounded-full hover:bg-blue-50">
-        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+      <button type="button" onclick="recenterOnUser()" aria-label="Use my current location" title="My Location"
+        class="text-googleBlue p-2 rounded-lg hover:bg-blue-50 min-w-[40px] min-h-[40px] flex items-center justify-center">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z" />
         </svg>
       </button>
@@ -208,100 +209,100 @@
     <!-- Google Quick Filter Pills -->
     <div
       class="pointer-events-auto flex items-center gap-1.5 overflow-x-auto pb-1 max-w-[calc(100vw-30px)] sm:max-w-[540px] no-scrollbar">
-      <button onclick="filterCategory('all')" id="pill-all"
-        class="filter-pill bg-white hover:bg-gray-50 text-gray-800 shadow-google px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 flex items-center gap-1.5 whitespace-nowrap active:bg-gray-100">
-        <span class="text-googleRed">📍</span> All Chargers (<span id="totalPinCount">8</span>)
+      <button type="button" onclick="filterCategory('all')" id="pill-all"
+        class="filter-pill bg-white hover:bg-gray-50 text-gray-900 shadow-google px-3.5 py-2 rounded-full text-xs font-semibold border border-gray-200 flex items-center gap-1.5 whitespace-nowrap">
+        All Chargers (<span id="totalPinCount">0</span>)
       </button>
-      <button onclick="filterCategory('7.4kw')" id="pill-7.4kw"
-        class="filter-pill bg-white hover:bg-gray-50 text-gray-700 shadow-google px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 flex items-center gap-1.5 whitespace-nowrap">
-        <span>⚡</span> 7.4 kW Fast AC
+      <button type="button" onclick="filterCategory('7.4kw')" id="pill-7.4kw"
+        class="filter-pill bg-white hover:bg-gray-50 text-gray-700 shadow-google px-3.5 py-2 rounded-full text-xs font-medium border border-gray-200 whitespace-nowrap">
+        7.4 kW Fast AC
       </button>
-      <button onclick="filterCategory('15a')" id="pill-15a"
-        class="filter-pill bg-white hover:bg-gray-50 text-gray-700 shadow-google px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 flex items-center gap-1.5 whitespace-nowrap">
-        <span>🔌</span> 15A Socket (3.3kW)
+      <button type="button" onclick="filterCategory('15a')" id="pill-15a"
+        class="filter-pill bg-white hover:bg-gray-50 text-gray-700 shadow-google px-3.5 py-2 rounded-full text-xs font-medium border border-gray-200 whitespace-nowrap">
+        15A Socket (3.3 kW)
       </button>
-      <button onclick="filterCategory('solar')" id="pill-solar"
-        class="filter-pill bg-white hover:bg-gray-50 text-gray-700 shadow-google px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 flex items-center gap-1.5 whitespace-nowrap">
-        <span>☀️</span> Solar Powered
+      <button type="button" onclick="filterCategory('solar')" id="pill-solar"
+        class="filter-pill bg-white hover:bg-gray-50 text-gray-700 shadow-google px-3.5 py-2 rounded-full text-xs font-medium border border-gray-200 whitespace-nowrap">
+        Solar Powered
       </button>
     </div>
 
   </header>
 
   <!-- TOP-RIGHT: Navigation & Satellite Controls -->
-  <div class="absolute top-3 right-3 sm:right-4 z-20 flex items-center gap-1.5">
+  <nav class="absolute top-3 right-3 sm:right-4 z-20 flex items-center gap-1.5" aria-label="Map navigation">
     <a href="index.html"
-      class="bg-white hover:bg-gray-50 text-gray-800 rounded-lg shadow-google border border-gray-200 px-3 py-2 text-xs font-bold flex items-center gap-1.5 transition-all">
-      <span>🏠</span> <span class="hidden sm:inline">Home</span>
+      class="bg-white hover:bg-gray-50 text-gray-800 rounded-lg shadow-google border border-gray-200 px-3 py-2 min-h-[40px] text-xs font-bold flex items-center gap-1.5 transition-colors">
+      <span>Home</span>
     </a>
     <a href="my-bookings.html"
-      class="bg-white hover:bg-gray-50 text-gray-800 rounded-lg shadow-google border border-gray-200 px-3 py-2 text-xs font-bold flex items-center gap-1.5 transition-all">
-      <span>📅</span> <span class="hidden sm:inline">My Bookings</span>
+      class="bg-white hover:bg-gray-50 text-gray-800 rounded-lg shadow-google border border-gray-200 px-3 py-2 min-h-[40px] text-xs font-bold flex items-center gap-1.5 transition-colors">
+      <span>My Bookings</span>
     </a>
     <a href="host-dashboard.html"
-      class="bg-white hover:bg-gray-50 text-emerald-700 rounded-lg shadow-google border border-emerald-200 px-3 py-2 text-xs font-bold flex items-center gap-1.5 transition-all">
-      <span>⚡</span> <span class="hidden md:inline">Host Mode</span>
+      class="bg-white hover:bg-emerald-50 text-emerald-700 rounded-lg shadow-google border border-emerald-300 px-3 py-2 min-h-[40px] text-xs font-bold flex items-center gap-1.5 transition-colors">
+      <span>Host Mode</span>
     </a>
-    <button id="btnLayerSat" onclick="toggleSatelliteLayer()"
-      class="bg-white hover:bg-gray-50 text-gray-700 rounded-lg shadow-google border border-gray-200 px-3 py-2 text-xs font-medium flex items-center gap-1.5 transition-all"
+    <button type="button" id="btnLayerSat" onclick="toggleSatelliteLayer()"
+      class="bg-white hover:bg-gray-50 text-gray-800 rounded-lg shadow-google border border-gray-200 px-3 py-2 min-h-[40px] text-xs font-medium flex items-center gap-1.5 transition-colors"
       title="Toggle Satellite Imagery">
-      <svg class="w-4 h-4 text-googleGray" fill="currentColor" viewBox="0 0 24 24">
+      <svg class="w-4 h-4 text-googleGray" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path
           d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
       </svg>
       <span id="satBtnLabel">Satellite</span>
     </button>
-  </div>
+  </nav>
 
   <!-- BOTTOM-RIGHT: Authentic Google Maps Zoom & Recenter Controls -->
   <div class="absolute bottom-6 right-3 sm:right-4 z-20 flex flex-col items-center gap-2.5">
     <!-- Recenter / Locate Me Button -->
-    <button onclick="recenterOnUser()" title="Show your location"
-      class="bg-white text-googleGray hover:text-googleBlue w-10 h-10 rounded-full shadow-google border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors">
-      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+    <button type="button" onclick="recenterOnUser()" aria-label="Center map on your location" title="Show your location"
+      class="bg-white text-googleGray hover:text-googleBlue w-11 h-11 rounded-full shadow-google border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors">
+      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path
           d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z" />
       </svg>
     </button>
 
     <!-- Zoom In & Zoom Out Split Button -->
-    <div class="bg-white rounded-lg shadow-google border border-gray-200 flex flex-col overflow-hidden w-10">
-      <button onclick="zoomInMap()" title="Zoom in"
-        class="w-10 h-10 flex items-center justify-center text-googleGray hover:text-black hover:bg-gray-50 text-xl font-bold border-b border-gray-200">
+    <div class="bg-white rounded-lg shadow-google border border-gray-200 flex flex-col overflow-hidden w-11">
+      <button type="button" onclick="zoomInMap()" aria-label="Zoom in" title="Zoom in"
+        class="w-11 h-11 flex items-center justify-center text-googleGray hover:text-black hover:bg-gray-50 text-xl font-bold border-b border-gray-200">
         +
       </button>
-      <button onclick="zoomOutMap()" title="Zoom out"
-        class="w-10 h-10 flex items-center justify-center text-googleGray hover:text-black hover:bg-gray-50 text-xl font-bold">
-        −
+      <button type="button" onclick="zoomOutMap()" aria-label="Zoom out" title="Zoom out"
+        class="w-11 h-11 flex items-center justify-center text-googleGray hover:text-black hover:bg-gray-50 text-xl font-bold">
+        -
       </button>
     </div>
   </div>
 
   <!-- FLOATING GOOGLE MAPS PLACE CARD / DETAIL DRAWER -->
   <aside id="placeCard"
-    class="hidden absolute bottom-3 left-3 right-3 sm:bottom-6 sm:left-4 sm:right-auto sm:w-[380px] z-30 bg-white rounded-2xl shadow-googleCard border border-gray-200 overflow-hidden transition-all duration-200 ease-out">
+    class="hidden absolute bottom-3 left-3 right-3 sm:bottom-6 sm:left-4 sm:right-auto sm:w-[380px] z-30 bg-white rounded-xl shadow-googleCard border border-gray-200 overflow-hidden">
 
-    <!-- Place Card Header Banner with Google Pin -->
-    <div class="relative bg-gradient-to-r from-blue-600 to-indigo-700 p-4 text-white">
-      <button onclick="closePlaceCard()" title="Close"
-        class="absolute top-3 right-3 text-white/80 hover:text-white bg-black/20 hover:bg-black/30 rounded-full w-7 h-7 flex items-center justify-center text-sm font-bold">
+    <!-- Place Card Header Banner -->
+    <div class="relative bg-googleBlue p-4 text-white">
+      <button type="button" onclick="closePlaceCard()" aria-label="Close charger details" title="Close"
+        class="absolute top-3 right-3 text-white hover:bg-black/20 rounded-lg w-8 h-8 flex items-center justify-center text-sm font-bold">
         ✕
       </button>
 
       <div class="flex items-center gap-2 mb-1">
         <span
-          class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-white/20 text-white flex items-center gap-1">
+          class="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-black/20 text-white flex items-center gap-1">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-          Community EV Charger
+          Verified Driveway
         </span>
-        <span class="text-xs text-blue-100 font-medium" id="cardConnectorBadge">Type-2 AC</span>
+        <span class="text-xs text-blue-50 font-medium" id="cardConnectorBadge">Type-2 AC</span>
       </div>
 
-      <h2 class="text-lg font-bold tracking-tight text-white pr-6" id="cardTitle">
+      <h2 class="text-lg font-bold tracking-tight text-white pr-8" id="cardTitle">
         Green Park Driveway Wallbox
       </h2>
-      <p class="text-xs text-blue-100 mt-0.5" id="cardHostName">
-        Hosted by Community Host • Verified Driveway
+      <p class="text-xs text-blue-50 mt-0.5" id="cardHostName">
+        Hosted by Community Host
       </p>
     </div>
 
@@ -312,18 +313,18 @@
       <div class="flex items-center justify-between pb-3 border-b border-gray-100">
         <div class="flex items-center gap-1.5">
           <span class="font-bold text-gray-900 text-sm">4.9</span>
-          <div class="flex text-amber-400 text-xs">★★★★★</div>
-          <span class="text-gray-500">(32 reviews)</span>
+          <div class="flex text-amber-500 text-xs" aria-hidden="true">★★★★★</div>
+          <span class="text-gray-600">(Verified ratings)</span>
         </div>
         <div class="text-right">
-          <span class="font-mono text-base font-bold text-emerald-600" id="cardHourlyRate">₹20.00</span>
-          <span class="text-gray-500 text-[11px]">/ hr</span>
+          <span class="font-mono text-base font-bold text-emerald-700" id="cardHourlyRate">₹20.00</span>
+          <span class="text-gray-600 text-[11px]">/ hr</span>
         </div>
       </div>
 
       <!-- Address with Google Pin Icon -->
       <div class="flex items-start gap-2.5 text-gray-700">
-        <div class="mt-0.5 text-googleRed">
+        <div class="mt-0.5 text-googleRed" aria-hidden="true">
           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
             <path
               d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
@@ -331,50 +332,48 @@
         </div>
         <div>
           <div class="font-medium text-gray-900" id="cardAddress">84 Main Market Avenue, Green Park</div>
-          <div class="text-[11px] text-gray-500">Verified residential driveway • Safe overnight parking</div>
+          <div class="text-[11px] text-gray-600">Residential driveway with enclosed parking</div>
         </div>
       </div>
 
       <!-- Charging Power & Sockets -->
       <div class="flex items-center gap-2.5 text-gray-700">
-        <div class="text-googleBlue">
+        <div class="text-googleBlue" aria-hidden="true">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
           </svg>
         </div>
         <div>
           <span class="font-medium text-gray-900" id="cardPower">7.4 kW Dedicated AC Wallbox</span>
-          <span class="text-gray-500 block text-[11px]">Compatible with Tata Nexon, MG Windsor, Ather, Ola</span>
+          <span class="text-gray-600 block text-[11px]">Compatible with Tata Nexon, MG Windsor, Ather, Ola</span>
         </div>
       </div>
 
-      <!-- Quick Action Buttons (Google Maps Style: Directions, Book, Call) -->
+      <!-- Quick Action Buttons (Google Maps Style: Directions & Book) -->
       <div class="grid grid-cols-2 gap-2 pt-1">
-        <button onclick="calculateRoadRouteAndNavigate()"
-          class="py-2.5 bg-googleBlue hover:bg-googleBlueHover text-white font-medium rounded-full flex items-center justify-center gap-1.5 transition-colors shadow-sm text-xs">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+        <button type="button" onclick="calculateRoadRouteAndNavigate()"
+          class="py-2.5 min-h-[40px] bg-googleBlue hover:bg-googleBlueHover text-white font-semibold rounded-full flex items-center justify-center gap-1.5 transition-colors text-xs">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path
               d="M21.71 11.29l-9-9c-.39-.39-1.02-.39-1.41 0l-9 9c-.39.39-.39 1.02 0 1.41l9 9c.39.39 1.02.39 1.41 0l9-9c.39-.38.39-1.01 0-1.41zM14 14.5V12h-4v3H8v-4c0-.55.45-1 1-1h5V7.5l3.5 3.5-3.5 3.5z" />
           </svg>
           Directions
         </button>
 
-        <button onclick="openBookingHandshake()"
-          class="py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-full flex items-center justify-center gap-1.5 transition-colors shadow-sm text-xs">
-          <span>⚡</span>
-          Book & Charge
+        <button type="button" onclick="openBookingHandshake()"
+          class="py-2.5 min-h-[40px] bg-emerald-700 hover:bg-emerald-800 text-white font-semibold rounded-full flex items-center justify-center gap-1.5 transition-colors text-xs">
+          Book Slot
         </button>
       </div>
 
       <a id="cardFullSpecsLink" href="charger.html"
-        class="block text-center py-2 text-xs text-googleBlue font-bold hover:underline border border-blue-100 rounded-full bg-blue-50/50">
-        View Full Driveway Specs & Host Details →
+        class="block text-center py-2 text-xs text-googleBlueHover font-bold hover:underline border border-blue-200 rounded-lg bg-blue-50">
+        View Full Driveway Specs &amp; Host Details
       </a>
 
-      <!-- Surge & Protection Shield -->
-      <div class="bg-gray-50 rounded-lg p-2.5 border border-gray-200 flex items-center gap-2 text-[11px] text-gray-600">
-        <span class="text-emerald-600 font-bold">🛡️</span>
-        <span>Covered by PlugMate Community Driveway Protection Guarantee</span>
+      <!-- Protection Note -->
+      <div class="bg-gray-50 rounded-lg p-2.5 border border-gray-200 text-[11px] text-gray-700">
+        4-digit arrival PIN verification protects escrow payout until charging begins.
       </div>
 
     </div>
@@ -382,23 +381,23 @@
 
   <!-- GOOGLE MAPS NAVIGATION HEADER (Turn-by-turn banner) -->
   <div id="navHeader"
-    class="hidden absolute top-3 left-3 right-3 sm:left-4 sm:right-auto sm:w-[420px] z-30 bg-[#0F9D58] text-white rounded-2xl shadow-googleCard overflow-hidden transition-all duration-200">
+    class="hidden absolute top-3 left-3 right-3 sm:left-4 sm:right-auto sm:w-[420px] z-30 bg-[#047857] text-white rounded-xl shadow-googleCard overflow-hidden">
     <div class="p-3.5 flex items-start justify-between gap-3">
       <div class="flex items-start gap-3">
         <!-- Turn Arrow Icon -->
-        <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-xl shrink-0 font-bold"
-          id="navTurnIcon">
+        <div class="w-10 h-10 rounded-full bg-black/20 flex items-center justify-center text-xl shrink-0 font-bold"
+          id="navTurnIcon" aria-hidden="true">
           ↱
         </div>
         <div>
           <div class="text-[11px] font-semibold text-emerald-100 uppercase tracking-wider" id="navStepDist">In 280 m
           </div>
-          <div class="text-base font-bold leading-tight" id="navStepInstruction">Turn right onto Ferozepur Rd</div>
-          <div class="text-[11px] text-emerald-100 mt-0.5" id="navNextStep">Then continue 1.2 km to host driveway</div>
+          <div class="text-base font-bold leading-tight" id="navStepInstruction">Proceed along road</div>
+          <div class="text-[11px] text-emerald-100 mt-0.5" id="navNextStep">Continue to host driveway</div>
         </div>
       </div>
-      <button onclick="exitNavigation()" title="Exit Navigation"
-        class="text-white/80 hover:text-white bg-black/20 hover:bg-black/30 rounded-full w-7 h-7 flex items-center justify-center text-sm font-bold shrink-0">
+      <button type="button" onclick="exitNavigation()" aria-label="Exit navigation" title="Exit Navigation"
+        class="text-white hover:bg-black/25 rounded-lg w-8 h-8 flex items-center justify-center text-sm font-bold shrink-0">
         ✕
       </button>
     </div>
@@ -406,55 +405,50 @@
 
   <!-- GOOGLE MAPS NAVIGATION BOTTOM BAR (ETA & Controls) -->
   <div id="navBottomBar"
-    class="hidden absolute bottom-4 left-3 right-3 sm:left-1/2 sm:-translate-x-1/2 sm:w-[460px] z-30 bg-white rounded-2xl shadow-googleCard border border-gray-200 p-3.5 transition-all">
+    class="hidden absolute bottom-4 left-3 right-3 sm:left-1/2 sm:-translate-x-1/2 sm:w-[460px] z-30 bg-white rounded-xl shadow-googleCard border border-gray-200 p-3.5">
     <div class="flex items-center justify-between gap-3">
       <div>
         <div class="flex items-baseline gap-2">
-          <span class="text-xl font-bold text-[#0F9D58]" id="navEta">6 min</span>
-          <span class="text-sm text-gray-500 font-medium" id="navDistance">(2.4 km)</span>
-          <span class="text-xs text-gray-400 font-mono" id="navClock">2:45 PM</span>
+          <span class="text-xl font-bold text-emerald-700" id="navEta">6 min</span>
+          <span class="text-sm text-gray-600 font-medium" id="navDistance">(2.4 km)</span>
+          <span class="text-xs text-gray-600 font-mono" id="navClock">2:45 PM</span>
         </div>
-        <div class="text-xs text-gray-600 font-medium truncate max-w-[220px]" id="navRouteDesc">
-          via Main Market Rd & Ferozepur Rd
+        <div class="text-xs text-gray-700 font-medium truncate max-w-[220px]" id="navRouteDesc">
+          via City Road Network
         </div>
       </div>
 
       <div class="flex items-center gap-2">
-        <button id="btnSimulateDrive" onclick="toggleDriveSimulation()"
-          class="px-4 py-2 bg-googleBlue hover:bg-googleBlueHover text-white font-medium text-xs rounded-full flex items-center gap-1.5 shadow-sm transition-all">
-          <span id="playIcon">▶</span> <span id="playText">Simulate Drive</span>
+        <button type="button" id="btnSimulateDrive" onclick="toggleDriveSimulation()"
+          class="px-4 py-2 min-h-[40px] bg-googleBlue hover:bg-googleBlueHover text-white font-semibold text-xs rounded-full flex items-center gap-1.5 transition-colors">
+          <span id="playIcon" aria-hidden="true">▶</span> <span id="playText">Simulate Drive</span>
         </button>
-        <button onclick="exitNavigation()"
-          class="w-8 h-8 rounded-full border border-gray-300 text-gray-500 hover:text-black hover:bg-gray-100 flex items-center justify-center text-xs">
+        <button type="button" onclick="exitNavigation()" aria-label="Close navigation bar"
+          class="w-9 h-9 rounded-lg border border-gray-300 text-gray-700 hover:text-black hover:bg-gray-100 flex items-center justify-center text-xs font-bold">
           ✕
         </button>
       </div>
     </div>
   </div>
 
-  <!-- POPUP MODAL: Booking Handshake & PIN (Triggered on 'Start Charging') -->
-  <div id="handshakeModal"
-    class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+  <!-- POPUP MODAL: Booking Handshake & PIN -->
+  <div id="handshakeModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"
+    class="hidden fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
     <div
-      class="bg-white rounded-2xl shadow-googleCard max-w-sm w-full p-5 space-y-4 border border-gray-100 text-center animate-in fade-in zoom-in duration-150">
-
-      <div
-        class="w-12 h-12 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto text-2xl">
-        ⚡
-      </div>
+      class="bg-white rounded-xl shadow-googleCard max-w-sm w-full p-5 space-y-4 border border-gray-200 text-center">
 
       <div>
         <h3 class="text-base font-bold text-gray-900" id="modalTitle">Charging Session Token</h3>
-        <p class="text-xs text-gray-500 mt-1">Provide this 4-digit PIN to the host upon arrival to unlock electricity:
+        <p class="text-xs text-gray-600 mt-1">Provide this 4-digit PIN to the host upon arrival to unlock electricity:
         </p>
       </div>
 
-      <div class="bg-gray-50 border-2 border-dashed border-emerald-500 rounded-xl py-3 px-4">
-        <span class="text-[11px] text-gray-500 uppercase tracking-widest block font-medium">Digital Charge Token</span>
+      <div class="bg-gray-50 border-2 border-dashed border-emerald-600 rounded-xl py-3 px-4">
+        <span class="text-[11px] text-gray-600 uppercase tracking-widest block font-medium">Digital Charge Token</span>
         <span class="font-mono text-3xl font-black text-emerald-700 tracking-widest" id="modalPinDisplay">8492</span>
       </div>
 
-      <div class="text-xs text-gray-600 bg-blue-50 p-3 rounded-lg border border-blue-100 text-left space-y-1">
+      <div class="text-xs text-gray-700 bg-blue-50 p-3 rounded-lg border border-blue-100 text-left space-y-1">
         <div class="flex justify-between">
           <span>Rate:</span>
           <span class="font-semibold text-gray-900" id="modalRate">₹20 / hr</span>
@@ -465,8 +459,8 @@
         </div>
       </div>
 
-      <button onclick="closeHandshakeModal()"
-        class="w-full py-2.5 bg-googleBlue hover:bg-googleBlueHover text-white font-medium text-xs rounded-full transition-colors shadow-sm">
+      <button type="button" onclick="closeHandshakeModal()"
+        class="w-full py-2.5 bg-googleBlue hover:bg-googleBlueHover text-white font-semibold text-xs rounded-full transition-colors">
         Done / Return to Map
       </button>
 

@@ -129,14 +129,12 @@
 
     const toolbar = document.createElement('div');
     toolbar.id = 'voltFilterToolbar';
-    toolbar.className = 'pointer-events-auto bg-white/95 backdrop-blur-md rounded-2xl shadow-google border border-gray-200 p-2.5 max-w-[calc(100vw-24px)] sm:w-[390px] flex flex-col gap-2 transition-all text-xs';
+    toolbar.className = 'pointer-events-auto bg-white rounded-xl shadow-google border border-gray-200 p-3 max-w-[calc(100vw-24px)] sm:w-[390px] flex flex-col gap-2 text-xs';
 
     toolbar.innerHTML = `
       <div class="flex items-center justify-between pb-1.5 border-b border-gray-100">
-        <span class="font-bold text-gray-800 flex items-center gap-1.5">
-          <span>🔍</span> Filter Chargers
-        </span>
-        <button id="btnResetFilters" class="text-[11px] text-googleBlue font-medium hover:underline">
+        <span class="font-bold text-gray-900">Filter Chargers</span>
+        <button type="button" id="btnResetFilters" class="text-xs text-googleBlueHover font-semibold hover:underline">
           Reset
         </button>
       </div>
@@ -144,8 +142,8 @@
       <div class="grid grid-cols-2 gap-2">
         <!-- Connector Selector -->
         <div>
-          <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-0.5">Plug Type</label>
-          <select id="filterConnectorSelect" class="w-full text-xs py-1 px-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue bg-white">
+          <label for="filterConnectorSelect" class="block text-[11px] font-bold text-gray-600 uppercase tracking-wider mb-1">Plug Type</label>
+          <select id="filterConnectorSelect" class="w-full text-xs py-1.5 px-2 border border-gray-300 rounded-lg focus:border-googleBlue bg-white text-gray-800">
             <option value="all">All Connectors</option>
             <option value="Type-2 AC">Type-2 AC (7.4kW+)</option>
             <option value="15A-3Pin">15A Socket (3.3kW)</option>
@@ -155,21 +153,21 @@
 
         <!-- Available Now Checkbox -->
         <div>
-          <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-0.5">Status</label>
-          <label class="flex items-center gap-1.5 py-1 px-1.5 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
-            <input type="checkbox" id="filterAvailableCheckbox" class="rounded text-googleBlue focus:ring-0">
-            <span class="text-xs font-semibold text-gray-700">Available Now</span>
+          <span class="block text-[11px] font-bold text-gray-600 uppercase tracking-wider mb-1">Status</span>
+          <label for="filterAvailableCheckbox" class="flex items-center gap-1.5 py-1.5 px-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+            <input type="checkbox" id="filterAvailableCheckbox" class="rounded text-googleBlue">
+            <span class="text-xs font-semibold text-gray-800">Available Now</span>
           </label>
         </div>
       </div>
 
       <!-- Max Price Slider -->
       <div class="pt-1">
-        <div class="flex items-center justify-between text-[11px] mb-0.5">
-          <span class="text-gray-500">Max Hourly Price:</span>
-          <span class="font-mono font-bold text-emerald-600" id="filterPriceLabel">Up to ₹40/hr</span>
+        <div class="flex items-center justify-between text-[11px] mb-1">
+          <label for="filterPriceRange" class="text-gray-600 font-medium">Max Hourly Price:</label>
+          <span class="font-mono font-bold text-emerald-700" id="filterPriceLabel">Up to ₹40/hr</span>
         </div>
-        <input type="range" id="filterPriceRange" min="10" max="40" step="2" value="40" class="w-full accent-googleBlue cursor-pointer">
+        <input type="range" id="filterPriceRange" min="10" max="40" step="2" value="40" class="w-full accent-googleBlue">
       </div>
     `;
 
@@ -256,9 +254,8 @@
     }
 
     extraBtnContainer.innerHTML = `
-      <a href="charger.html?id=${charger.id}" class="w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-full flex items-center justify-center gap-1.5 transition-all shadow-md text-xs">
-        <span>⚡</span>
-        <span>View Full Specs & Reserve Slot →</span>
+      <a href="charger.html?id=${charger.id}" class="w-full py-2.5 bg-googleBlue hover:bg-googleBlueHover text-white font-bold rounded-full flex items-center justify-center transition-colors text-xs">
+        View Full Specs &amp; Reserve Slot
       </a>
     `;
 
@@ -269,7 +266,7 @@
         e.preventDefault();
         window.location.href = `booking.html?chargerId=${charger.id}`;
       };
-      startBtn.innerHTML = `<span>⚡</span> Book Slot`;
+      startBtn.textContent = 'Book Slot';
     }
   }
 

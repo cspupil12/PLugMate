@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PlugMate — Charger Details</title>
+  <title>PlugMate: Charger Details</title>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -45,7 +45,7 @@
   <!-- Clerk JavaScript SDK -->
   <script async crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"></script>
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col font-sans text-gray-800">
+<body class="bg-gray-50 min-h-screen flex flex-col font-sans text-gray-800 overflow-x-hidden">
 
   <!-- Shared Navbar Mount -->
   <div id="voltNavbarMount"></div>
@@ -55,16 +55,16 @@
     
     <!-- Top Breadcrumb & Back Action -->
     <div class="flex items-center justify-between mb-4">
-      <a href="map.html" class="inline-flex items-center gap-1.5 text-xs font-medium text-googleBlue hover:text-googleBlueHover hover:underline">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <a href="map.html" class="inline-flex items-center gap-1.5 text-xs font-semibold text-googleBlueHover hover:underline py-1">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
         </svg>
         Back to Map
       </a>
 
       <div class="flex items-center gap-2">
-        <span id="availabilityBadge" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
-          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Available Now
+        <span id="availabilityBadge" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-100 text-emerald-800">
+          <span class="w-2 h-2 rounded-full bg-emerald-700"></span> Available Now
         </span>
       </div>
     </div>
@@ -75,29 +75,29 @@
       <div class="lg:col-span-2 space-y-6">
         
         <!-- Hero Photo & Badges -->
-        <div class="bg-white rounded-2xl overflow-hidden shadow-google border border-gray-200">
+        <div class="bg-white rounded-xl overflow-hidden border border-gray-200">
           <div class="relative h-64 sm:h-80 w-full bg-gray-900">
-            <img id="chargerPhoto" src="" alt="Driveway Charger" class="w-full h-full object-cover">
+            <img id="chargerPhoto" src="" alt="Driveway Charger" width="800" height="450" fetchpriority="high" class="w-full h-full object-cover">
             
-            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
 
             <div class="absolute bottom-4 left-4 right-4 text-white">
               <div class="flex flex-wrap items-center gap-2 mb-1.5">
-                <span class="bg-white/20 backdrop-blur-md px-2.5 py-0.5 rounded-full text-xs font-bold" id="connectorPill">
+                <span class="bg-black/45 px-2.5 py-0.5 rounded-md text-xs font-bold" id="connectorPill">
                   Type-2 AC
                 </span>
-                <span class="bg-emerald-500/90 px-2.5 py-0.5 rounded-full text-xs font-bold" id="powerPill">
+                <span class="bg-emerald-700 px-2.5 py-0.5 rounded-md text-xs font-bold" id="powerPill">
                   7.4 kW Fast AC
                 </span>
-                <span class="bg-blue-600/90 px-2.5 py-0.5 rounded-full text-xs font-medium flex items-center gap-1">
-                  🛡️ Verified Charger
+                <span class="bg-googleBlue px-2.5 py-0.5 rounded-md text-xs font-semibold">
+                  Verified Charger
                 </span>
               </div>
               <h1 class="text-xl sm:text-2xl font-bold font-google tracking-tight text-white" id="chargerTitle">
                 Green Park Driveway Wallbox
               </h1>
-              <p class="text-xs text-gray-200 mt-1 flex items-center gap-1.5" id="chargerAddress">
-                <svg class="w-3.5 h-3.5 text-googleRed shrink-0" fill="currentColor" viewBox="0 0 24 24">
+              <p class="text-xs text-gray-100 mt-1 flex items-center gap-1.5" id="chargerAddress">
+                <svg class="w-3.5 h-3.5 text-googleRed shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
                 </svg>
                 <span>Loading address...</span>
@@ -106,95 +106,92 @@
           </div>
 
           <!-- Quick Stats Row -->
-          <div class="grid grid-cols-3 divide-x divide-gray-100 border-t border-gray-100 p-3 text-center bg-gray-50/50">
+          <div class="grid grid-cols-3 divide-x divide-gray-100 border-t border-gray-100 p-3 text-center bg-gray-50">
             <div>
-              <span class="text-[11px] text-gray-500 block uppercase font-medium">Rating</span>
+              <span class="text-[11px] text-gray-600 block uppercase font-medium">Rating</span>
               <div class="flex items-center justify-center gap-1 font-bold text-gray-900 text-sm">
-                <span class="text-amber-500">★</span>
+                <span class="text-amber-600" aria-hidden="true">★</span>
                 <span id="ratingDisplay">4.9</span>
-                <span class="text-[11px] text-gray-400 font-normal" id="reviewsCountDisplay">(32)</span>
+                <span class="text-[11px] text-gray-600 font-normal" id="reviewsCountDisplay">(0)</span>
               </div>
             </div>
             <div>
-              <span class="text-[11px] text-gray-500 block uppercase font-medium">Power Output</span>
+              <span class="text-[11px] text-gray-600 block uppercase font-medium">Power Output</span>
               <div class="font-bold text-gray-900 text-sm" id="statPower">7.4 kW</div>
             </div>
             <div>
-              <span class="text-[11px] text-gray-500 block uppercase font-medium">Availability</span>
-              <div class="font-bold text-emerald-600 text-xs sm:text-sm" id="statHours">6 AM - 11 PM</div>
+              <span class="text-[11px] text-gray-600 block uppercase font-medium">Availability</span>
+              <div class="font-bold text-emerald-700 text-xs sm:text-sm" id="statHours">6 AM - 11 PM</div>
             </div>
           </div>
         </div>
 
         <!-- Host Profile Card -->
-        <div class="bg-white rounded-2xl p-5 shadow-google border border-gray-200">
-          <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Driveway Host</h2>
-          <div class="flex items-start justify-between">
+        <div class="bg-white rounded-xl p-5 border border-gray-200">
+          <h2 class="text-xs font-bold text-gray-600 uppercase tracking-wider mb-3">Driveway Host</h2>
+          <div class="flex items-start justify-between gap-3">
             <div class="flex items-center gap-3.5">
-              <img id="hostAvatar" src="" class="w-12 h-12 rounded-full object-cover border-2 border-emerald-500 shadow-sm">
+              <img id="hostAvatar" src="" alt="Host profile photo" width="48" height="48" class="w-12 h-12 rounded-full object-cover border-2 border-emerald-600">
               <div>
-                <div class="flex items-center gap-1.5">
+                <div class="flex items-center gap-1.5 flex-wrap">
                   <h3 class="text-sm font-bold text-gray-900 font-google" id="hostName">Verified Host</h3>
-                  <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                  <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-md">
                     Verified Host
                   </span>
                 </div>
-                <p class="text-xs text-gray-500 mt-0.5" id="hostBio">
-                  Verified Neighborhood Host • EV Enthusiast
+                <p class="text-xs text-gray-600 mt-0.5" id="hostBio">
+                  Verified Neighborhood Host
                 </p>
-                <div class="text-[11px] text-gray-400 mt-1 flex items-center gap-3">
-                  <span>⚡ 120+ sessions hosted</span>
-                  <span>🛡️ Identity & meter verified</span>
+                <div class="text-[11px] text-gray-600 mt-1 flex items-center gap-3">
+                  <span>Identity &amp; meter verified</span>
+                  <span>4-digit PIN handshake</span>
                 </div>
               </div>
             </div>
 
-            <button onclick="contactHost()" class="hidden sm:flex items-center gap-1 text-xs font-semibold text-googleBlue bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-full transition-colors">
-              📞 Contact
+            <button type="button" onclick="contactHost()" class="hidden sm:flex items-center gap-1 text-xs font-semibold text-googleBlueHover bg-blue-50 hover:bg-blue-100 px-3.5 py-2 rounded-lg transition-colors">
+              Contact Host
             </button>
           </div>
         </div>
 
         <!-- Driveway Specs & Amenities -->
-        <div class="bg-white rounded-2xl p-5 shadow-google border border-gray-200 space-y-4">
-          <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Features & Driveway Amenities</h2>
+        <div class="bg-white rounded-xl p-5 border border-gray-200 space-y-4">
+          <h2 class="text-xs font-bold text-gray-600 uppercase tracking-wider">Features &amp; Driveway Amenities</h2>
           
           <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="amenitiesGrid">
             <!-- Rendered by JS -->
           </div>
 
           <div class="pt-3 border-t border-gray-100">
-            <span class="text-xs font-bold text-gray-700 block mb-1">Vehicle Compatibility:</span>
+            <span class="text-xs font-bold text-gray-800 block mb-1">Vehicle Compatibility:</span>
             <p class="text-xs text-gray-600" id="compatibilityText">
               Tata Nexon EV, Tata Curvv, MG ZS EV, MG Windsor, Mahindra XUV400, Ather 450X, Ola S1.
             </p>
           </div>
 
-          <div class="p-3 bg-emerald-50 border border-emerald-100 rounded-xl flex items-start gap-2.5">
-            <span class="text-emerald-700 text-lg">🛡️</span>
-            <div>
-              <h4 class="text-xs font-bold text-emerald-900">PlugMate Community Protection Guarantee</h4>
-              <p class="text-[11px] text-emerald-800 mt-0.5">
-                Every booking is protected for electrical safety and property protection. Payments remain locked in escrow until your 4-digit PIN is verified.
-              </p>
-            </div>
+          <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl">
+            <h4 class="text-xs font-bold text-emerald-900">PlugMate Escrow &amp; Safety Protection</h4>
+            <p class="text-[11px] text-emerald-800 mt-0.5">
+              Payments remain held in escrow until you arrive at the driveway and share your 4-digit verification PIN.
+            </p>
           </div>
         </div>
 
         <!-- Verified Reviews Section -->
-        <div class="bg-white rounded-2xl p-5 shadow-google border border-gray-200 space-y-4">
-          <div class="flex items-center justify-between">
+        <div class="bg-white rounded-xl p-5 border border-gray-200 space-y-4">
+          <div class="flex items-center justify-between gap-2">
             <div>
-              <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Community Reviews</h2>
+              <h2 class="text-xs font-bold text-gray-600 uppercase tracking-wider">Community Reviews</h2>
               <div class="flex items-center gap-2 mt-1">
                 <div class="text-xl font-black text-gray-900" id="reviewsSummaryRating">4.9</div>
-                <div class="text-amber-400 text-sm">★★★★★</div>
-                <span class="text-xs text-gray-500" id="reviewsSummaryCount">based on 32 verified charges</span>
+                <div class="text-amber-500 text-sm" aria-hidden="true">★★★★★</div>
+                <span class="text-xs text-gray-600" id="reviewsSummaryCount">based on verified charges</span>
               </div>
             </div>
             
-            <a id="btnWriteReviewLink" href="#" class="text-xs font-bold text-googleBlue hover:underline">
-              Rate your visit →
+            <a id="btnWriteReviewLink" href="review.html" class="text-xs font-bold text-googleBlueHover hover:underline">
+              Rate your visit
             </a>
           </div>
 
@@ -208,18 +205,18 @@
       <!-- Right 1 Col: Pricing Box & Sticky Booking CTA -->
       <div class="space-y-4">
         
-        <div class="bg-white rounded-2xl p-5 shadow-googleCard border border-gray-200 sticky top-20 space-y-4">
+        <div class="bg-white rounded-xl p-5 shadow-googleCard border border-gray-200 sticky top-20 space-y-4">
           
           <div class="flex items-baseline justify-between border-b border-gray-100 pb-3">
             <div>
-              <span class="text-xs text-gray-400 uppercase font-bold block">Rate</span>
+              <span class="text-xs text-gray-600 uppercase font-bold block">Rate</span>
               <div class="flex items-baseline gap-1">
-                <span class="font-mono text-3xl font-black text-emerald-600" id="boxHourlyRate">₹22.00</span>
-                <span class="text-xs text-gray-500 font-medium">/ hour</span>
+                <span class="font-mono text-3xl font-black text-emerald-700" id="boxHourlyRate">₹22.00</span>
+                <span class="text-xs text-gray-600 font-medium">/ hour</span>
               </div>
             </div>
             <div class="text-right">
-              <span class="text-[11px] bg-emerald-50 text-emerald-700 font-bold px-2 py-0.5 rounded-full border border-emerald-200">
+              <span class="text-[11px] bg-emerald-50 text-emerald-800 font-bold px-2.5 py-0.5 rounded-md border border-emerald-200">
                 Peer-to-Peer
               </span>
             </div>
@@ -227,44 +224,42 @@
 
           <!-- Quick Estimation Calculator -->
           <div class="bg-gray-50 rounded-xl p-3 space-y-2 border border-gray-200 text-xs">
-            <div class="font-bold text-gray-700 flex items-center justify-between">
+            <div class="font-bold text-gray-800 flex items-center justify-between">
               <span>Quick Cost Estimator</span>
-              <span class="text-googleBlue font-normal text-[11px]">2 Hours Standard</span>
+              <span class="text-googleBlueHover font-medium text-[11px]">2 Hours Standard</span>
             </div>
-            <div class="flex justify-between text-gray-600">
+            <div class="flex justify-between text-gray-700">
               <span>Energy Rental (2h @ <span id="estRate">₹22</span>/h):</span>
               <span class="font-mono" id="estBase">₹44.00</span>
             </div>
-            <div class="flex justify-between text-gray-600">
-              <span>Community Escrow & Insurance (10%):</span>
+            <div class="flex justify-between text-gray-700">
+              <span>Escrow &amp; Protection (10%):</span>
               <span class="font-mono" id="estFee">₹4.40</span>
             </div>
             <div class="border-t border-gray-200 pt-1.5 flex justify-between font-bold text-gray-900 text-sm">
               <span>Total Estimated:</span>
-              <span class="font-mono text-emerald-600" id="estTotal">₹48.40</span>
+              <span class="font-mono text-emerald-700" id="estTotal">₹48.40</span>
             </div>
           </div>
 
           <!-- Primary Booking Button -->
-          <button onclick="proceedToBooking()" class="w-full py-3.5 bg-googleBlue hover:bg-googleBlueHover text-white text-sm font-bold rounded-full shadow-google transition-all flex items-center justify-center gap-2 group">
-            <span class="text-lg">⚡</span>
-            <span>Reserve Charger Slot</span>
-            <span class="group-hover:translate-x-1 transition-transform">→</span>
+          <button type="button" onclick="proceedToBooking()" class="w-full py-3.5 bg-googleBlue hover:bg-googleBlueHover text-white text-sm font-bold rounded-full transition-colors flex items-center justify-center">
+            Reserve Charger Slot
           </button>
 
           <!-- Secondary Actions -->
           <div class="grid grid-cols-2 gap-2 text-center text-xs">
-            <a href="map.html" class="py-2.5 border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium rounded-full transition-colors flex items-center justify-center gap-1">
-              <span>🗺️</span> View on Map
+            <a href="map.html" class="py-2.5 border border-gray-300 hover:bg-gray-50 text-gray-800 font-medium rounded-lg transition-colors flex items-center justify-center">
+              View on Map
             </a>
-            <button onclick="shareCharger()" class="py-2.5 border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium rounded-full transition-colors flex items-center justify-center gap-1">
-              <span>📤</span> Share Link
+            <button type="button" onclick="shareCharger()" class="py-2.5 border border-gray-300 hover:bg-gray-50 text-gray-800 font-medium rounded-lg transition-colors flex items-center justify-center">
+              Share Link
             </button>
           </div>
 
-          <div class="text-[11px] text-gray-500 text-center space-y-1 pt-2 border-t border-gray-100">
-            <p class="flex items-center justify-center gap-1 text-emerald-700 font-medium">
-              <span>✓</span> Free cancellation up to 30 mins prior
+          <div class="text-[11px] text-gray-600 text-center space-y-1 pt-2 border-t border-gray-100">
+            <p class="text-emerald-700 font-medium">
+              Free cancellation up to 30 mins prior
             </p>
             <p>4-digit unlock PIN generated immediately upon confirmation</p>
           </div>
@@ -303,10 +298,10 @@
         return;
       }
 
-      document.title = `${currentCharger.title} — PlugMate`;
+      document.title = `${currentCharger.title} | PlugMate`;
       document.getElementById('chargerTitle').textContent = currentCharger.title;
       document.getElementById('chargerAddress').innerHTML = `
-        <svg class="w-3.5 h-3.5 text-googleRed shrink-0" fill="currentColor" viewBox="0 0 24 24">
+        <svg class="w-3.5 h-3.5 text-googleRed shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
         </svg>
         <span>${currentCharger.address}</span>
@@ -335,11 +330,11 @@
       document.getElementById('estTotal').textContent = `₹${(base + fee).toFixed(2)}`;
 
       if (currentCharger.is_available) {
-        document.getElementById('availabilityBadge').className = 'inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800';
-        document.getElementById('availabilityBadge').innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Available Now';
+        document.getElementById('availabilityBadge').className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-100 text-emerald-800';
+        document.getElementById('availabilityBadge').innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-700"></span> Available Now';
       } else {
-        document.getElementById('availabilityBadge').className = 'inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800';
-        document.getElementById('availabilityBadge').innerHTML = '<span class="w-2 h-2 rounded-full bg-amber-500"></span> Currently In Use';
+        document.getElementById('availabilityBadge').className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold bg-amber-100 text-amber-800';
+        document.getElementById('availabilityBadge').innerHTML = '<span class="w-2 h-2 rounded-full bg-amber-700"></span> Currently In Use';
       }
 
       if (currentCharger.compatibility) {
@@ -351,8 +346,8 @@
       amenitiesGrid.innerHTML = '';
       (currentCharger.amenities || ['Gated Driveway', '24/7 Access', 'CCTV']).forEach(item => {
         amenitiesGrid.innerHTML += `
-          <div class="flex items-center gap-2 p-2 bg-gray-50 rounded-lg text-xs font-medium text-gray-700 border border-gray-100">
-            <span class="text-emerald-600 font-bold">✓</span>
+          <div class="flex items-center gap-2 p-2.5 bg-gray-50 rounded-lg text-xs font-medium text-gray-800 border border-gray-200">
+            <span class="text-emerald-700 font-bold" aria-hidden="true">✓</span>
             <span>${item}</span>
           </div>
         `;

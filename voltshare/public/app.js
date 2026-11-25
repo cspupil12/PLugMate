@@ -321,14 +321,33 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Check if opened after booking confirmation for auto-navigation
+  // Check if opened with URL params (?navigate=ID, ?q=query, ?filter=category)
   checkUrlNavigationTrigger();
 });
 
-// Auto-navigate to charger if URL has ?navigate=ID or ?chargerId=ID
+// Close active map overlays with Escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeHandshakeModal();
+    closePlaceCard();
+  }
+});
+
+// Auto-navigate or apply URL filters (?navigate=ID, ?q=query, ?filter=type)
 function checkUrlNavigationTrigger() {
   const urlParams = new URLSearchParams(window.location.search);
+  const query = urlParams.get('q');
+  const filter = urlParams.get('filter');
   const targetId = urlParams.get('navigate') || urlParams.get('chargerId');
+
+  if (query) {
+    const searchInput = document.getElementById('mapSearchInput');
+    if (searchInput) searchInput.value = query;
+    handleSearchFilter(query);
+  } else if (filter) {
+    filterCategory(filter);
+  }
+
   if (targetId) {
     const target = CHARGERS_DATA.find(c => c.id === Number(targetId));
     if (target) {

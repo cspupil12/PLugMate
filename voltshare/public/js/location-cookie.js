@@ -210,26 +210,30 @@ const VoltLocation = {
 
     const banner = document.createElement('div');
     banner.id = 'voltCookieBanner';
-    banner.className = 'fixed bottom-4 left-4 right-4 sm:right-auto sm:max-w-md bg-white rounded-2xl shadow-googleCard border border-gray-200 p-4 z-50 animate-in fade-in slide-in-from-bottom-4 duration-200';
+    banner.setAttribute('role', 'region');
+    banner.setAttribute('aria-label', 'Location permission');
+    banner.className = 'fixed bottom-4 left-4 right-4 sm:right-auto sm:max-w-md bg-white rounded-xl shadow-googleCard border border-gray-200 p-4 z-50';
     
     banner.innerHTML = `
       <div class="flex items-start gap-3">
-        <div class="w-10 h-10 rounded-xl bg-blue-50 text-googleBlue flex items-center justify-center text-xl shrink-0">
-          📍
+        <div class="w-10 h-10 rounded-lg bg-blue-50 text-googleBlueHover flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+          </svg>
         </div>
         <div class="space-y-1.5 flex-1 text-xs">
-          <div class="flex items-center justify-between">
+          <div class="flex items-center justify-between gap-2">
             <h4 class="font-bold text-gray-900 font-google">Allow Location Tracking?</h4>
-            <span class="text-[10px] text-googleBlue bg-blue-50 font-bold px-2 py-0.5 rounded-full">Session Only</span>
+            <span class="text-[11px] text-googleBlueHover bg-blue-50 font-semibold px-2 py-0.5 rounded-md">Session Only</span>
           </div>
           <p class="text-[11px] text-gray-600 leading-relaxed">
-            PlugMate uses your position to center the map on your location and find the nearest community driveway EV chargers. Stored temporarily for this visit only.
+            PlugMate uses your position to center the map on your location and find nearby driveway EV chargers. Stored temporarily for this visit only.
           </p>
           <div class="pt-1.5 flex items-center gap-2">
-            <button onclick="VoltLocation.acceptLocationConsent()" class="px-4 py-1.5 bg-googleBlue hover:bg-googleBlueHover text-white text-xs font-bold rounded-full shadow-google transition-all">
+            <button type="button" onclick="VoltLocation.acceptLocationConsent()" class="px-4 py-2 bg-googleBlue hover:bg-googleBlueHover text-white text-xs font-bold rounded-full transition-colors">
               Allow Location
             </button>
-            <button onclick="VoltLocation.declineLocationConsent()" class="px-3 py-1.5 border border-gray-300 hover:bg-gray-100 text-gray-700 text-xs font-semibold rounded-full transition-colors">
+            <button type="button" onclick="VoltLocation.declineLocationConsent()" class="px-3.5 py-2 border border-gray-300 hover:bg-gray-100 text-gray-700 text-xs font-semibold rounded-lg transition-colors">
               Not Now
             </button>
           </div>

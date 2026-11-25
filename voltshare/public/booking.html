@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PlugMate — Book Charger Slot</title>
+  <title>PlugMate: Book Charger Slot</title>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -50,7 +50,7 @@
     src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"></script>
 </head>
 
-<body class="bg-gray-50 min-h-screen flex flex-col font-sans text-gray-800">
+<body class="bg-gray-50 min-h-screen flex flex-col font-sans text-gray-800 overflow-x-hidden">
 
   <!-- Shared Navbar Mount -->
   <div id="voltNavbarMount"></div>
@@ -60,62 +60,65 @@
     <!-- Top Back Link -->
     <div class="mb-4">
       <a id="btnBackToCharger" href="map.html"
-        class="inline-flex items-center gap-1.5 text-xs font-medium text-googleBlue hover:text-googleBlueHover hover:underline">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        class="inline-flex items-center gap-1.5 text-xs font-semibold text-googleBlueHover hover:underline py-1">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
         </svg>
         Back to Charger Specs
       </a>
     </div>
 
+    <h1 class="text-xl sm:text-2xl font-bold font-google text-gray-900 mb-5">Reserve Charging Slot</h1>
+
     <!-- MAIN FORM CONTAINER -->
     <div id="bookingFormSection" class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-      <!-- Left 2 Cols: Slot Picker, Vehicle, & Fake Payment -->
+      <!-- Left 2 Cols: Slot Picker, Vehicle, & Payment -->
       <div class="md:col-span-2 space-y-5">
 
         <!-- Step 1: Time Slot & Duration -->
-        <div class="bg-white rounded-2xl p-5 shadow-google border border-gray-200 space-y-4">
+        <div class="bg-white rounded-xl p-5 border border-gray-200 space-y-4">
           <div class="flex items-center justify-between border-b border-gray-100 pb-3">
             <h2 class="text-sm font-bold text-gray-900 font-google flex items-center gap-2">
               <span
-                class="w-6 h-6 rounded-full bg-blue-100 text-googleBlue text-xs flex items-center justify-center font-bold">1</span>
-              Choose Date & Time Slot
+                class="w-6 h-6 rounded-full bg-blue-100 text-googleBlueHover text-xs flex items-center justify-center font-bold">1</span>
+              Choose Date &amp; Time Slot
             </h2>
             <span
-              class="text-[11px] text-emerald-600 font-bold bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+              class="text-[11px] text-emerald-800 font-bold bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200">
               Instant Confirmation
             </span>
           </div>
 
           <!-- Date Quick Chips -->
           <div>
-            <label class="block text-xs font-bold text-gray-700 mb-1.5">Date of Charging:</label>
+            <span class="block text-xs font-bold text-gray-800 mb-1.5">Date of Charging:</span>
             <div class="grid grid-cols-3 gap-2">
               <button type="button" onclick="selectDateChip('today')" id="chipDateToday"
-                class="border rounded-xl py-2 px-3 text-xs font-medium text-center transition-all border-googleBlue bg-blue-50 text-googleBlue font-bold">
+                class="border rounded-lg py-2 px-3 text-xs font-medium text-center transition-colors border-googleBlue bg-blue-50 text-googleBlueHover font-bold">
                 Today
-                <span class="block text-[10px] font-normal text-gray-500" id="labelTodayDate">Nov 17</span>
+                <span class="block text-[11px] font-normal text-gray-600" id="labelTodayDate">Nov 25</span>
               </button>
               <button type="button" onclick="selectDateChip('tomorrow')" id="chipDateTomorrow"
-                class="border rounded-xl py-2 px-3 text-xs font-medium text-center transition-all border-gray-200 text-gray-700 hover:border-gray-300">
+                class="border rounded-lg py-2 px-3 text-xs font-medium text-center transition-colors border-gray-300 text-gray-800 hover:border-gray-400">
                 Tomorrow
-                <span class="block text-[10px] font-normal text-gray-500" id="labelTomorrowDate">Nov 18</span>
+                <span class="block text-[11px] font-normal text-gray-600" id="labelTomorrowDate">Nov 26</span>
               </button>
               <button type="button" onclick="selectDateChip('custom')" id="chipDateCustom"
-                class="border rounded-xl py-2 px-3 text-xs font-medium text-center transition-all border-gray-200 text-gray-700 hover:border-gray-300">
+                class="border rounded-lg py-2 px-3 text-xs font-medium text-center transition-colors border-gray-300 text-gray-800 hover:border-gray-400">
                 Custom
-                <span class="block text-[10px] font-normal text-gray-500">Pick Date</span>
+                <span class="block text-[11px] font-normal text-gray-600">Pick Date</span>
               </button>
             </div>
+            <label for="bookingCustomDate" class="sr-only">Custom charging date</label>
             <input type="date" id="bookingCustomDate"
-              class="hidden w-full mt-2 text-xs px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue"
+              class="hidden w-full mt-2 text-xs px-3 py-2 border border-gray-300 rounded-lg focus:border-googleBlue"
               onchange="calculatePrice()">
           </div>
 
           <!-- Start Time Slot Selection -->
           <div>
-            <label class="block text-xs font-bold text-gray-700 mb-1.5">Arrival / Start Time:</label>
+            <span class="block text-xs font-bold text-gray-800 mb-1.5">Arrival / Start Time:</span>
             <div class="grid grid-cols-3 sm:grid-cols-4 gap-2" id="timeSlotContainer">
               <!-- Injected by JS -->
             </div>
@@ -123,139 +126,137 @@
 
           <!-- Duration Selector -->
           <div>
-            <label class="block text-xs font-bold text-gray-700 mb-1.5">Charging Duration:</label>
+            <span class="block text-xs font-bold text-gray-800 mb-1.5">Charging Duration:</span>
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
               <button type="button" onclick="selectDuration(1)" id="dur-1"
-                class="border rounded-xl py-2.5 px-2 text-xs font-semibold text-center border-gray-200 hover:border-gray-300 text-gray-700">
+                class="border rounded-lg py-2.5 px-2 text-xs font-semibold text-center border-gray-300 hover:border-gray-400 text-gray-800">
                 1 Hour
-                <span class="block text-[10px] font-normal text-gray-400">Quick top-up</span>
+                <span class="block text-[11px] font-normal text-gray-600">Quick top-up</span>
               </button>
               <button type="button" onclick="selectDuration(2)" id="dur-2"
-                class="border rounded-xl py-2.5 px-2 text-xs font-semibold text-center border-googleBlue bg-blue-50 text-googleBlue font-bold">
+                class="border rounded-lg py-2.5 px-2 text-xs font-semibold text-center border-googleBlue bg-blue-50 text-googleBlueHover font-bold">
                 2 Hours
-                <span class="block text-[10px] font-normal text-blue-600">Recommended</span>
+                <span class="block text-[11px] font-normal text-googleBlueHover">Recommended</span>
               </button>
               <button type="button" onclick="selectDuration(3)" id="dur-3"
-                class="border rounded-xl py-2.5 px-2 text-xs font-semibold text-center border-gray-200 hover:border-gray-300 text-gray-700">
+                class="border rounded-lg py-2.5 px-2 text-xs font-semibold text-center border-gray-300 hover:border-gray-400 text-gray-800">
                 3 Hours
-                <span class="block text-[10px] font-normal text-gray-400">Standard</span>
+                <span class="block text-[11px] font-normal text-gray-600">Standard</span>
               </button>
               <button type="button" onclick="selectDuration(8)" id="dur-8"
-                class="border rounded-xl py-2.5 px-2 text-xs font-semibold text-center border-gray-200 hover:border-gray-300 text-gray-700">
+                class="border rounded-lg py-2.5 px-2 text-xs font-semibold text-center border-gray-300 hover:border-gray-400 text-gray-800">
                 Overnight (8h)
-                <span class="block text-[10px] font-normal text-emerald-600">Full 100% fill</span>
+                <span class="block text-[11px] font-normal text-emerald-700">Full 100% fill</span>
               </button>
             </div>
           </div>
         </div>
 
         <!-- Step 2: Driver & Vehicle Confirmation -->
-        <div class="bg-white rounded-2xl p-5 shadow-google border border-gray-200 space-y-4">
+        <div class="bg-white rounded-xl p-5 border border-gray-200 space-y-4">
           <div class="flex items-center justify-between border-b border-gray-100 pb-3">
             <h2 class="text-sm font-bold text-gray-900 font-google flex items-center gap-2">
               <span
-                class="w-6 h-6 rounded-full bg-blue-100 text-googleBlue text-xs flex items-center justify-center font-bold">2</span>
-              Driver & Vehicle Details
+                class="w-6 h-6 rounded-full bg-blue-100 text-googleBlueHover text-xs flex items-center justify-center font-bold">2</span>
+              Driver &amp; Vehicle Details
             </h2>
-            <span class="text-[11px] text-gray-500">Auto-filled from profile</span>
+            <span class="text-[11px] text-gray-600">Auto-filled from profile</span>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
             <div>
-              <label class="block font-medium text-gray-700 mb-1">Driver Name</label>
+              <label for="driverName" class="block font-medium text-gray-800 mb-1">Driver Name</label>
               <input type="text" id="driverName"
-                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue"
-                placeholder="Enter your name">
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-googleBlue"
+                placeholder="Your Name">
             </div>
             <div>
-              <label class="block font-medium text-gray-700 mb-1">Mobile (for Host SMS)</label>
+              <label for="driverPhone" class="block font-medium text-gray-800 mb-1">Mobile (for Host SMS)</label>
               <input type="tel" id="driverPhone"
-                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-googleBlue"
                 placeholder="+91 Mobile number">
             </div>
           </div>
 
           <div class="text-xs">
-            <label class="block font-medium text-gray-700 mb-1">EV Vehicle Model & Plate</label>
+            <label for="driverVehicle" class="block font-medium text-gray-800 mb-1">EV Vehicle Model &amp; Plate</label>
             <input type="text" id="driverVehicle"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-googleBlue"
               placeholder="e.g. Tata Nexon EV, MG ZS EV">
           </div>
         </div>
 
-        <!-- Step 3: Fake Payment Screen -->
-        <div class="bg-white rounded-2xl p-5 shadow-google border border-gray-200 space-y-4">
+        <!-- Step 3: Payment Screen -->
+        <div class="bg-white rounded-xl p-5 border border-gray-200 space-y-4">
           <div class="flex items-center justify-between border-b border-gray-100 pb-3">
             <h2 class="text-sm font-bold text-gray-900 font-google flex items-center gap-2">
               <span
-                class="w-6 h-6 rounded-full bg-blue-100 text-googleBlue text-xs flex items-center justify-center font-bold">3</span>
-              Prototype Payment Method
+                class="w-6 h-6 rounded-full bg-blue-100 text-googleBlueHover text-xs flex items-center justify-center font-bold">3</span>
+              Escrow Payment Method
             </h2>
             <span
-              class="text-[11px] bg-amber-50 text-amber-700 font-bold px-2 py-0.5 rounded-full border border-amber-200">
+              class="text-[11px] bg-amber-50 text-amber-800 font-bold px-2.5 py-0.5 rounded-md border border-amber-200">
               Escrow Protected
             </span>
           </div>
 
           <div class="space-y-2.5">
             <!-- UPI Option -->
-            <label
-              class="flex items-center justify-between p-3 border-2 border-googleBlue bg-blue-50/50 rounded-xl cursor-pointer"
+            <label for="payRadioUpi"
+              class="flex items-center justify-between p-3 border-2 border-googleBlue bg-blue-50/50 rounded-xl"
               id="payOptionUpi">
               <div class="flex items-center gap-3">
-                <input type="radio" name="paymentOption" value="upi" checked onchange="updatePayOption()"
-                  class="text-googleBlue focus:ring-0">
+                <input type="radio" id="payRadioUpi" name="paymentOption" value="upi" checked onchange="updatePayOption()"
+                  class="text-googleBlue">
                 <div>
-                  <div class="text-xs font-bold text-gray-900 flex items-center gap-1.5">
-                    <span>📱</span> UPI Instant Escrow (GPay / PhonePe / Paytm)
+                  <div class="text-xs font-bold text-gray-900">
+                    UPI Instant Escrow (GPay / PhonePe / Paytm)
                   </div>
-                  <div class="text-[11px] text-gray-500">Safe peer-to-peer hold. Fast 1-click mock approval.</div>
+                  <div class="text-[11px] text-gray-600">Simulated peer-to-peer hold for demonstration.</div>
                 </div>
               </div>
-              <span class="text-xs font-bold text-googleBlue">Preferred</span>
+              <span class="text-xs font-bold text-googleBlueHover">Preferred</span>
             </label>
 
             <!-- Card Option -->
-            <label
-              class="flex items-center justify-between p-3 border border-gray-200 rounded-xl cursor-pointer hover:border-gray-300"
+            <label for="payRadioCard"
+              class="flex items-center justify-between p-3 border border-gray-300 rounded-xl hover:border-gray-400"
               id="payOptionCard">
               <div class="flex items-center gap-3">
-                <input type="radio" name="paymentOption" value="card" onchange="updatePayOption()"
-                  class="text-googleBlue focus:ring-0">
+                <input type="radio" id="payRadioCard" name="paymentOption" value="card" onchange="updatePayOption()"
+                  class="text-googleBlue">
                 <div>
-                  <div class="text-xs font-bold text-gray-900 flex items-center gap-1.5">
-                    <span>💳</span> Credit / Debit Card
+                  <div class="text-xs font-bold text-gray-900">
+                    Credit / Debit Card
                   </div>
-                  <div class="text-[11px] text-gray-500">Visa, Mastercard, RuPay (Simulated)</div>
+                  <div class="text-[11px] text-gray-600">Visa, Mastercard, RuPay (Simulated)</div>
                 </div>
               </div>
             </label>
 
             <!-- Cash / Direct Option -->
-            <label
-              class="flex items-center justify-between p-3 border border-gray-200 rounded-xl cursor-pointer hover:border-gray-300"
+            <label for="payRadioCash"
+              class="flex items-center justify-between p-3 border border-gray-300 rounded-xl hover:border-gray-400"
               id="payOptionCash">
               <div class="flex items-center gap-3">
-                <input type="radio" name="paymentOption" value="cash" onchange="updatePayOption()"
-                  class="text-googleBlue focus:ring-0">
+                <input type="radio" id="payRadioCash" name="paymentOption" value="cash" onchange="updatePayOption()"
+                  class="text-googleBlue">
                 <div>
-                  <div class="text-xs font-bold text-gray-900 flex items-center gap-1.5">
-                    <span>💵</span> Pay Host Directly Upon Arrival
+                  <div class="text-xs font-bold text-gray-900">
+                    Pay Host Directly Upon Arrival
                   </div>
-                  <div class="text-[11px] text-gray-500">Pay cash or UPI in person after charging completes.</div>
+                  <div class="text-[11px] text-gray-600">Pay cash or UPI in person after charging completes.</div>
                 </div>
               </div>
             </label>
           </div>
 
-          <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 text-[11px] text-gray-600 space-y-1">
-            <div class="flex items-center gap-1.5 text-googleBlue font-bold">
-              <span>🔒</span>
-              <span>100% Safe Community Escrow</span>
+          <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 text-[11px] text-gray-700 space-y-1">
+            <div class="text-googleBlueHover font-bold">
+              Community Escrow Protection
             </div>
             <p>
-              Your funds are held securely by PlugMate. The host cannot claim payout until the session starts with the
-              verified 4-digit PIN.
+              Funds remain in escrow and release to the host only after your 4-digit arrival PIN is verified.
             </p>
           </div>
 
@@ -266,30 +267,30 @@
       <!-- Right 1 Col: Summary Card & Pay Button -->
       <div class="space-y-4">
 
-        <div class="bg-white rounded-2xl p-5 shadow-googleCard border border-gray-200 sticky top-20 space-y-4">
-          <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Booking Breakdown</h3>
+        <div class="bg-white rounded-xl p-5 shadow-googleCard border border-gray-200 sticky top-20 space-y-4">
+          <h3 class="text-xs font-bold text-gray-600 uppercase tracking-wider">Booking Breakdown</h3>
 
           <!-- Charger Snapshot -->
           <div class="flex gap-3 pb-3 border-b border-gray-100">
-            <img id="summaryPhoto" src="" class="w-16 h-16 rounded-xl object-cover border border-gray-200 shrink-0">
+            <img id="summaryPhoto" src="" alt="Selected EV charger" width="64" height="64" class="w-16 h-16 rounded-lg object-cover border border-gray-200 shrink-0">
             <div>
               <h4 class="text-xs font-bold text-gray-900 leading-tight" id="summaryTitle">Charger Name</h4>
-              <p class="text-[11px] text-gray-500 mt-0.5 line-clamp-1" id="summaryAddress">Address</p>
-              <div class="text-[11px] text-googleBlue font-medium mt-1" id="summaryConnector">Type-2 AC • 7.4 kW</div>
+              <p class="text-[11px] text-gray-600 mt-0.5 line-clamp-1" id="summaryAddress">Address</p>
+              <div class="text-[11px] text-googleBlueHover font-medium mt-1" id="summaryConnector">Type-2 AC • 7.4 kW</div>
             </div>
           </div>
 
           <!-- Selected Slot Details -->
           <div class="space-y-2 text-xs">
-            <div class="flex justify-between text-gray-600">
+            <div class="flex justify-between text-gray-700">
               <span>Date:</span>
-              <span class="font-bold text-gray-900" id="sumDate">Nov 17, 2026</span>
+              <span class="font-bold text-gray-900" id="sumDate">Nov 25, 2026</span>
             </div>
-            <div class="flex justify-between text-gray-600">
+            <div class="flex justify-between text-gray-700">
               <span>Time Slot:</span>
               <span class="font-bold text-gray-900" id="sumSlot">08:00 PM - 10:00 PM</span>
             </div>
-            <div class="flex justify-between text-gray-600">
+            <div class="flex justify-between text-gray-700">
               <span>Duration:</span>
               <span class="font-bold text-gray-900" id="sumDuration">2 Hours</span>
             </div>
@@ -297,30 +298,29 @@
 
           <!-- Price Calculation -->
           <div class="pt-3 border-t border-gray-100 space-y-2 text-xs">
-            <div class="flex justify-between text-gray-600">
+            <div class="flex justify-between text-gray-700">
               <span>Energy Charge (<span id="calcHours">2</span>h × ₹<span id="calcRate">22</span>):</span>
               <span class="font-mono text-gray-900" id="calcBase">₹44.00</span>
             </div>
-            <div class="flex justify-between text-gray-600">
-              <span>Escrow & Community Insurance (10%):</span>
+            <div class="flex justify-between text-gray-700">
+              <span>Escrow &amp; Protection (10%):</span>
               <span class="font-mono text-gray-900" id="calcFee">₹4.40</span>
             </div>
             <div
               class="border-t border-gray-200 pt-2 flex justify-between items-baseline font-bold text-base text-gray-900">
               <span>Total Payable:</span>
-              <span class="font-mono text-xl font-black text-emerald-600" id="calcTotal">₹48.40</span>
+              <span class="font-mono text-xl font-black text-emerald-700" id="calcTotal">₹48.40</span>
             </div>
           </div>
 
           <!-- Action Button -->
-          <button onclick="executeFakePaymentAndConfirm()" id="btnConfirmPay"
-            class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-full shadow-google transition-all flex items-center justify-center gap-2">
-            <span>⚡</span>
-            <span>Confirm & Pay ₹48.40</span>
+          <button type="button" onclick="executeFakePaymentAndConfirm()" id="btnConfirmPay"
+            class="w-full py-3.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-sm rounded-full transition-colors flex items-center justify-center">
+            Confirm &amp; Pay ₹48.40
           </button>
 
-          <p class="text-[11px] text-gray-400 text-center">
-            Zero-risk escrow hold • Instant cancellation refund anytime before start
+          <p class="text-[11px] text-gray-600 text-center">
+            Escrow hold with free cancellation before arrival
           </p>
 
         </div>
@@ -331,57 +331,53 @@
 
     <!-- CONFIRMATION SCREEN SECTION (Hidden until booking placed) -->
     <div id="bookingConfirmationSection"
-      class="hidden max-w-lg mx-auto bg-white rounded-2xl shadow-googleCard border border-gray-200 overflow-hidden text-center animate-in fade-in zoom-in-95 duration-200">
+      class="hidden max-w-lg mx-auto bg-white rounded-xl shadow-googleCard border border-gray-200 overflow-hidden text-center">
 
       <!-- Success Header -->
-      <div class="bg-gradient-to-r from-emerald-600 to-teal-700 p-6 text-white">
-        <div
-          class="w-14 h-14 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center mx-auto text-3xl mb-2">
-          ⚡
-        </div>
-        <h2 class="text-xl font-bold font-google">Charger Slot Confirmed!</h2>
+      <div class="bg-emerald-700 p-6 text-white">
+        <h2 class="text-xl font-bold font-google">Charger Slot Confirmed</h2>
         <p class="text-xs text-emerald-100 mt-1">
-          Your neighborhood charging reservation is secured
+          Your neighborhood charging reservation is saved in Supabase
         </p>
       </div>
 
       <div class="p-6 space-y-5">
 
         <!-- Booking ID Badge -->
-        <div class="inline-flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full text-xs font-mono text-gray-700">
+        <div class="inline-flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-md text-xs font-mono text-gray-800">
           <span>Booking Reference:</span>
-          <span class="font-bold text-googleBlue" id="confBookingId">PM-0000</span>
+          <span class="font-bold text-googleBlueHover" id="confBookingId">PM-0000</span>
         </div>
 
         <!-- DIGITAL CHARGING PIN BOX -->
         <div
-          class="bg-gradient-to-br from-emerald-50 to-teal-50 border-2 border-dashed border-emerald-500 rounded-2xl p-5 text-center space-y-1.5">
+          class="bg-emerald-50 border-2 border-dashed border-emerald-600 rounded-xl p-5 text-center space-y-1.5">
           <span class="text-[11px] font-bold uppercase tracking-widest text-emerald-800 block">
             Your 4-Digit Charging PIN
           </span>
           <div class="font-mono text-4xl font-black text-emerald-800 tracking-widest py-1" id="confPinDisplay">
             8492
           </div>
-          <p class="text-xs text-gray-600">
+          <p class="text-xs text-gray-700">
             Show this PIN to host <b id="confHostName">Verified Host</b> upon arrival to activate the driveway charger.
           </p>
         </div>
 
         <!-- Session Overview Card -->
         <div class="bg-gray-50 rounded-xl p-4 text-xs text-left space-y-2 border border-gray-200">
-          <div class="flex justify-between pb-2 border-b border-gray-200 font-bold text-gray-800">
+          <div class="flex justify-between pb-2 border-b border-gray-200 font-bold text-gray-900">
             <span id="confChargerTitle">Green Park Wallbox</span>
-            <span class="font-mono text-emerald-600" id="confAmountPaid">₹48.40 (Paid)</span>
+            <span class="font-mono text-emerald-700" id="confAmountPaid">₹48.40 (Paid)</span>
           </div>
-          <div class="text-gray-600">
-            <span class="font-medium text-gray-700">Address:</span>
+          <div class="text-gray-700">
+            <span class="font-medium text-gray-800">Address:</span>
             <div id="confAddress">84 Main Market Avenue, Green Park</div>
           </div>
-          <div class="flex justify-between text-gray-600">
+          <div class="flex justify-between text-gray-700">
             <span>Reserved Slot:</span>
-            <span class="font-bold text-gray-900" id="confSlot">Nov 17 • 08:00 PM - 10:00 PM</span>
+            <span class="font-bold text-gray-900" id="confSlot">Nov 25 • 08:00 PM - 10:00 PM</span>
           </div>
-          <div class="flex justify-between text-gray-600">
+          <div class="flex justify-between text-gray-700">
             <span>Vehicle:</span>
             <span class="text-gray-900" id="confVehicle">Tata Nexon EV</span>
           </div>
@@ -390,15 +386,13 @@
         <!-- Actions -->
         <div class="space-y-2">
           <a id="confNavMapBtn" href="map.html"
-            class="w-full py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-bold rounded-full shadow-google transition-all flex items-center justify-center gap-2 group">
-            <span class="text-base">🗺️</span>
-            <span>Start Turn-by-Turn Road Directions on Map</span>
-            <span class="group-hover:translate-x-1 transition-transform">→</span>
+            class="w-full py-3.5 bg-googleBlue hover:bg-googleBlueHover text-white text-xs font-bold rounded-full transition-colors flex items-center justify-center">
+            Start Road Directions on Map
           </a>
 
           <a href="my-bookings.html"
-            class="w-full py-2.5 border border-gray-300 hover:bg-gray-50 text-gray-700 text-xs font-bold rounded-full transition-colors flex items-center justify-center gap-1.5">
-            <span>📅</span> View in My Bookings
+            class="w-full py-2.5 border border-gray-300 hover:bg-gray-50 text-gray-800 text-xs font-bold rounded-lg transition-colors flex items-center justify-center">
+            View in My Bookings
           </a>
         </div>
 

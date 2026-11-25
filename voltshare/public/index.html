@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PlugMate — Community EV Charger Sharing</title>
+  <title>PlugMate: Community EV Charger Sharing</title>
 
   <!-- Google Fonts: Roboto & Google Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,14 +28,14 @@
             googleBlue: '#1A73E8',
             googleBlueHover: '#1557B0',
             googleRed: '#EA4335',
-            googleGreen: '#0F9D58',
+            googleGreen: '#047857',
             googleYellow: '#FBBC04',
-            googleGray: '#5F6368',
+            googleGray: '#4B5563',
             googleBorder: '#DADCE0'
           },
           boxShadow: {
-            google: '0 2px 6px rgba(60,64,67, 0.3), 0 1px 2px rgba(60,64,67, 0.15)',
-            googleHover: '0 3px 8px rgba(60,64,67, 0.4), 0 1px 3px rgba(60,64,67, 0.2)',
+            google: '0 2px 6px rgba(60,64,67, 0.25), 0 1px 2px rgba(60,64,67, 0.12)',
+            googleHover: '0 3px 8px rgba(60,64,67, 0.35), 0 1px 3px rgba(60,64,67, 0.18)',
             googleCard: '0 4px 16px rgba(0,0,0,0.12)'
           }
         }
@@ -46,339 +46,230 @@
   <link rel="stylesheet" href="css/style.css">
   <!-- Dynamic Environment Config (safe public keys only) -->
   <script src="/js/config.js"></script>
-  <!-- Clerk JavaScript SDK -->
-  <script async crossorigin="anonymous"
-    src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"></script>
 </head>
 
-<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col overflow-x-hidden">
 
   <!-- Navigation Bar -->
   <div id="voltNavbarMount"></div>
 
-  <!-- Hero Section -->
-  <header class="relative overflow-hidden bg-white border-b border-gray-200">
-    <!-- Subtle Background Accent -->
-    <div class="absolute inset-0 bg-gradient-to-b from-blue-50/60 via-white to-transparent pointer-events-none"></div>
+  <main class="flex-1">
+    <!-- Hero Section -->
+    <header class="bg-white border-b border-gray-200">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 text-center">
 
-    <div class="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-16 sm:pt-16 sm:pb-20 text-center">
+        <h1 class="text-3xl sm:text-5xl lg:text-6xl font-bold font-google text-gray-900 tracking-tight leading-tight max-w-4xl mx-auto">
+          Share Home Chargers.<br class="hidden sm:inline">
+          <span class="text-googleBlue">Power Your Neighborhood.</span>
+        </h1>
 
-      <!-- Community Initiative Pill -->
-      <div
-        class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-googleBlue text-xs font-bold mb-6 shadow-sm">
-        <span class="w-2 h-2 rounded-full bg-googleBlue animate-pulse"></span>
-        <span>Community EV Driveway Network</span>
-        <span class="text-blue-300">•</span>
-        <span class="text-gray-600 font-medium">Verified Residential Chargers</span>
-      </div>
-
-      <!-- Main Headline -->
-      <h1
-        class="text-3xl sm:text-5xl lg:text-6xl font-bold font-google text-gray-900 tracking-tight leading-tight max-w-4xl mx-auto">
-        Share Home Chargers.<br class="hidden sm:inline">
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-          Power Your Neighborhood.
-        </span>
-      </h1>
-
-      <!-- Subtitle -->
-      <p class="mt-4 sm:mt-6 text-sm sm:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-        Own an EV but don't have a private driveway? Reserve a neighbor's home wallbox for safe, affordable overnight
-        charging. Have a driveway? Share your socket and earn.
-      </p>
-
-      <!-- Primary Action Buttons -->
-      <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto">
-        <a href="map.html"
-          class="w-full sm:w-auto px-7 py-3.5 bg-googleBlue hover:bg-googleBlueHover text-white text-sm font-bold rounded-full shadow-google transition-all flex items-center justify-center gap-2 group">
-          <span>🗺️</span>
-          <span>Explore Nearby Chargers</span>
-          <span class="group-hover:translate-x-1 transition-transform">→</span>
-        </a>
-
-        <a href="host-dashboard.html"
-          class="w-full sm:w-auto px-6 py-3.5 bg-white hover:bg-gray-50 text-gray-800 border border-gray-300 text-sm font-bold rounded-full shadow-sm transition-colors flex items-center justify-center gap-1.5">
-          <span>⚡</span>
-          <span>List My Charger (Host)</span>
-        </a>
-      </div>
-
-      <!-- Quick Category Chips -->
-      <div class="mt-8 pt-6 border-t border-gray-100 flex flex-wrap items-center justify-center gap-2 text-xs">
-        <span class="text-gray-400 font-medium">Quick Filters:</span>
-        <a href="map.html"
-          class="px-3 py-1 bg-gray-100 hover:bg-blue-50 hover:text-googleBlue rounded-full text-gray-700 font-medium transition-colors">⚡
-          Type-2 AC (7.4 kW)</a>
-        <a href="map.html"
-          class="px-3 py-1 bg-gray-100 hover:bg-blue-50 hover:text-googleBlue rounded-full text-gray-700 font-medium transition-colors">🔌
-          15A Smart Socket (3.3 kW)</a>
-        <a href="map.html"
-          class="px-3 py-1 bg-gray-100 hover:bg-blue-50 hover:text-googleBlue rounded-full text-gray-700 font-medium transition-colors">☀️
-          Solar Powered Ports</a>
-        <a href="map.html"
-          class="px-3 py-1 bg-gray-100 hover:bg-blue-50 hover:text-googleBlue rounded-full text-gray-700 font-medium transition-colors">🌙
-          Overnight Gated Parking</a>
-      </div>
-
-    </div>
-  </header>
-
-  <!-- Live Stats Bar -->
-  <section class="bg-gray-900 text-white py-6 border-y border-gray-800">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-        <div>
-          <div class="font-mono text-2xl sm:text-3xl font-black text-emerald-400" id="statChargersCount">15+</div>
-          <div class="text-xs text-gray-400 mt-0.5">Verified Driveways</div>
-        </div>
-        <div>
-          <div class="font-mono text-2xl sm:text-3xl font-black text-googleBlue">₹12 - ₹26</div>
-          <div class="text-xs text-gray-400 mt-0.5">Fair Hourly Pricing</div>
-        </div>
-        <div>
-          <div class="font-mono text-2xl sm:text-3xl font-black text-amber-400">Gated Parking</div>
-          <div class="text-xs text-gray-400 mt-0.5">Safe Enclosed Slots</div>
-        </div>
-        <div>
-          <div class="font-mono text-2xl sm:text-3xl font-black text-emerald-400">4-Digit PIN</div>
-          <div class="text-xs text-gray-400 mt-0.5">Verified Handshake</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- The Challenge & Solution -->
-  <section class="py-14 bg-white border-b border-gray-200">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-
-      <div class="text-center max-w-2xl mx-auto mb-12">
-        <span class="text-xs font-bold uppercase tracking-wider text-googleBlue block mb-1">Community
-          Electrification</span>
-        <h2 class="text-2xl sm:text-3xl font-bold font-google text-gray-900">
-          Why Driveway Sharing Works
-        </h2>
-        <p class="text-xs sm:text-sm text-gray-500 mt-2">
-          Connecting electric vehicle owners with neighbors who have idle chargers and solar driveways.
+        <p class="mt-4 sm:mt-6 text-sm sm:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          Reserve a neighbor's verified residential wallbox for safe overnight charging, or share your private driveway socket to earn hourly payouts across Jalandhar and local communities.
         </p>
-      </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-        <!-- The Driveway Gap -->
-        <div class="bg-rose-50/60 border border-rose-200 rounded-2xl p-6 sm:p-8 space-y-4">
-          <div class="w-12 h-12 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center text-2xl">
-            🚫
-          </div>
-          <h3 class="text-lg font-bold text-gray-900 font-google">The Multi-Unit Dilemma</h3>
-          <p class="text-xs sm:text-sm text-gray-600 leading-relaxed">
-            Over 50% of urban EV drivers live in apartments, shared floors, or rented residences where installing a
-            dedicated wallbox is prohibited or cost-prohibitive.
-          </p>
-          <ul class="text-xs text-gray-600 space-y-1.5 pt-2">
-            <li class="flex items-center gap-2"><span class="text-rose-500 font-bold">✕</span> Waiting in queues at
-              commercial DC fast chargers</li>
-            <li class="flex items-center gap-2"><span class="text-rose-500 font-bold">✕</span> Faster battery wear from
-              continuous DC rapid-charging</li>
-            <li class="flex items-center gap-2"><span class="text-rose-500 font-bold">✕</span> Unsafe extension cables
-              hanging out of upper-floor windows</li>
-          </ul>
+        <!-- Primary Action Buttons -->
+        <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto">
+          <a href="map.html"
+            class="w-full sm:w-auto min-h-[44px] px-7 py-3 bg-googleBlue hover:bg-googleBlueHover text-white text-sm font-bold rounded-full shadow-google transition-colors flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+            </svg>
+            <span>Find Nearby Chargers</span>
+          </a>
+
+          <a href="host-dashboard.html"
+            class="w-full sm:w-auto min-h-[44px] px-6 py-3 bg-white hover:bg-gray-100 text-gray-800 border border-gray-300 text-sm font-bold rounded-lg transition-colors flex items-center justify-center">
+            List Your Driveway Charger
+          </a>
         </div>
 
-        <!-- The Community Solution -->
-        <div class="bg-emerald-50/60 border border-emerald-200 rounded-2xl p-6 sm:p-8 space-y-4">
-          <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-2xl">
-            🤝
+        <!-- Quick Category Links -->
+        <div class="mt-8 pt-6 border-t border-gray-100 flex flex-wrap items-center justify-center gap-2 text-xs">
+          <span class="text-gray-600 font-medium">Browse by plug:</span>
+          <a href="map.html?filter=7.4kw"
+            class="px-3.5 py-1.5 bg-gray-100 hover:bg-blue-50 hover:text-googleBlueHover rounded-full text-gray-700 font-medium transition-colors">
+            Type-2 AC (7.4 kW+)
+          </a>
+          <a href="map.html?filter=15a"
+            class="px-3.5 py-1.5 bg-gray-100 hover:bg-blue-50 hover:text-googleBlueHover rounded-full text-gray-700 font-medium transition-colors">
+            15A Smart Socket (3.3 kW)
+          </a>
+          <a href="map.html?filter=solar"
+            class="px-3.5 py-1.5 bg-gray-100 hover:bg-blue-50 hover:text-googleBlueHover rounded-full text-gray-700 font-medium transition-colors">
+            Solar Powered Ports
+          </a>
+          <a href="map.html?q=Jalandhar"
+            class="px-3.5 py-1.5 bg-blue-50 hover:bg-blue-100 text-googleBlueHover rounded-full font-semibold transition-colors">
+            Jalandhar Network
+          </a>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- Live Network Summary Bar (Values hydrated directly from Supabase) -->
+    <section class="bg-gray-900 text-white py-6 border-b border-gray-800" aria-label="Live network metrics">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+          <div>
+            <div class="font-mono text-2xl sm:text-3xl font-bold text-emerald-400" id="statChargersCount">--</div>
+            <div class="text-xs text-gray-300 mt-0.5">Live Listed Chargers</div>
           </div>
-          <h3 class="text-lg font-bold text-gray-900 font-google">The PlugMate Solution</h3>
-          <p class="text-xs sm:text-sm text-gray-600 leading-relaxed">
-            Homeowners with private driveways, solar arrays, or idle wallboxes open their chargers to nearby neighbors.
-            Drivers plug in, walk home, and return to a full battery.
-          </p>
-          <ul class="text-xs text-gray-600 space-y-1.5 pt-2">
-            <li class="flex items-center gap-2"><span class="text-emerald-600 font-bold">✓</span> Safe, enclosed
-              overnight parking in neighbor driveways</li>
-            <li class="flex items-center gap-2"><span class="text-emerald-600 font-bold">✓</span> Gentle AC charging
-              that extends EV battery life</li>
-            <li class="flex items-center gap-2"><span class="text-emerald-600 font-bold">✓</span> Hosts monetize surplus
-              power and earn net payout</li>
-          </ul>
+          <div>
+            <div class="font-mono text-2xl sm:text-3xl font-bold text-blue-400" id="statPriceRange">--</div>
+            <div class="text-xs text-gray-300 mt-0.5">Hourly Rate Range</div>
+          </div>
+          <div>
+            <div class="font-mono text-2xl sm:text-3xl font-bold text-amber-300" id="statCitiesCount">Jalandhar + Local</div>
+            <div class="text-xs text-gray-300 mt-0.5">Active Coverage</div>
+          </div>
+          <div>
+            <div class="font-mono text-2xl sm:text-3xl font-bold text-emerald-400">4-Digit PIN</div>
+            <div class="text-xs text-gray-300 mt-0.5">Arrival Handshake</div>
+          </div>
         </div>
       </div>
+    </section>
 
-    </div>
-  </section>
+    <!-- Live Chargers Preview from Supabase (Real Product Data) -->
+    <section class="py-12 sm:py-16 bg-gray-50 border-b border-gray-200">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-8">
+          <div>
+            <h2 class="text-2xl sm:text-3xl font-bold font-google text-gray-900">
+              Live Driveway Chargers
+            </h2>
+            <p class="text-xs sm:text-sm text-gray-600 mt-1">
+              Real residential sockets and wallboxes synced directly from the PlugMate database.
+            </p>
+          </div>
+          <a href="map.html" class="text-xs font-bold text-googleBlueHover hover:underline self-start sm:self-auto py-1">
+            Open Full Interactive Map
+          </a>
+        </div>
 
-  <!-- How It Works (3 Steps) -->
-  <section class="py-14 bg-gray-50 border-b border-gray-200">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div id="homeFeaturedChargers" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <!-- Loading state -->
+          <div class="col-span-full py-10 text-center text-xs text-gray-600 bg-white rounded-xl border border-gray-200">
+            Loading live chargers from database...
+          </div>
+        </div>
+      </div>
+    </section>
 
-      <div class="text-center max-w-2xl mx-auto mb-12">
-        <span class="text-xs font-bold uppercase tracking-wider text-googleBlue block mb-1">Simple Workflow</span>
-        <h2 class="text-2xl sm:text-3xl font-bold font-google text-gray-900">
-          How PlugMate Works in 3 Steps
+    <!-- Problem vs Solution Editorial Split -->
+    <section class="py-12 sm:py-16 bg-white border-b border-gray-200">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div class="lg:col-span-4 space-y-2">
+            <h2 class="text-2xl sm:text-3xl font-bold font-google text-gray-900">
+              Why Driveway Sharing Works
+            </h2>
+            <p class="text-xs sm:text-sm text-gray-600 leading-relaxed">
+              Apartment EV owners rarely have access to private sockets, while residential wallboxes sit idle most of the day.
+            </p>
+          </div>
+
+          <div class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 space-y-3">
+              <h3 class="text-base font-bold text-gray-900 font-google">The Apartment Charging Gap</h3>
+              <p class="text-xs text-gray-600 leading-relaxed">
+                Drivers living in multi-unit buildings or rented homes often rely on crowded public DC stations or unsafe extension cords.
+              </p>
+              <ul class="text-xs text-gray-700 space-y-2 pt-1 border-t border-gray-200">
+                <li class="flex items-start gap-2"><span class="text-rose-700 font-bold" aria-hidden="true">-</span> Long queues at highway fast chargers</li>
+                <li class="flex items-start gap-2"><span class="text-rose-700 font-bold" aria-hidden="true">-</span> Higher battery degradation from constant DC fast charging</li>
+                <li class="flex items-start gap-2"><span class="text-rose-700 font-bold" aria-hidden="true">-</span> No safe overnight parking near home</li>
+              </ul>
+            </div>
+
+            <div class="bg-emerald-50/70 border border-emerald-200 rounded-xl p-6 space-y-3">
+              <h3 class="text-base font-bold text-gray-900 font-google">Peer-to-Peer Residential AC</h3>
+              <p class="text-xs text-gray-700 leading-relaxed">
+                Homeowners list idle wallboxes and solar ports with fixed hourly pricing, gated entry, and verified driver check-ins.
+              </p>
+              <ul class="text-xs text-gray-800 space-y-2 pt-1 border-t border-emerald-200">
+                <li class="flex items-start gap-2"><span class="text-emerald-700 font-bold" aria-hidden="true">+</span> Enclosed driveway parking within walking distance</li>
+                <li class="flex items-start gap-2"><span class="text-emerald-700 font-bold" aria-hidden="true">+</span> Gentle 3.3 kW to 22 kW AC charging speeds</li>
+                <li class="flex items-start gap-2"><span class="text-emerald-700 font-bold" aria-hidden="true">+</span> 90% host payout released after PIN verification</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Workflow Rail (Distinct Horizontal Rhythm) -->
+    <section class="py-12 sm:py-16 bg-gray-50 border-b border-gray-200">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-xl sm:text-2xl font-bold font-google text-gray-900 mb-8">
+          Charging Session Flow
         </h2>
-      </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- Step 1 -->
-        <div
-          class="bg-white rounded-2xl p-6 shadow-google border border-gray-200 space-y-3 flex flex-col justify-between">
-          <div>
-            <div
-              class="w-10 h-10 rounded-full bg-blue-100 text-googleBlue font-black text-sm flex items-center justify-center mb-4">
-              1
-            </div>
-            <h3 class="text-base font-bold text-gray-900 font-google">Discover & Book</h3>
-            <p class="text-xs text-gray-600 leading-relaxed mt-1.5">
-              Open the interactive map, filter by connector type (Type-2 AC or 15A Socket), choose your arrival window,
-              and confirm your slot.
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-gray-200 pt-6">
+          <div class="space-y-2">
+            <div class="font-mono text-xs font-bold text-googleBlueHover">01 / DISCOVER &amp; BOOK</div>
+            <h3 class="text-base font-bold text-gray-900 font-google">Pick a Charger &amp; Time Window</h3>
+            <p class="text-xs text-gray-600 leading-relaxed">
+              Search by city or connector type on the map, inspect hourly rates, and reserve your slot with an instant booking reference.
             </p>
           </div>
-          <a href="map.html" class="text-xs font-bold text-googleBlue pt-2 block hover:underline">Explore Interactive
-            Map →</a>
-        </div>
 
-        <!-- Step 2 -->
-        <div
-          class="bg-white rounded-2xl p-6 shadow-google border border-gray-200 space-y-3 flex flex-col justify-between">
-          <div>
-            <div
-              class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 font-black text-sm flex items-center justify-center mb-4">
-              2
-            </div>
-            <h3 class="text-base font-bold text-gray-900 font-google">4-Digit PIN Handshake</h3>
-            <p class="text-xs text-gray-600 leading-relaxed mt-1.5">
-              Drive to the host's driveway. Share your secret 4-digit verification code to unlock power and confirm the
-              arrival handshake.
+          <div class="space-y-2">
+            <div class="font-mono text-xs font-bold text-emerald-700">02 / 4-DIGIT PIN HANDSHAKE</div>
+            <h3 class="text-base font-bold text-gray-900 font-google">Verify Arrival at the Driveway</h3>
+            <p class="text-xs text-gray-600 leading-relaxed">
+              Follow turn-by-turn road directions to the host's gate and share your unique 4-digit PIN so the host can unlock power.
             </p>
           </div>
-          <span class="text-xs font-bold text-emerald-700 pt-2 block">Secure Handshake Verification</span>
-        </div>
 
-        <!-- Step 3 -->
-        <div
-          class="bg-white rounded-2xl p-6 shadow-google border border-gray-200 space-y-3 flex flex-col justify-between">
-          <div>
-            <div
-              class="w-10 h-10 rounded-full bg-amber-100 text-amber-700 font-black text-sm flex items-center justify-center mb-4">
-              3
-            </div>
-            <h3 class="text-base font-bold text-gray-900 font-google">Protected Payout & Reviews</h3>
-            <p class="text-xs text-gray-600 leading-relaxed mt-1.5">
-              Host payout is released upon session start. Once complete, leave a verified neighbor review and rate host
-              hospitality.
+          <div class="space-y-2">
+            <div class="font-mono text-xs font-bold text-amber-700">03 / PAYOUT &amp; REVIEW</div>
+            <h3 class="text-base font-bold text-gray-900 font-google">Escrow Release &amp; Rating</h3>
+            <p class="text-xs text-gray-600 leading-relaxed">
+              Once the host confirms your PIN, escrow payout credits to the host dashboard and you can rate the charging visit.
             </p>
           </div>
-          <span class="text-xs font-bold text-amber-700 pt-2 block">Community Feedback & Ratings</span>
         </div>
       </div>
+    </section>
 
-    </div>
-  </section>
-
-  <!-- Community Reviews -->
-  <section class="py-14 bg-white border-b border-gray-200">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-
-      <div class="text-center max-w-2xl mx-auto mb-10">
-        <span class="text-xs font-bold uppercase tracking-wider text-googleBlue block mb-1">Community Experiences</span>
-        <h2 class="text-2xl sm:text-3xl font-bold font-google text-gray-900">
-          What EV Drivers & Hosts Say
+    <!-- Action Footer Banner -->
+    <section class="py-12 bg-gray-900 text-white text-center">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+        <h2 class="text-2xl sm:text-3xl font-bold font-google">
+          Ready to Charge or Host?
         </h2>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-        <!-- User 1 -->
-        <div class="bg-gray-50 border border-gray-200 rounded-2xl p-5 space-y-3">
-          <div class="flex items-center gap-3">
-            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=160&q=80"
-              class="w-11 h-11 rounded-full object-cover border-2 border-googleBlue">
-            <div>
-              <div class="font-bold text-sm text-gray-900">Neighborhood EV Driver</div>
-              <div class="text-[11px] text-googleBlue font-bold uppercase">Chargee • Apartment Owner</div>
-            </div>
-          </div>
-          <p class="text-xs text-gray-600 italic">
-            "I live in an apartment without private garage parking. With PlugMate, I charge overnight at a neighbor's
-            driveway and walk back to a full battery every morning."
-          </p>
-          <div class="text-[11px] text-gray-400 font-mono">Verified Chargee • 18+ Sessions</div>
+        <p class="text-xs sm:text-sm text-gray-300 max-w-lg mx-auto">
+          View live charger availability across Jalandhar and local neighborhoods, or add your own socket in Host Dashboard.
+        </p>
+        <div class="pt-2 flex flex-wrap items-center justify-center gap-3">
+          <a href="map.html"
+            class="min-h-[44px] px-6 py-2.5 bg-googleBlue hover:bg-googleBlueHover text-white font-bold text-xs rounded-full transition-colors flex items-center gap-2">
+            Open Charger Map
+          </a>
+          <a href="host-dashboard.html"
+            class="min-h-[44px] px-6 py-2.5 bg-gray-800 hover:bg-gray-700 text-white font-bold text-xs rounded-lg border border-gray-600 transition-colors flex items-center">
+            Open Host Dashboard
+          </a>
         </div>
-
-        <!-- User 2 -->
-        <div class="bg-gray-50 border border-gray-200 rounded-2xl p-5 space-y-3">
-          <div class="flex items-center gap-3">
-            <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=160&q=80"
-              class="w-11 h-11 rounded-full object-cover border-2 border-emerald-500">
-            <div>
-              <div class="font-bold text-sm text-gray-900">Residential Driveway Host</div>
-              <div class="text-[11px] text-emerald-700 font-bold uppercase">Host • Verified Wallbox</div>
-            </div>
-          </div>
-          <p class="text-xs text-gray-600 italic">
-            "My 7.4 kW home wallbox was sitting idle 20 hours a day. Sharing it with neighborhood EV drivers brings in
-            steady monthly earnings while supporting clean mobility."
-          </p>
-          <div class="text-[11px] text-gray-400 font-mono">Verified Host • 4.9 ★ Rating</div>
-        </div>
-
-        <!-- User 3 -->
-        <div class="bg-gray-50 border border-gray-200 rounded-2xl p-5 space-y-3">
-          <div class="flex items-center gap-3">
-            <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=160&q=80"
-              class="w-11 h-11 rounded-full object-cover border-2 border-emerald-500">
-            <div>
-              <div class="font-bold text-sm text-gray-900">Solar Rooftop Host</div>
-              <div class="text-[11px] text-emerald-700 font-bold uppercase">Host • Rooftop Solar</div>
-            </div>
-          </div>
-          <p class="text-xs text-gray-600 italic">
-            "Our solar setup generates excess clean units during the afternoon. Renting out our shaded plug puts 100%
-            renewable power directly into local electric cars."
-          </p>
-          <div class="text-[11px] text-gray-400 font-mono">Solar Host • 5.0 ★ Rating</div>
-        </div>
-
       </div>
-
-    </div>
-  </section>
-
-  <!-- Community CTA Banner -->
-  <section class="py-12 bg-gradient-to-r from-blue-600 to-indigo-700 text-white text-center">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
-      <h2 class="text-2xl sm:text-3xl font-bold font-google">
-        Ready to Charge or Share?
-      </h2>
-      <p class="text-xs sm:text-sm text-blue-100 max-w-lg mx-auto">
-        Find verified driveway chargers nearby with real-time availability, or list your private socket to earn.
-      </p>
-      <div class="pt-2 flex flex-wrap items-center justify-center gap-3">
-        <a href="map.html"
-          class="px-6 py-3 bg-white hover:bg-gray-100 text-googleBlue font-bold text-xs rounded-full shadow-google transition-all flex items-center gap-1.5">
-          <span>🗺️</span> Explore Map View
-        </a>
-        <a href="host-dashboard.html"
-          class="px-6 py-3 bg-blue-500 hover:bg-blue-400 text-white font-bold text-xs rounded-full shadow-sm transition-all border border-blue-400 flex items-center gap-1.5">
-          <span>⚡</span> List a Charger
-        </a>
-      </div>
-    </div>
-  </section>
+    </section>
+  </main>
 
   <!-- Footer -->
-  <footer class="bg-gray-100 text-gray-500 text-xs py-8 border-t border-gray-200 mt-auto">
+  <footer class="bg-white text-gray-600 text-xs py-6 border-t border-gray-200 mt-auto">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-2">
-        <span class="text-base text-googleBlue font-bold">⚡ PlugMate</span>
-        <span>• Community EV Charger Sharing Network</span>
+        <span class="text-sm text-gray-900 font-bold font-google">PlugMate</span>
+        <span>Community EV Charger Sharing Network</span>
       </div>
-      <div class="flex items-center gap-4 text-[11px]">
-        <a href="map.html" class="hover:text-googleBlue">Map View</a>
-        <a href="my-bookings.html" class="hover:text-googleBlue">My Bookings</a>
-        <a href="host-dashboard.html" class="hover:text-googleBlue">Host Dashboard</a>
-        <a href="#" onclick="if (typeof openPlugMateSignIn === 'function') openPlugMateSignIn(); return false;"
-          class="hover:text-googleBlue">Sign In</a>
+      <div class="flex items-center gap-5 text-xs font-medium">
+        <a href="map.html" class="hover:text-googleBlueHover">Map View</a>
+        <a href="my-bookings.html" class="hover:text-googleBlueHover">My Bookings</a>
+        <a href="host-dashboard.html" class="hover:text-googleBlueHover">Host Dashboard</a>
+        <button type="button" onclick="if (typeof openPlugMateSignIn === 'function') openPlugMateSignIn();"
+          class="hover:text-googleBlueHover font-medium">Sign In</button>
       </div>
     </div>
   </footer>
@@ -387,15 +278,73 @@
   <script src="js/location-cookie.js"></script>
   <script src="js/navbar.js"></script>
   <script>
+    function renderHomeLiveStatsAndChargers() {
+      const chargers = VoltData.getChargers();
+      const counter = document.getElementById('statChargersCount');
+      if (counter) counter.textContent = chargers.length > 0 ? String(chargers.length) : '0';
+
+      const priceEl = document.getElementById('statPriceRange');
+      if (priceEl && chargers.length > 0) {
+        const rates = chargers.map(c => Number(c.hourly_rate) || 0).filter(r => r > 0);
+        if (rates.length > 0) {
+          priceEl.textContent = `₹${Math.min(...rates)} - ₹${Math.max(...rates)}`;
+        }
+      }
+
+      const grid = document.getElementById('homeFeaturedChargers');
+      if (!grid) return;
+
+      if (!chargers || chargers.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-10 px-4 text-center bg-white rounded-xl border border-gray-200 space-y-2">
+            <p class="text-sm font-bold text-gray-900">No chargers listed yet</p>
+            <p class="text-xs text-gray-600">Add the first residential driveway socket in the Host Dashboard.</p>
+            <a href="host-dashboard.html" class="inline-block mt-2 px-4 py-2 bg-googleBlue text-white text-xs font-bold rounded-lg">Add a Charger</a>
+          </div>
+        `;
+        return;
+      }
+
+      // Prioritize Jalandhar + diverse connectors in preview (top 6)
+      const sorted = [...chargers].sort((a, b) => {
+        const aJal = (a.city === 'jalandhar' || (a.address || '').toLowerCase().includes('jalandhar')) ? 0 : 1;
+        const bJal = (b.city === 'jalandhar' || (b.address || '').toLowerCase().includes('jalandhar')) ? 0 : 1;
+        return aJal - bJal;
+      }).slice(0, 6);
+
+      grid.innerHTML = sorted.map(c => `
+        <article class="bg-white rounded-xl border border-gray-200 overflow-hidden flex flex-col justify-between hover:border-gray-300 transition-colors">
+          <div>
+            <div class="aspect-video w-full bg-gray-100 overflow-hidden relative">
+              <img src="${c.photo}" alt="${c.title}" width="640" height="360" loading="lazy" class="w-full h-full object-cover">
+              <span class="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-md text-[11px] font-bold ${c.is_available ? 'bg-emerald-700 text-white' : 'bg-amber-700 text-white'}">
+                ${c.is_available ? 'Available' : 'In Use'}
+              </span>
+            </div>
+            <div class="p-4 space-y-2">
+              <div class="flex items-start justify-between gap-2">
+                <h3 class="text-sm font-bold text-gray-900 font-google leading-snug">${c.title}</h3>
+                <span class="font-mono text-sm font-bold text-emerald-700 shrink-0">₹${Number(c.hourly_rate).toFixed(0)}/hr</span>
+              </div>
+              <p class="text-xs text-gray-600 line-clamp-1">${c.address}</p>
+              <div class="flex items-center justify-between text-[11px] text-gray-700 pt-2 border-t border-gray-100">
+                <span class="bg-gray-100 px-2 py-0.5 rounded-md font-medium">${c.connector_type} • ${c.power_kw} kW</span>
+                <span class="font-medium">Host: ${c.host_name}</span>
+              </div>
+            </div>
+          </div>
+          <div class="px-4 py-3 bg-gray-50 border-t border-gray-100 flex items-center justify-between gap-2">
+            <a href="charger.html?id=${c.id}" class="text-xs font-bold text-googleBlueHover hover:underline py-1">View Specs</a>
+            <a href="booking.html?chargerId=${c.id}" class="px-3.5 py-1.5 bg-googleBlue hover:bg-googleBlueHover text-white text-xs font-bold rounded-full transition-colors">Book Slot</a>
+          </div>
+        </article>
+      `).join('');
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       renderVoltNavbar('home');
-      const updateChargerStat = () => {
-        const chargers = VoltData.getChargers();
-        const counter = document.getElementById('statChargersCount');
-        if (counter) counter.textContent = `${chargers.length}+`;
-      };
-      updateChargerStat();
-      window.addEventListener('plugmate:dataSynced', updateChargerStat);
+      renderHomeLiveStatsAndChargers();
+      window.addEventListener('plugmate:dataSynced', renderHomeLiveStatsAndChargers);
       if (new URLSearchParams(window.location.search).get('signin') === '1') {
         setTimeout(() => { if (typeof openPlugMateSignIn === 'function') openPlugMateSignIn(); }, 400);
       }

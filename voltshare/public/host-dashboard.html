@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PlugMate — Host Dashboard & Earnings</title>
+  <title>PlugMate: Host Dashboard &amp; Earnings</title>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -49,7 +49,7 @@
   <script async crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"></script>
 </head>
 
-<body class="bg-gray-50 min-h-screen flex flex-col font-sans text-gray-800">
+<body class="bg-gray-50 min-h-screen flex flex-col font-sans text-gray-800 overflow-x-hidden">
 
   <!-- Shared Navbar Mount -->
   <div id="voltNavbarMount"></div>
@@ -58,32 +58,32 @@
 
     <!-- Top Host Banner -->
     <div
-      class="bg-white rounded-2xl p-5 shadow-google border border-gray-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      class="bg-white rounded-xl p-5 shadow-google border border-gray-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div class="flex items-center gap-3.5">
-        <img id="hostProfileAvatar" src=""
-          class="w-14 h-14 rounded-full object-cover border-2 border-emerald-500 shadow-sm">
+        <img id="hostProfileAvatar" src="" alt="Host profile avatar" width="56" height="56"
+          class="w-14 h-14 rounded-full object-cover border-2 border-emerald-600">
         <div>
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-2 flex-wrap">
             <h1 class="text-xl font-bold font-google text-gray-900" id="hostProfileName">Community Host</h1>
             <span
-              class="bg-emerald-100 text-emerald-800 text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border border-emerald-200">
+              class="bg-emerald-100 text-emerald-800 text-[11px] uppercase font-bold px-2.5 py-0.5 rounded-md border border-emerald-200">
               Host Mode
             </span>
           </div>
-          <p class="text-xs text-gray-500 mt-0.5" id="hostProfileAddress">
+          <p class="text-xs text-gray-600 mt-0.5" id="hostProfileAddress">
             Neighborhood Driveway • Verified Host
           </p>
         </div>
       </div>
 
-      <div class="flex items-center gap-2">
-        <button onclick="openAddChargerModal()"
-          class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-full shadow-google transition-colors flex items-center gap-1.5">
-          <span>⚡</span> Add New Charger
+      <div class="flex items-center gap-2 flex-wrap">
+        <button type="button" onclick="openAddChargerModal()"
+          class="px-4 py-2.5 min-h-[40px] bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-full transition-colors">
+          + Add New Charger
         </button>
         <a href="map.html"
-          class="px-3.5 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 text-xs font-semibold rounded-full transition-colors flex items-center gap-1">
-          <span>🗺️</span> View Map
+          class="px-4 py-2.5 min-h-[40px] border border-gray-300 hover:bg-gray-100 text-gray-800 text-xs font-semibold rounded-lg transition-colors flex items-center">
+          View Map
         </a>
       </div>
     </div>
@@ -92,51 +92,51 @@
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
 
       <!-- Metric 1 -->
-      <div class="bg-white rounded-2xl p-4 shadow-google border border-gray-200">
-        <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider block">Net Host Payouts</span>
-        <div class="font-mono text-2xl font-black text-emerald-600 mt-1" id="metricTotalEarnings">₹0.00</div>
-        <span class="text-[10px] text-gray-500 mt-0.5 block">90% of completed sessions</span>
+      <div class="bg-white rounded-xl p-4 border border-gray-200">
+        <span class="text-[11px] font-bold text-gray-600 uppercase tracking-wider block">Net Host Payouts</span>
+        <div class="font-mono text-2xl font-black text-emerald-700 mt-1" id="metricTotalEarnings">₹0.00</div>
+        <span class="text-[11px] text-gray-600 mt-0.5 block">90% of completed sessions</span>
       </div>
 
       <!-- Metric 2 -->
-      <div class="bg-white rounded-2xl p-4 shadow-google border border-gray-200">
-        <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider block">Incoming Bookings</span>
-        <div class="font-mono text-2xl font-black text-googleBlue mt-1" id="metricUpcomingCount">0</div>
-        <span class="text-[10px] text-gray-500 mt-0.5 block">Awaiting driver arrival / PIN</span>
+      <div class="bg-white rounded-xl p-4 border border-gray-200">
+        <span class="text-[11px] font-bold text-gray-600 uppercase tracking-wider block">Incoming Bookings</span>
+        <div class="font-mono text-2xl font-black text-googleBlueHover mt-1" id="metricUpcomingCount">0</div>
+        <span class="text-[11px] text-gray-600 mt-0.5 block">Awaiting driver PIN</span>
       </div>
 
       <!-- Metric 3 -->
-      <div class="bg-white rounded-2xl p-4 shadow-google border border-gray-200">
-        <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider block">Active Chargers</span>
+      <div class="bg-white rounded-xl p-4 border border-gray-200">
+        <span class="text-[11px] font-bold text-gray-600 uppercase tracking-wider block">Active Chargers</span>
         <div class="font-mono text-2xl font-black text-gray-900 mt-1" id="metricChargerCount">0</div>
-        <span class="text-[10px] text-emerald-600 font-semibold mt-0.5 block">Community Listed</span>
+        <span class="text-[11px] text-emerald-700 font-semibold mt-0.5 block">Synced with Supabase</span>
       </div>
 
       <!-- Metric 4 -->
-      <div class="bg-white rounded-2xl p-4 shadow-google border border-gray-200">
-        <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider block">Community Rating</span>
-        <div class="flex items-center gap-1 font-mono text-2xl font-black text-amber-500 mt-1">
-          <span>4.9</span>
-          <span class="text-xs text-amber-400">★★★★★</span>
+      <div class="bg-white rounded-xl p-4 border border-gray-200">
+        <span class="text-[11px] font-bold text-gray-600 uppercase tracking-wider block">Average Rating</span>
+        <div class="flex items-center gap-1 font-mono text-2xl font-black text-amber-700 mt-1">
+          <span id="metricAvgRating">--</span>
+          <span class="text-sm text-amber-500" aria-hidden="true">★</span>
         </div>
-        <span class="text-[10px] text-gray-500 mt-0.5 block">Verified neighbor rating</span>
+        <span class="text-[11px] text-gray-600 mt-0.5 block">Across listed chargers</span>
       </div>
 
     </div>
 
     <!-- SECTION 1: INCOMING DRIVER BOOKINGS -->
-    <div class="bg-white rounded-2xl p-5 shadow-google border border-gray-200 space-y-4">
-      <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+    <div class="bg-white rounded-xl p-5 border border-gray-200 space-y-4">
+      <div class="flex items-center justify-between gap-2 border-b border-gray-100 pb-3">
         <div>
-          <h2 class="text-sm font-bold text-gray-900 font-google flex items-center gap-2">
-            <span>🚗</span> Incoming Neighbor Bookings & Handshake Verification
+          <h2 class="text-sm font-bold text-gray-900 font-google">
+            Incoming Driver Bookings &amp; Handshake Verification
           </h2>
-          <p class="text-xs text-gray-500 mt-0.5">
+          <p class="text-xs text-gray-600 mt-0.5">
             Verify the driver's 4-digit PIN on arrival to unlock electricity and release escrow payout.
           </p>
         </div>
-        <button onclick="renderHostDashboard()" class="text-xs text-googleBlue hover:underline flex items-center gap-1">
-          <span>🔄</span> Refresh
+        <button type="button" onclick="renderHostDashboard()" class="text-xs font-semibold text-googleBlueHover hover:underline px-2 py-1 shrink-0">
+          Refresh
         </button>
       </div>
 
@@ -146,20 +146,20 @@
     </div>
 
     <!-- SECTION 2: MY LISTED CHARGERS -->
-    <div class="bg-white rounded-2xl p-5 shadow-google border border-gray-200 space-y-4">
-      <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+    <div class="bg-white rounded-xl p-5 border border-gray-200 space-y-4">
+      <div class="flex items-center justify-between gap-2 border-b border-gray-100 pb-3">
         <div>
-          <h2 class="text-sm font-bold text-gray-900 font-google flex items-center gap-2">
-            <span>⚡</span> My Listed Driveway Chargers
+          <h2 class="text-sm font-bold text-gray-900 font-google">
+            My Listed Driveway Chargers
           </h2>
-          <p class="text-xs text-gray-500 mt-0.5">
-            Set pricing per hour, configure operating hours, and toggle driveway availability.
+          <p class="text-xs text-gray-600 mt-0.5">
+            Set hourly pricing, operating hours, and toggle driveway availability.
           </p>
         </div>
 
-        <button onclick="openAddChargerModal()"
-          class="px-3.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full transition-colors flex items-center gap-1">
-          <span>+</span> Add Charger
+        <button type="button" onclick="openAddChargerModal()"
+          class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-bold rounded-lg transition-colors shrink-0">
+          + Add Charger
         </button>
       </div>
 
@@ -171,81 +171,81 @@
   </main>
 
   <!-- ADD / EDIT CHARGER MODAL -->
-  <div id="chargerModal"
-    class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+  <div id="chargerModal" role="dialog" aria-modal="true" aria-labelledby="modalChargerHeading"
+    class="hidden fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
     <div
-      class="bg-white rounded-2xl shadow-googleCard max-w-lg w-full p-6 space-y-4 border border-gray-200 max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in-95 duration-150">
+      class="bg-white rounded-xl shadow-googleCard max-w-lg w-full p-6 space-y-4 border border-gray-200 max-h-[90vh] overflow-y-auto">
 
       <div class="flex items-center justify-between border-b border-gray-100 pb-3">
         <h3 class="text-base font-bold text-gray-900 font-google" id="modalChargerHeading">Add New Driveway Charger</h3>
-        <button onclick="closeChargerModal()" class="text-gray-400 hover:text-gray-700 text-lg font-bold">✕</button>
+        <button type="button" onclick="closeChargerModal()" aria-label="Close charger modal" class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 text-base font-bold">✕</button>
       </div>
 
       <form id="chargerForm" onsubmit="handleSaveCharger(event)" class="space-y-3 text-xs">
         <input type="hidden" id="editChargerId" value="">
 
         <div>
-          <label class="block font-medium text-gray-700 mb-1">Charger Title</label>
-          <input type="text" id="formTitle" required placeholder="e.g. Model Town Kothi Wallbox"
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue">
+          <label for="formTitle" class="block font-medium text-gray-700 mb-1">Charger Title</label>
+          <input type="text" id="formTitle" required placeholder="e.g. Model Town Driveway Wallbox"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-googleBlue">
         </div>
 
         <div>
-          <label class="block font-medium text-gray-700 mb-1">Driveway Address</label>
-          <input type="text" id="formAddress" required placeholder="e.g. 45 Pinecrest Drive, Model Town"
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue">
+          <label for="formAddress" class="block font-medium text-gray-700 mb-1">Driveway Address</label>
+          <input type="text" id="formAddress" required placeholder="e.g. House 45, Model Town, Jalandhar"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-googleBlue">
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block font-medium text-gray-700 mb-1">Connector Type</label>
+            <label for="formConnector" class="block font-medium text-gray-700 mb-1">Connector Type</label>
             <select id="formConnector"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue">
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-googleBlue bg-white">
               <option value="Type-2 AC">Type-2 AC (Universal 4-Wheeler)</option>
               <option value="15A-3Pin">15A-3Pin Standard Socket (3.3 kW)</option>
               <option value="CCS-2 DC">CCS-2 DC Rapid Charger</option>
             </select>
           </div>
           <div>
-            <label class="block font-medium text-gray-700 mb-1">Power Output (kW)</label>
+            <label for="formPower" class="block font-medium text-gray-700 mb-1">Power Output (kW)</label>
             <input type="number" step="0.1" id="formPower" required value="7.4"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue">
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-googleBlue">
           </div>
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block font-medium text-gray-700 mb-1">Rate per Hour (₹)</label>
+            <label for="formRate" class="block font-medium text-gray-700 mb-1">Rate per Hour (₹)</label>
             <input type="number" step="1" id="formRate" required value="22"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue">
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-googleBlue">
           </div>
           <div>
-            <label class="block font-medium text-gray-700 mb-1">Available Hours</label>
+            <label for="formHours" class="block font-medium text-gray-700 mb-1">Available Hours</label>
             <input type="text" id="formHours" required value="06:00 AM - 11:30 PM"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue">
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-googleBlue">
           </div>
         </div>
 
         <div>
-          <label class="block font-medium text-gray-700 mb-1">Photo URL (Optional)</label>
+          <label for="formPhoto" class="block font-medium text-gray-700 mb-1">Photo URL (Optional)</label>
           <input type="url" id="formPhoto" placeholder="https://..."
             value="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=800&q=80"
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue">
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-googleBlue">
         </div>
 
         <div>
-          <label class="block font-medium text-gray-700 mb-1">Vehicle Compatibility</label>
+          <label for="formCompatibility" class="block font-medium text-gray-700 mb-1">Vehicle Compatibility</label>
           <input type="text" id="formCompatibility" value="Tata Nexon, MG Windsor, Ather, Ola"
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-googleBlue">
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-googleBlue">
         </div>
 
         <div class="pt-3 border-t border-gray-100 flex items-center justify-end gap-2">
           <button type="button" onclick="closeChargerModal()"
-            class="px-4 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-full font-medium">
+            class="px-4 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-lg font-medium">
             Cancel
           </button>
           <button type="submit"
-            class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full font-bold shadow-google">
+            class="px-5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-full font-bold">
             Save Charger
           </button>
         </div>
@@ -313,6 +313,15 @@
       document.getElementById('metricTotalEarnings').textContent = `₹${totalEarnings.toFixed(2)}`;
       document.getElementById('metricUpcomingCount').textContent = upcomingBookings.length;
       document.getElementById('metricChargerCount').textContent = hostChargers.length;
+      const avgRatingEl = document.getElementById('metricAvgRating');
+      if (avgRatingEl) {
+        if (hostChargers.length > 0) {
+          const avg = hostChargers.reduce((sum, c) => sum + (Number(c.rating) || 5.0), 0) / hostChargers.length;
+          avgRatingEl.textContent = avg.toFixed(1);
+        } else {
+          avgRatingEl.textContent = '--';
+        }
+      }
 
       // Render Bookings List
       renderHostBookings(hostBookings);
@@ -324,7 +333,7 @@
     function renderHostBookings(bookings) {
       const listContainer = document.getElementById('hostBookingsList');
       if (bookings.length === 0) {
-        listContainer.innerHTML = `<p class="text-xs text-gray-400 py-3 text-center">No incoming bookings yet.</p>`;
+        listContainer.innerHTML = `<p class="text-xs text-gray-600 py-4 text-center">No incoming bookings yet. Bookings from drivers will appear here.</p>`;
         return;
       }
 
@@ -334,31 +343,31 @@
         const hostPayout = (b.total_amount * 0.90).toFixed(2);
 
         return `
-          <div class="p-3.5 bg-gray-50/70 border border-gray-200 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+          <div class="p-3.5 bg-gray-50 border border-gray-200 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
             <div class="space-y-1">
-              <div class="flex items-center gap-2">
+              <div class="flex items-center gap-2 flex-wrap">
                 <span class="font-bold text-gray-900">${b.user_name}</span>
-                <span class="text-[10px] text-gray-500 font-mono">${b.user_vehicle || 'EV'}</span>
-                <span class="font-mono text-[10px] font-bold px-1.5 py-0.2 rounded bg-blue-100 text-googleBlue">${b.id}</span>
+                <span class="text-[11px] text-gray-600 font-mono">${b.user_vehicle || 'EV'}</span>
+                <span class="font-mono text-[11px] font-bold px-1.5 py-0.5 rounded-md bg-blue-100 text-googleBlueHover">${b.id}</span>
               </div>
-              <div class="text-gray-600">
-                <span>📍 ${b.charger_title}</span> • <span class="font-bold text-gray-800">${b.date} (${b.time_slot})</span>
+              <div class="text-gray-700">
+                <span>${b.charger_title}</span> • <span class="font-bold text-gray-900">${b.date} (${b.time_slot})</span>
               </div>
             </div>
 
             <div class="flex items-center gap-3 self-end sm:self-center">
               <div class="text-right">
-                <span class="font-mono font-bold text-emerald-600 block text-sm">₹${hostPayout}</span>
-                <span class="text-[10px] text-gray-400">90% Payout</span>
+                <span class="font-mono font-bold text-emerald-700 block text-sm">₹${hostPayout}</span>
+                <span class="text-[11px] text-gray-600">90% Payout</span>
               </div>
 
               ${isUpcoming ? `
-                <button onclick="verifyPinPrompt('${b.id}', '${b.pin}')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-full shadow-sm text-xs transition-colors flex items-center gap-1">
-                  <span>🔑</span> Verify PIN (${b.pin})
+                <button type="button" onclick="verifyPinPrompt('${b.id}', '${b.pin}')" class="px-3.5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-full text-xs transition-colors">
+                  Verify PIN (${b.pin})
                 </button>
               ` : `
-                <span class="text-xs font-semibold text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-                  ✓ Completed
+                <span class="text-xs font-semibold text-gray-700 bg-gray-200 px-3 py-1.5 rounded-md">
+                  Completed
                 </span>
               `}
             </div>
@@ -370,18 +379,18 @@
     function renderHostChargers(chargers) {
       const grid = document.getElementById('hostChargersGrid');
       if (chargers.length === 0) {
-        grid.innerHTML = `<p class="text-xs text-gray-400 py-4 col-span-3 text-center">No chargers added. Click "+ Add New Charger" above.</p>`;
+        grid.innerHTML = `<p class="text-xs text-gray-600 py-6 col-span-3 text-center">No chargers added yet. Click "+ Add New Charger" above to list your driveway plug.</p>`;
         return;
       }
 
       grid.innerHTML = chargers.map(c => `
-        <div class="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-google transition-all flex flex-col justify-between">
+        <div class="bg-white rounded-xl border border-gray-200 overflow-hidden flex flex-col justify-between">
           <div>
-            <div class="relative h-32 w-full bg-gray-100">
-              <img src="${c.photo}" class="w-full h-full object-cover">
+            <div class="relative h-36 w-full bg-gray-100">
+              <img src="${c.photo}" alt="${c.title}" width="400" height="225" loading="lazy" class="w-full h-full object-cover">
               <div class="absolute top-2 right-2">
-                <button onclick="toggleAvailability(${c.id})" class="px-2.5 py-1 rounded-full text-[10px] font-bold shadow-sm transition-all ${c.is_available ? 'bg-emerald-500 text-white' : 'bg-amber-500 text-white'}">
-                  ${c.is_available ? '● Available' : '● In Use / Busy'}
+                <button type="button" onclick="toggleAvailability(${c.id})" class="px-2.5 py-1 rounded-md text-[11px] font-bold transition-colors ${c.is_available ? 'bg-emerald-700 hover:bg-emerald-800 text-white' : 'bg-amber-700 hover:bg-amber-800 text-white'}">
+                  ${c.is_available ? 'Available' : 'In Use / Busy'}
                 </button>
               </div>
             </div>
@@ -389,27 +398,27 @@
             <div class="p-3.5 space-y-2">
               <div class="flex items-start justify-between gap-2">
                 <h3 class="font-bold text-gray-900 text-xs line-clamp-1">${c.title}</h3>
-                <span class="font-mono font-bold text-emerald-600 text-xs shrink-0">₹${c.hourly_rate}/h</span>
+                <span class="font-mono font-bold text-emerald-700 text-xs shrink-0">₹${c.hourly_rate}/h</span>
               </div>
-              <p class="text-[11px] text-gray-500 line-clamp-1">📍 ${c.address}</p>
+              <p class="text-[11px] text-gray-600 line-clamp-1">${c.address}</p>
 
-              <div class="flex items-center justify-between text-[11px] text-gray-600 pt-2 border-t border-gray-100">
-                <span class="bg-gray-100 px-2 py-0.5 rounded font-medium">${c.connector_type} • ${c.power_kw}kW</span>
+              <div class="flex items-center justify-between text-[11px] text-gray-700 pt-2 border-t border-gray-100">
+                <span class="bg-gray-100 px-2 py-0.5 rounded-md font-medium">${c.connector_type} • ${c.power_kw} kW</span>
                 <span>${c.available_hours || '24 Hours'}</span>
               </div>
             </div>
           </div>
 
           <div class="p-3 bg-gray-50 border-t border-gray-100 flex items-center justify-between text-xs">
-            <a href="charger.html?id=${c.id}" class="text-googleBlue font-medium hover:underline">
-              Preview Page →
+            <a href="charger.html?id=${c.id}" class="text-googleBlueHover font-semibold hover:underline">
+              Preview Page
             </a>
-            <div class="flex items-center gap-1.5">
-              <button onclick="openEditChargerModal(${c.id})" class="text-gray-700 hover:text-black font-medium p-1">
-                ✏️ Edit
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="openEditChargerModal(${c.id})" class="text-gray-800 hover:text-black font-medium px-2 py-1 rounded hover:bg-gray-200">
+                Edit
               </button>
-              <button onclick="deleteChargerPrompt(${c.id})" class="text-rose-600 hover:text-rose-800 font-medium p-1">
-                🗑️
+              <button type="button" onclick="deleteChargerPrompt(${c.id})" aria-label="Delete ${c.title}" class="text-rose-700 hover:text-rose-900 font-medium px-2 py-1 rounded hover:bg-rose-50">
+                Delete
               </button>
             </div>
           </div>
@@ -468,6 +477,12 @@
       document.getElementById('chargerModal').classList.add('hidden');
     }
 
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeChargerModal();
+      }
+    });
+
     function handleSaveCharger(e) {
       e.preventDefault();
       const user = VoltData.getCurrentUser();
@@ -481,6 +496,10 @@
       const photo = document.getElementById('formPhoto').value.trim();
       const compat = document.getElementById('formCompatibility').value.trim();
 
+      const isJalandhar = address.toLowerCase().includes('jalandhar');
+      const baseLat = isJalandhar ? 31.3150 : 30.8900;
+      const baseLng = isJalandhar ? 75.5780 : 75.8200;
+
       if (editId) {
         VoltData.updateCharger(editId, {
           title, address, connector_type: connector, power_kw: power,
@@ -491,9 +510,9 @@
         VoltData.addCharger({
           host_id: user.id,
           host_name: user.name,
-          title, address, city: 'community',
-          lat: 30.8900 + (Math.random() - 0.5) * 0.04,
-          lng: 75.8200 + (Math.random() - 0.5) * 0.04,
+          title, address, city: isJalandhar ? 'jalandhar' : 'community',
+          lat: baseLat + (Math.random() - 0.5) * 0.03,
+          lng: baseLng + (Math.random() - 0.5) * 0.03,
           connector_type: connector,
           power_kw: power,
           hourly_rate: rate,

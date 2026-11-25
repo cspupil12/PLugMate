@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PlugMate — Rate Your Charging Session</title>
+  <title>PlugMate: Rate Your Charging Session</title>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -45,34 +45,34 @@
   <!-- Clerk JavaScript SDK -->
   <script async crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"></script>
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col font-sans text-gray-800">
+<body class="bg-gray-50 min-h-screen flex flex-col font-sans text-gray-800 overflow-x-hidden">
 
   <!-- Shared Navbar Mount -->
   <div id="voltNavbarMount"></div>
 
   <main class="flex-1 max-w-xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex items-center justify-center">
     
-    <div class="w-full bg-white rounded-2xl shadow-googleCard border border-gray-200 overflow-hidden">
+    <div class="w-full bg-white rounded-xl shadow-googleCard border border-gray-200 overflow-hidden">
       
       <!-- Card Header Banner -->
-      <div class="bg-gradient-to-r from-amber-500 to-amber-600 p-6 text-white text-center">
-        <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto text-2xl mb-2">
+      <div class="bg-gray-900 p-6 text-white text-center">
+        <div class="w-11 h-11 bg-amber-700 rounded-full flex items-center justify-center mx-auto text-xl mb-2" aria-hidden="true">
           ★
         </div>
         <h1 class="text-xl font-bold font-google">Rate Your Charging Experience</h1>
-        <p class="text-xs text-amber-100 mt-1">
+        <p class="text-xs text-gray-300 mt-1">
           Help neighbors discover verified, reliable driveway hosts
         </p>
       </div>
 
       <!-- Booking Session Summary -->
-      <div class="p-5 bg-amber-50/50 border-b border-amber-100 flex items-center justify-between text-xs">
+      <div class="p-5 bg-amber-50/70 border-b border-amber-200 flex items-center justify-between gap-2 text-xs">
         <div>
           <span class="text-[10px] uppercase font-bold text-amber-800 block">Completed Session</span>
           <h2 class="font-bold text-gray-900" id="revChargerTitle">Green Park Wallbox</h2>
-          <p class="text-gray-500" id="revHostDetails">Hosted by Verified Host</p>
+          <p class="text-gray-600" id="revHostDetails">Hosted by Verified Host</p>
         </div>
-        <span class="font-mono font-bold text-xs bg-white px-2.5 py-1 rounded-full border border-amber-200 text-gray-700" id="revBookingId">
+        <span class="font-mono font-bold text-xs bg-white px-2.5 py-1 rounded-md border border-amber-300 text-gray-800 shrink-0" id="revBookingId">
           PM-0000
         </span>
       </div>
@@ -82,57 +82,57 @@
         
         <!-- Interactive 5 Star Selector -->
         <div class="text-center space-y-2">
-          <label class="block text-xs font-bold text-gray-700">Tap to Rate Host & Charger</label>
-          <div class="flex items-center justify-center gap-2 select-none" id="starContainer">
-            <button type="button" onclick="setRating(1)" onmouseover="hoverRating(1)" onmouseout="resetHoverRating()" class="star-btn active" id="star-1">★</button>
-            <button type="button" onclick="setRating(2)" onmouseover="hoverRating(2)" onmouseout="resetHoverRating()" class="star-btn active" id="star-2">★</button>
-            <button type="button" onclick="setRating(3)" onmouseover="hoverRating(3)" onmouseout="resetHoverRating()" class="star-btn active" id="star-3">★</button>
-            <button type="button" onclick="setRating(4)" onmouseover="hoverRating(4)" onmouseout="resetHoverRating()" class="star-btn active" id="star-4">★</button>
-            <button type="button" onclick="setRating(5)" onmouseover="hoverRating(5)" onmouseout="resetHoverRating()" class="star-btn active" id="star-5">★</button>
+          <span class="block text-xs font-bold text-gray-800">Tap to Rate Host &amp; Charger</span>
+          <div class="flex items-center justify-center gap-2 select-none" id="starContainer" role="radiogroup" aria-label="Star rating">
+            <button type="button" onclick="setRating(1)" onmouseover="hoverRating(1)" onmouseout="resetHoverRating()" aria-label="Rate 1 star" class="star-btn active" id="star-1">★</button>
+            <button type="button" onclick="setRating(2)" onmouseover="hoverRating(2)" onmouseout="resetHoverRating()" aria-label="Rate 2 stars" class="star-btn active" id="star-2">★</button>
+            <button type="button" onclick="setRating(3)" onmouseover="hoverRating(3)" onmouseout="resetHoverRating()" aria-label="Rate 3 stars" class="star-btn active" id="star-3">★</button>
+            <button type="button" onclick="setRating(4)" onmouseover="hoverRating(4)" onmouseout="resetHoverRating()" aria-label="Rate 4 stars" class="star-btn active" id="star-4">★</button>
+            <button type="button" onclick="setRating(5)" onmouseover="hoverRating(5)" onmouseout="resetHoverRating()" aria-label="Rate 5 stars" class="star-btn active" id="star-5">★</button>
           </div>
-          <div class="text-xs font-bold text-amber-600 font-google" id="ratingLabel">
-            5 Stars — Outstanding Experience!
+          <div class="text-xs font-bold text-amber-700 font-google" id="ratingLabel">
+            5 Stars: Outstanding Experience!
           </div>
         </div>
 
         <!-- Tag Chips -->
         <div>
-          <label class="block text-xs font-bold text-gray-700 mb-2">What went well? (Select all that apply)</label>
+          <span class="block text-xs font-bold text-gray-800 mb-2">What went well? (Select all that apply)</span>
           <div class="flex flex-wrap gap-1.5" id="tagsContainer">
-            <button type="button" onclick="toggleTag(this, 'Fast charging')" class="tag-chip px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 text-gray-600 hover:border-gray-300">
-              ⚡ Fast charging
+            <button type="button" onclick="toggleTag(this, 'Fast charging')" class="tag-chip px-3 py-1.5 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:border-gray-400">
+              Fast charging
             </button>
-            <button type="button" onclick="toggleTag(this, 'Clean driveway')" class="tag-chip px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 text-gray-600 hover:border-gray-300">
-              🏡 Clean driveway
+            <button type="button" onclick="toggleTag(this, 'Clean driveway')" class="tag-chip px-3 py-1.5 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:border-gray-400">
+              Clean driveway
             </button>
-            <button type="button" onclick="toggleTag(this, 'Friendly host')" class="tag-chip px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 text-gray-600 hover:border-gray-300">
-              🤝 Friendly host
+            <button type="button" onclick="toggleTag(this, 'Friendly host')" class="tag-chip px-3 py-1.5 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:border-gray-400">
+              Friendly host
             </button>
-            <button type="button" onclick="toggleTag(this, 'Safe at night')" class="tag-chip px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 text-gray-600 hover:border-gray-300">
-              🌙 Safe at night
+            <button type="button" onclick="toggleTag(this, 'Safe at night')" class="tag-chip px-3 py-1.5 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:border-gray-400">
+              Safe at night
             </button>
-            <button type="button" onclick="toggleTag(this, 'Easy access')" class="tag-chip px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 text-gray-600 hover:border-gray-300">
-              🚗 Easy access
+            <button type="button" onclick="toggleTag(this, 'Easy access')" class="tag-chip px-3 py-1.5 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:border-gray-400">
+              Easy access
             </button>
-            <button type="button" onclick="toggleTag(this, 'Solar powered')" class="tag-chip px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 text-gray-600 hover:border-gray-300">
-              ☀️ Solar powered
+            <button type="button" onclick="toggleTag(this, 'Solar powered')" class="tag-chip px-3 py-1.5 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:border-gray-400">
+              Solar powered
             </button>
           </div>
         </div>
 
         <!-- Feedback Comments -->
         <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1">Write your review</label>
-          <textarea id="reviewComment" rows="3" required placeholder="Share details of your experience: driveway accessibility, host hospitality, electricity stability..." class="w-full text-xs p-3 border border-gray-300 rounded-xl focus:outline-none focus:border-googleBlue resize-none"></textarea>
+          <label for="reviewComment" class="block text-xs font-bold text-gray-800 mb-1">Write your review</label>
+          <textarea id="reviewComment" rows="3" required placeholder="Share details of your experience: driveway accessibility, host hospitality, electricity stability..." class="w-full text-xs p-3 border border-gray-300 rounded-lg focus:border-googleBlue resize-none"></textarea>
         </div>
 
         <!-- Submit Button -->
         <div class="pt-2 flex items-center gap-3">
-          <a href="my-bookings.html" class="w-1/3 py-2.5 border border-gray-300 hover:bg-gray-50 text-gray-700 text-xs font-bold rounded-full transition-colors text-center">
+          <a href="my-bookings.html" class="w-1/3 py-2.5 border border-gray-300 hover:bg-gray-50 text-gray-800 text-xs font-bold rounded-lg transition-colors text-center">
             Cancel
           </a>
-          <button type="submit" class="flex-1 py-2.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded-full shadow-google transition-colors flex items-center justify-center gap-1.5">
-            <span>★</span> Submit Community Review
+          <button type="submit" class="flex-1 py-2.5 bg-amber-700 hover:bg-amber-800 text-white text-xs font-bold rounded-full transition-colors flex items-center justify-center">
+            Submit Community Review
           </button>
         </div>
 
@@ -152,11 +152,11 @@
     let chargerId = 1;
 
     const RATING_TEXTS = {
-      1: "1 Star — Poor Experience",
-      2: "2 Stars — Needs Improvement",
-      3: "3 Stars — Decent / Average",
-      4: "4 Stars — Very Good Charging",
-      5: "5 Stars — Outstanding Experience!"
+      1: "1 Star: Poor Experience",
+      2: "2 Stars: Needs Improvement",
+      3: "3 Stars: Decent / Average",
+      4: "4 Stars: Very Good Charging",
+      5: "5 Stars: Outstanding Experience!"
     };
 
     document.addEventListener('DOMContentLoaded', () => {
