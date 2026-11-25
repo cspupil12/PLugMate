@@ -46,11 +46,12 @@
   <script async crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"></script>
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col font-sans text-gray-800 overflow-x-hidden">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
 
   <!-- Shared Navbar Mount -->
   <div id="voltNavbarMount"></div>
 
-  <main class="flex-1 max-w-xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex items-center justify-center">
+  <main id="main-content" tabindex="-1" class="flex-1 max-w-xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex items-center justify-center">
     
     <div class="w-full bg-white rounded-xl shadow-googleCard border border-gray-200 overflow-hidden">
       
@@ -84,13 +85,13 @@
         <div class="text-center space-y-2">
           <span class="block text-xs font-bold text-gray-800">Tap to Rate Host &amp; Charger</span>
           <div class="flex items-center justify-center gap-2 select-none" id="starContainer" role="radiogroup" aria-label="Star rating">
-            <button type="button" onclick="setRating(1)" onmouseover="hoverRating(1)" onmouseout="resetHoverRating()" aria-label="Rate 1 star" class="star-btn active" id="star-1">★</button>
-            <button type="button" onclick="setRating(2)" onmouseover="hoverRating(2)" onmouseout="resetHoverRating()" aria-label="Rate 2 stars" class="star-btn active" id="star-2">★</button>
-            <button type="button" onclick="setRating(3)" onmouseover="hoverRating(3)" onmouseout="resetHoverRating()" aria-label="Rate 3 stars" class="star-btn active" id="star-3">★</button>
-            <button type="button" onclick="setRating(4)" onmouseover="hoverRating(4)" onmouseout="resetHoverRating()" aria-label="Rate 4 stars" class="star-btn active" id="star-4">★</button>
-            <button type="button" onclick="setRating(5)" onmouseover="hoverRating(5)" onmouseout="resetHoverRating()" aria-label="Rate 5 stars" class="star-btn active" id="star-5">★</button>
+            <button type="button" role="radio" aria-checked="true" tabindex="-1" onclick="setRating(1)" onmouseover="hoverRating(1)" onmouseout="resetHoverRating()" aria-label="Rate 1 star" class="star-btn active" id="star-1">★</button>
+            <button type="button" role="radio" aria-checked="true" tabindex="-1" onclick="setRating(2)" onmouseover="hoverRating(2)" onmouseout="resetHoverRating()" aria-label="Rate 2 stars" class="star-btn active" id="star-2">★</button>
+            <button type="button" role="radio" aria-checked="true" tabindex="-1" onclick="setRating(3)" onmouseover="hoverRating(3)" onmouseout="resetHoverRating()" aria-label="Rate 3 stars" class="star-btn active" id="star-3">★</button>
+            <button type="button" role="radio" aria-checked="true" tabindex="-1" onclick="setRating(4)" onmouseover="hoverRating(4)" onmouseout="resetHoverRating()" aria-label="Rate 4 stars" class="star-btn active" id="star-4">★</button>
+            <button type="button" role="radio" aria-checked="true" tabindex="0" onclick="setRating(5)" onmouseover="hoverRating(5)" onmouseout="resetHoverRating()" aria-label="Rate 5 stars" class="star-btn active" id="star-5">★</button>
           </div>
-          <div class="text-xs font-bold text-amber-700 font-google" id="ratingLabel">
+          <div class="text-xs font-bold text-amber-700 font-google" id="ratingLabel" aria-live="polite">
             5 Stars: Outstanding Experience!
           </div>
         </div>
@@ -99,22 +100,22 @@
         <div>
           <span class="block text-xs font-bold text-gray-800 mb-2">What went well? (Select all that apply)</span>
           <div class="flex flex-wrap gap-1.5" id="tagsContainer">
-            <button type="button" onclick="toggleTag(this, 'Fast charging')" class="tag-chip px-3 py-1.5 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:border-gray-400">
+            <button type="button" aria-pressed="false" onclick="toggleTag(this, 'Fast charging')" class="tag-chip px-3 py-1.5 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:border-gray-400">
               Fast charging
             </button>
-            <button type="button" onclick="toggleTag(this, 'Clean driveway')" class="tag-chip px-3 py-1.5 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:border-gray-400">
+            <button type="button" aria-pressed="false" onclick="toggleTag(this, 'Clean driveway')" class="tag-chip px-3 py-1.5 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:border-gray-400">
               Clean driveway
             </button>
-            <button type="button" onclick="toggleTag(this, 'Friendly host')" class="tag-chip px-3 py-1.5 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:border-gray-400">
+            <button type="button" aria-pressed="false" onclick="toggleTag(this, 'Friendly host')" class="tag-chip px-3 py-1.5 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:border-gray-400">
               Friendly host
             </button>
-            <button type="button" onclick="toggleTag(this, 'Safe at night')" class="tag-chip px-3 py-1.5 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:border-gray-400">
+            <button type="button" aria-pressed="false" onclick="toggleTag(this, 'Safe at night')" class="tag-chip px-3 py-1.5 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:border-gray-400">
               Safe at night
             </button>
-            <button type="button" onclick="toggleTag(this, 'Easy access')" class="tag-chip px-3 py-1.5 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:border-gray-400">
+            <button type="button" aria-pressed="false" onclick="toggleTag(this, 'Easy access')" class="tag-chip px-3 py-1.5 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:border-gray-400">
               Easy access
             </button>
-            <button type="button" onclick="toggleTag(this, 'Solar powered')" class="tag-chip px-3 py-1.5 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:border-gray-400">
+            <button type="button" aria-pressed="false" onclick="toggleTag(this, 'Solar powered')" class="tag-chip px-3 py-1.5 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:border-gray-400">
               Solar powered
             </button>
           </div>
@@ -123,7 +124,8 @@
         <!-- Feedback Comments -->
         <div>
           <label for="reviewComment" class="block text-xs font-bold text-gray-800 mb-1">Write your review</label>
-          <textarea id="reviewComment" rows="3" required placeholder="Share details of your experience: driveway accessibility, host hospitality, electricity stability..." class="w-full text-xs p-3 border border-gray-300 rounded-lg focus:border-googleBlue resize-none"></textarea>
+          <textarea id="reviewComment" rows="3" required aria-describedby="reviewCommentError" placeholder="Share details of your experience: driveway accessibility, host hospitality, electricity stability..." class="w-full text-xs p-3 border border-gray-300 rounded-lg focus:border-googleBlue resize-none"></textarea>
+          <p id="reviewCommentError" role="alert" class="hidden text-xs font-semibold text-rose-700 mt-1">Please write a short comment about your charging session before submitting.</p>
         </div>
 
         <!-- Submit Button -->
@@ -184,6 +186,26 @@
       loadReviewTarget();
       window.addEventListener('plugmate:dataSynced', loadReviewTarget);
       setRating(5);
+
+      // Keyboard Left/Right navigation for star radiogroup (R-32)
+      const starContainer = document.getElementById('starContainer');
+      if (starContainer) {
+        starContainer.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+            e.preventDefault();
+            const next = Math.min(5, currentRating + 1);
+            setRating(next);
+            const btn = document.getElementById(`star-${next}`);
+            if (btn) btn.focus();
+          } else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+            e.preventDefault();
+            const prev = Math.max(1, currentRating - 1);
+            setRating(prev);
+            const btn = document.getElementById(`star-${prev}`);
+            if (btn) btn.focus();
+          }
+        });
+      }
     });
 
     function setRating(rating) {
@@ -205,11 +227,14 @@
     function updateStarsUi(count) {
       for (let i = 1; i <= 5; i++) {
         const star = document.getElementById(`star-${i}`);
+        if (!star) continue;
         if (i <= count) {
           star.classList.add('active');
         } else {
           star.classList.remove('active');
         }
+        star.setAttribute('aria-checked', String(i === currentRating));
+        star.setAttribute('tabindex', i === currentRating ? '0' : '-1');
       }
     }
 
@@ -217,20 +242,31 @@
       const idx = selectedTags.indexOf(tag);
       if (idx !== -1) {
         selectedTags.splice(idx, 1);
-        button.className = 'tag-chip px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 text-gray-600 hover:border-gray-300';
+        button.setAttribute('aria-pressed', 'false');
+        button.className = 'tag-chip px-3 py-1.5 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:border-gray-400';
       } else {
         selectedTags.push(tag);
-        button.className = 'tag-chip px-3 py-1.5 rounded-full text-xs font-bold border border-amber-500 bg-amber-50 text-amber-800';
+        button.setAttribute('aria-pressed', 'true');
+        button.className = 'tag-chip px-3 py-1.5 rounded-full text-xs font-bold border border-amber-700 bg-amber-50 text-amber-900';
       }
     }
 
     function handleSubmitReview(e) {
       e.preventDefault();
-      const comment = document.getElementById('reviewComment').value.trim();
-      if (!comment) return;
+      const input = document.getElementById('reviewComment');
+      const errEl = document.getElementById('reviewCommentError');
+      const comment = input.value.trim();
+      if (!comment) {
+        input.setAttribute('aria-invalid', 'true');
+        if (errEl) errEl.classList.remove('hidden');
+        input.focus();
+        return;
+      }
+      input.removeAttribute('aria-invalid');
+      if (errEl) errEl.classList.add('hidden');
 
       VoltData.addReview(bookingId, chargerId, currentRating, comment, selectedTags);
-      showToast("Thank you! Review published to community.", "★");
+      showToast("Thank you! Review published to community.");
 
       setTimeout(() => {
         window.location.href = 'my-bookings.html';

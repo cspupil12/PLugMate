@@ -164,28 +164,32 @@
 </head>
 
 <body class="relative w-screen h-screen overflow-hidden bg-gray-100 select-none">
+  <a href="#main-content" class="skip-link">Skip to map and charger search</a>
 
-  <!-- MAP CONTAINER (Full Screen Google Maps Layer) -->
-  <div id="map"></div>
+  <main id="main-content" tabindex="-1" class="relative w-full h-full">
+    <h1 class="sr-only">PlugMate Interactive EV Charger Map</h1>
 
-  <!-- FLOATING GOOGLE MAPS TOP BAR: Search & City Filters -->
-  <header class="absolute top-3 left-3 sm:left-4 z-20 flex flex-col gap-2 max-w-[calc(100vw-24px)] pointer-events-none">
+    <!-- MAP CONTAINER (Full Screen Google Maps Layer) -->
+    <div id="map"></div>
 
-    <!-- Google Search Box -->
-    <div
-      class="pointer-events-auto flex items-center bg-white rounded-lg shadow-google h-12 w-full sm:w-[390px] px-3.5 border border-gray-200 hover:border-gray-300 transition-colors">
-      <!-- Recenter / Reset View Icon -->
-      <button type="button" onclick="toggleCityDropdown()" aria-label="Center map on neighborhood" title="Center map"
-        class="text-googleGray hover:text-gray-900 p-2 -ml-1.5 rounded-lg hover:bg-gray-100 min-w-[40px] min-h-[40px] flex items-center justify-center">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
+    <!-- FLOATING GOOGLE MAPS TOP BAR: Search & City Filters -->
+    <header class="absolute top-3 left-3 sm:left-4 z-20 flex flex-col gap-2 max-w-[calc(100vw-24px)] pointer-events-none">
 
-      <!-- Search Input -->
-      <input type="text" id="mapSearchInput" aria-label="Search EV chargers, streets, or cities" onkeyup="handleSearchFilter(this.value)"
-        placeholder="Search Jalandhar, streets, or plug types..."
-        class="flex-1 ml-2 text-sm text-gray-900 placeholder-gray-600 focus:outline-none font-normal bg-transparent" />
+      <!-- Google Search Box -->
+      <div
+        class="pointer-events-auto flex items-center bg-white rounded-lg shadow-google h-12 w-full sm:w-[390px] px-3.5 border border-gray-200 hover:border-gray-300 focus-within:ring-2 focus-within:ring-googleBlue transition-colors">
+        <!-- Recenter / Reset View Icon -->
+        <button type="button" onclick="toggleCityDropdown()" aria-label="Center map on neighborhood" title="Center map"
+          class="text-googleGray hover:text-gray-900 p-2 -ml-1.5 rounded-lg hover:bg-gray-100 min-w-[40px] min-h-[40px] flex items-center justify-center">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+
+        <!-- Search Input -->
+        <input type="text" id="mapSearchInput" aria-label="Search EV chargers, streets, or cities" onkeyup="handleSearchFilter(this.value)"
+          placeholder="Search Jalandhar, streets, or plug types..."
+          class="flex-1 ml-2 text-sm text-gray-900 placeholder-gray-600 rounded px-1 font-normal bg-transparent" />
 
       <!-- Search Glass Icon -->
       <div class="text-googleGray p-1" aria-hidden="true">
@@ -313,7 +317,7 @@
       <div class="flex items-center justify-between pb-3 border-b border-gray-100">
         <div class="flex items-center gap-1.5">
           <span class="font-bold text-gray-900 text-sm">4.9</span>
-          <div class="flex text-amber-500 text-xs" aria-hidden="true">★★★★★</div>
+          <div class="flex text-amber-700 text-xs" aria-hidden="true">★★★★★</div>
           <span class="text-gray-600">(Verified ratings)</span>
         </div>
         <div class="text-right">
@@ -466,6 +470,7 @@
 
     </div>
   </div>
+  </main>
 
   <!-- Application Logic -->
   <script src="js/data.js"></script>

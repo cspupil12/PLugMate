@@ -46,12 +46,13 @@
   <script async crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"></script>
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col font-sans text-gray-800 overflow-x-hidden">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
 
   <!-- Shared Navbar Mount -->
   <div id="voltNavbarMount"></div>
 
   <!-- Charger Details Container -->
-  <main class="flex-1 max-w-5xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+  <main id="main-content" tabindex="-1" class="flex-1 max-w-5xl w-full mx-auto p-4 sm:p-6 lg:p-8">
     
     <!-- Top Breadcrumb & Back Action -->
     <div class="flex items-center justify-between mb-4">
@@ -110,7 +111,7 @@
             <div>
               <span class="text-[11px] text-gray-600 block uppercase font-medium">Rating</span>
               <div class="flex items-center justify-center gap-1 font-bold text-gray-900 text-sm">
-                <span class="text-amber-600" aria-hidden="true">★</span>
+                <span class="text-amber-700" aria-hidden="true">★</span>
                 <span id="ratingDisplay">4.9</span>
                 <span class="text-[11px] text-gray-600 font-normal" id="reviewsCountDisplay">(0)</span>
               </div>
@@ -185,7 +186,7 @@
               <h2 class="text-xs font-bold text-gray-600 uppercase tracking-wider">Community Reviews</h2>
               <div class="flex items-center gap-2 mt-1">
                 <div class="text-xl font-black text-gray-900" id="reviewsSummaryRating">4.9</div>
-                <div class="text-amber-500 text-sm" aria-hidden="true">★★★★★</div>
+                <div class="text-amber-700 text-sm" aria-hidden="true">★★★★★</div>
                 <span class="text-xs text-gray-600" id="reviewsSummaryCount">based on verified charges</span>
               </div>
             </div>
@@ -370,7 +371,7 @@
       }
 
       if (reviews.length === 0) {
-        reviewsList.innerHTML = `<p class="text-xs text-gray-400 py-2">No reviews written yet. Be the first neighbor to review!</p>`;
+        reviewsList.innerHTML = `<p class="text-xs text-gray-600 py-2">No reviews written yet. Be the first neighbor to review!</p>`;
         return;
       }
 
@@ -378,20 +379,20 @@
         <div class="pt-3 first:pt-0">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
-              <div class="w-7 h-7 rounded-full bg-blue-100 text-googleBlue font-bold text-xs flex items-center justify-center">
+              <div class="w-7 h-7 rounded-full bg-blue-100 text-googleBlueHover font-bold text-xs flex items-center justify-center">
                 ${r.user_name.charAt(0)}
               </div>
               <span class="text-xs font-bold text-gray-900">${r.user_name}</span>
             </div>
-            <div class="flex items-center gap-1 text-amber-400 text-xs">
-              ${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}
-              <span class="text-[11px] text-gray-400 ml-1 font-mono">${r.date}</span>
+            <div class="flex items-center gap-1 text-amber-700 text-xs" aria-label="Rated ${r.rating} out of 5 stars">
+              <span aria-hidden="true">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</span>
+              <span class="text-[11px] text-gray-600 ml-1 font-mono">${r.date}</span>
             </div>
           </div>
-          <p class="text-xs text-gray-600 mt-1.5 leading-relaxed">${r.comment}</p>
+          <p class="text-xs text-gray-700 mt-1.5 leading-relaxed">${r.comment}</p>
           ${r.tags && r.tags.length > 0 ? `
             <div class="flex flex-wrap gap-1 mt-2">
-              ${r.tags.map(t => `<span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-[10px] font-medium">${t}</span>`).join('')}
+              ${r.tags.map(t => `<span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded-md text-[11px] font-medium">${t}</span>`).join('')}
             </div>
           ` : ''}
         </div>

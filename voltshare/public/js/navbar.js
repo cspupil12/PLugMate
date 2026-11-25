@@ -22,7 +22,7 @@ function renderVoltNavbar(activePage = '') {
   mountEl.innerHTML = `
     <nav class="bg-white border-b border-gray-200 sticky top-0 z-40" aria-label="Primary Navigation">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16 items-center">
+        <div class="flex justify-between min-h-[64px] py-2 items-center gap-2">
           
           <!-- Left: Brand Logo & Links -->
           <div class="flex items-center gap-3">
@@ -298,11 +298,17 @@ function openDemoLoginModal() {
     if (e.target === modal) closeDemoAuthModal();
   });
   document.body.appendChild(modal);
+  if (window.VoltA11y && typeof VoltA11y.trapFocus === 'function') {
+    modal._releaseTrap = VoltA11y.trapFocus(modal, closeDemoAuthModal);
+  }
 }
 
 function closeDemoAuthModal() {
   const m = document.getElementById('plugmateDemoModal');
-  if (m) m.remove();
+  if (m) {
+    if (typeof m._releaseTrap === 'function') m._releaseTrap();
+    m.remove();
+  }
 }
 
 document.addEventListener('keydown', (e) => {

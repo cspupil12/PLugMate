@@ -51,11 +51,12 @@
 </head>
 
 <body class="bg-gray-50 min-h-screen flex flex-col font-sans text-gray-800 overflow-x-hidden">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
 
   <!-- Shared Navbar Mount -->
   <div id="voltNavbarMount"></div>
 
-  <main class="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+  <main id="main-content" tabindex="-1" class="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 lg:p-8">
 
     <!-- Header Row -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
@@ -78,25 +79,28 @@
 
     <!-- Tab Bar: Upcoming vs Past -->
     <div class="flex items-center gap-2 border-b border-gray-200 pb-3 mb-6 overflow-x-auto text-xs font-medium" role="tablist" aria-label="Booking filter tabs">
-      <button type="button" onclick="switchTab('upcoming')" id="tabBtnUpcoming" role="tab" aria-selected="true"
+      <button type="button" onclick="switchTab('upcoming')" id="tabBtnUpcoming" role="tab" aria-selected="true" aria-controls="bookingsPanel" tabindex="0"
         class="px-4 py-2 min-h-[40px] rounded-full font-bold bg-blue-50 text-googleBlueHover border border-googleBlue flex items-center gap-1.5 transition-colors whitespace-nowrap">
         Upcoming &amp; Active (<span id="countUpcoming">0</span>)
       </button>
 
-      <button type="button" onclick="switchTab('completed')" id="tabBtnCompleted" role="tab" aria-selected="false"
+      <button type="button" onclick="switchTab('completed')" id="tabBtnCompleted" role="tab" aria-selected="false" aria-controls="bookingsPanel" tabindex="-1"
         class="px-4 py-2 min-h-[40px] rounded-full text-gray-700 hover:text-gray-900 hover:bg-gray-100 flex items-center gap-1.5 transition-colors whitespace-nowrap">
         Past History (<span id="countCompleted">0</span>)
       </button>
 
-      <button type="button" onclick="switchTab('all')" id="tabBtnAll" role="tab" aria-selected="false"
+      <button type="button" onclick="switchTab('all')" id="tabBtnAll" role="tab" aria-selected="false" aria-controls="bookingsPanel" tabindex="-1"
         class="px-4 py-2 min-h-[40px] rounded-full text-gray-700 hover:text-gray-900 hover:bg-gray-100 flex items-center gap-1.5 transition-colors whitespace-nowrap">
         All Bookings (<span id="countAll">0</span>)
       </button>
     </div>
 
-    <!-- Bookings List Container -->
-    <div id="bookingsList" class="space-y-4">
-      <!-- Injected by JavaScript -->
+    <!-- Bookings Panel -->
+    <div id="bookingsPanel" role="tabpanel" aria-labelledby="tabBtnUpcoming">
+      <!-- Bookings List Container -->
+      <div id="bookingsList" class="space-y-4">
+        <!-- Injected by JavaScript -->
+      </div>
     </div>
 
     <!-- Empty State -->
@@ -124,6 +128,21 @@
       renderVoltNavbar('bookings');
       renderBookings();
       window.addEventListener('plugmate:dataSynced', renderBookings);
+
+      const tabOrder = ['upcoming', 'completed', 'all'];
+      const tabButtons = ['tabBtnUpcoming', 'tabBtnCompleted', 'tabBtnAll'].map(id => document.getElementById(id));
+      tabButtons.forEach((btn, idx) => {
+        if (!btn) return;
+        btn.addEventListener('keydown', (e) => {
+          if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+          e.preventDefault();
+          const nextIdx = e.key === 'ArrowRight'
+            ? (idx + 1) % tabButtons.length
+            : (idx - 1 + tabButtons.length) % tabButtons.length;
+          switchTab(tabOrder[nextIdx]);
+          tabButtons[nextIdx].focus();
+        });
+      });
     });
 
     function switchTab(tab) {
@@ -132,26 +151,29 @@
       const btnUp = document.getElementById('tabBtnUpcoming');
       const btnComp = document.getElementById('tabBtnCompleted');
       const btnAll = document.getElementById('tabBtnAll');
+      const panel = document.getElementById('bookingsPanel');
 
       [btnUp, btnComp, btnAll].forEach(b => {
-        b.className = 'px-4 py-2 rounded-full text-gray-600 hover:text-gray-900 hover:bg-gray-100 flex items-center gap-1.5 transition-all';
+        b.className = 'px-4 py-2 min-h-[40px] rounded-full text-gray-700 hover:text-gray-900 hover:bg-gray-100 flex items-center gap-1.5 transition-colors whitespace-nowrap';
+        b.setAttribute('aria-selected', 'false');
+        b.setAttribute('tabindex', '-1');
       });
 
       if (tab === 'upcoming') {
         btnUp.className = 'px-4 py-2 min-h-[40px] rounded-full font-bold bg-blue-50 text-googleBlueHover border border-googleBlue flex items-center gap-1.5 transition-colors whitespace-nowrap';
         btnUp.setAttribute('aria-selected', 'true');
-        btnComp.setAttribute('aria-selected', 'false');
-        btnAll.setAttribute('aria-selected', 'false');
+        btnUp.setAttribute('tabindex', '0');
+        if (panel) panel.setAttribute('aria-labelledby', 'tabBtnUpcoming');
       } else if (tab === 'completed') {
         btnComp.className = 'px-4 py-2 min-h-[40px] rounded-full font-bold bg-emerald-50 text-emerald-800 border border-emerald-700 flex items-center gap-1.5 transition-colors whitespace-nowrap';
         btnComp.setAttribute('aria-selected', 'true');
-        btnUp.setAttribute('aria-selected', 'false');
-        btnAll.setAttribute('aria-selected', 'false');
+        btnComp.setAttribute('tabindex', '0');
+        if (panel) panel.setAttribute('aria-labelledby', 'tabBtnCompleted');
       } else {
         btnAll.className = 'px-4 py-2 min-h-[40px] rounded-full font-bold bg-gray-200 text-gray-900 border border-gray-400 flex items-center gap-1.5 transition-colors whitespace-nowrap';
         btnAll.setAttribute('aria-selected', 'true');
-        btnUp.setAttribute('aria-selected', 'false');
-        btnComp.setAttribute('aria-selected', 'false');
+        btnAll.setAttribute('tabindex', '0');
+        if (panel) panel.setAttribute('aria-labelledby', 'tabBtnAll');
       }
 
       renderBookings();

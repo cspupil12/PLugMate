@@ -18,15 +18,48 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Skip Link for Keyboard Users (R-32) */
+.skip-link {
+  position: fixed;
+  top: -60px;
+  left: 12px;
+  background: #111827;
+  color: #FFFFFF;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  z-index: 10000;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+.skip-link:focus {
+  top: 12px;
+}
+
 /* Base Interactive Affordances & Keyboard Focus (R-32, R-39) */
 a[href],
 button:not(:disabled),
 summary,
 select:not(:disabled),
+label[for],
+label:has(> input[type="checkbox"], > input[type="radio"]),
+[role="button"]:not([aria-disabled="true"]),
+[role="link"],
+[role="tab"],
+[role="menuitem"],
+[role="option"],
+[role="switch"],
+[role="radio"],
 input[type="checkbox"]:not(:disabled),
 input[type="radio"]:not(:disabled),
-label[for],
-[role="button"]:not([aria-disabled="true"]) {
+input[type="file"]:not(:disabled),
+input[type="submit"]:not(:disabled),
+input[type="button"]:not(:disabled),
+input[type="reset"]:not(:disabled),
+input[type="range"]:not(:disabled),
+input[type="color"]:not(:disabled) {
   cursor: pointer;
 }
 
@@ -38,6 +71,11 @@ label[for],
 :focus-visible {
   outline: 2px solid #1A73E8;
   outline-offset: 2px;
+}
+
+/* Keep focused inputs visible above mobile on-screen keyboards */
+input, select, textarea {
+  scroll-margin-bottom: 140px;
 }
 
 @media (prefers-reduced-motion: reduce) {

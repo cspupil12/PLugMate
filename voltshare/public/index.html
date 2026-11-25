@@ -49,22 +49,25 @@
 </head>
 
 <body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col overflow-x-hidden">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
 
   <!-- Navigation Bar -->
   <div id="voltNavbarMount"></div>
 
-  <main class="flex-1">
+  <main id="main-content" tabindex="-1" class="flex-1">
     <!-- Hero Section -->
     <header class="bg-white border-b border-gray-200">
       <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 text-center">
 
-        <h1 class="text-3xl sm:text-5xl lg:text-6xl font-bold font-google text-gray-900 tracking-tight leading-tight max-w-4xl mx-auto">
+        <h1
+          class="text-3xl sm:text-5xl lg:text-6xl font-bold font-google text-gray-900 tracking-tight leading-tight max-w-4xl mx-auto">
           Share Home Chargers.<br class="hidden sm:inline">
           <span class="text-googleBlue">Power Your Neighborhood.</span>
         </h1>
 
         <p class="mt-4 sm:mt-6 text-sm sm:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-          Reserve a neighbor's verified residential wallbox for safe overnight charging, or share your private driveway socket to earn hourly payouts across Jalandhar and local communities.
+          Reserve a neighbor's verified residential wallbox for safe overnight charging, or share your private driveway
+          socket to earn hourly payouts across Jalandhar and local communities.
         </p>
 
         <!-- Primary Action Buttons -->
@@ -72,7 +75,8 @@
           <a href="map.html"
             class="w-full sm:w-auto min-h-[44px] px-7 py-3 bg-googleBlue hover:bg-googleBlueHover text-white text-sm font-bold rounded-full shadow-google transition-colors flex items-center justify-center gap-2">
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+              <path
+                d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
             </svg>
             <span>Find Nearby Chargers</span>
           </a>
@@ -120,7 +124,8 @@
             <div class="text-xs text-gray-300 mt-0.5">Hourly Rate Range</div>
           </div>
           <div>
-            <div class="font-mono text-2xl sm:text-3xl font-bold text-amber-300" id="statCitiesCount">Jalandhar + Local</div>
+            <div class="font-mono text-2xl sm:text-3xl font-bold text-amber-300" id="statCitiesCount">Jalandhar + Local
+            </div>
             <div class="text-xs text-gray-300 mt-0.5">Active Coverage</div>
           </div>
           <div>
@@ -143,7 +148,8 @@
               Real residential sockets and wallboxes synced directly from the PlugMate database.
             </p>
           </div>
-          <a href="map.html" class="text-xs font-bold text-googleBlueHover hover:underline self-start sm:self-auto py-1">
+          <a href="map.html"
+            class="text-xs font-bold text-googleBlueHover hover:underline self-start sm:self-auto py-1">
             Open Full Interactive Map
           </a>
         </div>
@@ -166,7 +172,8 @@
               Why Driveway Sharing Works
             </h2>
             <p class="text-xs sm:text-sm text-gray-600 leading-relaxed">
-              Apartment EV owners rarely have access to private sockets, while residential wallboxes sit idle most of the day.
+              Apartment EV owners rarely have access to private sockets, while residential wallboxes sit idle most of
+              the day.
             </p>
           </div>
 
@@ -174,24 +181,32 @@
             <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 space-y-3">
               <h3 class="text-base font-bold text-gray-900 font-google">The Apartment Charging Gap</h3>
               <p class="text-xs text-gray-600 leading-relaxed">
-                Drivers living in multi-unit buildings or rented homes often rely on crowded public DC stations or unsafe extension cords.
+                Drivers living in multi-unit buildings or rented homes often rely on crowded public DC stations or
+                unsafe extension cords.
               </p>
               <ul class="text-xs text-gray-700 space-y-2 pt-1 border-t border-gray-200">
-                <li class="flex items-start gap-2"><span class="text-rose-700 font-bold" aria-hidden="true">-</span> Long queues at highway fast chargers</li>
-                <li class="flex items-start gap-2"><span class="text-rose-700 font-bold" aria-hidden="true">-</span> Higher battery degradation from constant DC fast charging</li>
-                <li class="flex items-start gap-2"><span class="text-rose-700 font-bold" aria-hidden="true">-</span> No safe overnight parking near home</li>
+                <li class="flex items-start gap-2"><span class="text-rose-700 font-bold" aria-hidden="true">-</span>
+                  Long queues at highway fast chargers</li>
+                <li class="flex items-start gap-2"><span class="text-rose-700 font-bold" aria-hidden="true">-</span>
+                  Higher battery degradation from constant DC fast charging</li>
+                <li class="flex items-start gap-2"><span class="text-rose-700 font-bold" aria-hidden="true">-</span> No
+                  safe overnight parking near home</li>
               </ul>
             </div>
 
             <div class="bg-emerald-50/70 border border-emerald-200 rounded-xl p-6 space-y-3">
               <h3 class="text-base font-bold text-gray-900 font-google">Peer-to-Peer Residential AC</h3>
               <p class="text-xs text-gray-700 leading-relaxed">
-                Homeowners list idle wallboxes and solar ports with fixed hourly pricing, gated entry, and verified driver check-ins.
+                Homeowners list idle wallboxes and solar ports with fixed hourly pricing, gated entry, and verified
+                driver check-ins.
               </p>
               <ul class="text-xs text-gray-800 space-y-2 pt-1 border-t border-emerald-200">
-                <li class="flex items-start gap-2"><span class="text-emerald-700 font-bold" aria-hidden="true">+</span> Enclosed driveway parking within walking distance</li>
-                <li class="flex items-start gap-2"><span class="text-emerald-700 font-bold" aria-hidden="true">+</span> Gentle 3.3 kW to 22 kW AC charging speeds</li>
-                <li class="flex items-start gap-2"><span class="text-emerald-700 font-bold" aria-hidden="true">+</span> 90% host payout released after PIN verification</li>
+                <li class="flex items-start gap-2"><span class="text-emerald-700 font-bold" aria-hidden="true">+</span>
+                  Enclosed driveway parking within walking distance</li>
+                <li class="flex items-start gap-2"><span class="text-emerald-700 font-bold" aria-hidden="true">+</span>
+                  Gentle 3.3 kW to 22 kW AC charging speeds</li>
+                <li class="flex items-start gap-2"><span class="text-emerald-700 font-bold" aria-hidden="true">+</span>
+                  90% host payout released after PIN verification</li>
               </ul>
             </div>
           </div>
@@ -211,7 +226,8 @@
             <div class="font-mono text-xs font-bold text-googleBlueHover">01 / DISCOVER &amp; BOOK</div>
             <h3 class="text-base font-bold text-gray-900 font-google">Pick a Charger &amp; Time Window</h3>
             <p class="text-xs text-gray-600 leading-relaxed">
-              Search by city or connector type on the map, inspect hourly rates, and reserve your slot with an instant booking reference.
+              Search by city or connector type on the map, inspect hourly rates, and reserve your slot with an instant
+              booking reference.
             </p>
           </div>
 
@@ -219,7 +235,8 @@
             <div class="font-mono text-xs font-bold text-emerald-700">02 / 4-DIGIT PIN HANDSHAKE</div>
             <h3 class="text-base font-bold text-gray-900 font-google">Verify Arrival at the Driveway</h3>
             <p class="text-xs text-gray-600 leading-relaxed">
-              Follow turn-by-turn road directions to the host's gate and share your unique 4-digit PIN so the host can unlock power.
+              Follow turn-by-turn road directions to the host's gate and share your unique 4-digit PIN so the host can
+              unlock power.
             </p>
           </div>
 
@@ -227,7 +244,8 @@
             <div class="font-mono text-xs font-bold text-amber-700">03 / PAYOUT &amp; REVIEW</div>
             <h3 class="text-base font-bold text-gray-900 font-google">Escrow Release &amp; Rating</h3>
             <p class="text-xs text-gray-600 leading-relaxed">
-              Once the host confirms your PIN, escrow payout credits to the host dashboard and you can rate the charging visit.
+              Once the host confirms your PIN, escrow payout credits to the host dashboard and you can rate the charging
+              visit.
             </p>
           </div>
         </div>
@@ -241,7 +259,8 @@
           Ready to Charge or Host?
         </h2>
         <p class="text-xs sm:text-sm text-gray-300 max-w-lg mx-auto">
-          View live charger availability across Jalandhar and local neighborhoods, or add your own socket in Host Dashboard.
+          View live charger availability across Jalandhar and local neighborhoods, or add your own socket in Host
+          Dashboard.
         </p>
         <div class="pt-2 flex flex-wrap items-center justify-center gap-3">
           <a href="map.html"

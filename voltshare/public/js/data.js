@@ -818,5 +818,92 @@ const VoltData = {
 window.PlugMateData = VoltData;
 window.VoltData = VoltData;
 
+// Shared Accessibility & Live-Region Notification Helpers (R-27, R-32, R-39)
+const VoltA11y = {
+  trapFocus(modalEl, onClose) {
+    if (!modalEl) return () => {};
+    const opener = document.activeElement;
+    const selector = 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    const focusable = Array.from(modalEl.querySelectorAll(selector)).filter(el => el.offsetParent !== null);
+    const first = focusable[0] || modalEl;
+    const last = focusable[focusable.length - 1] || modalEl;
+
+    if (!modalEl.hasAttribute('tabindex')) modalEl.setAttribute('tabindex', '-1');
+
+    function handleKeydown(e) {
+      if (e.key === 'Escape') {
+        e.stopPropagation();
+        if (typeof onClose === 'function') onClose();
+        return;
+      }
+      if (e.key !== 'Tab' || focusable.length === 0) return;
+      if (e.shiftKey && (document.activeElement === first || document.activeElement === modalEl)) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+
+    modalEl.addEventListener('keydown', handleKeydown);
+    setTimeout(() => { try { first.focus(); } catch (e) {} }, 10);
+
+    return function releaseFocusTrap() {
+      modalEl.removeEventListener('keydown', handleKeydown);
+      if (opener && typeof opener.focus === 'function' && document.contains(opener)) {
+        try { opener.focus(); } catch (e) {}
+      }
+    };
+  },
+
+  announce(message, politeness = 'polite') {
+    if (typeof document === 'undefined' || !message) return;
+    const id = politeness === 'assertive' ? 'voltAssertiveAnnouncer' : 'voltPoliteAnnouncer';
+    let region = document.getElementById(id);
+    if (!region) {
+      region = document.createElement('div');
+      region.id = id;
+      region.setAttribute('aria-live', politeness);
+      region.setAttribute('aria-atomic', 'true');
+      if (politeness === 'assertive') region.setAttribute('role', 'alert');
+      region.className = 'sr-only';
+      region.style.cssText = 'position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;';
+      document.body.appendChild(region);
+    }
+    region.textContent = '';
+    requestAnimationFrame(() => {
+      region.textContent = message;
+    });
+  }
+};
+
+window.VoltA11y = VoltA11y;
+
+if (typeof window !== 'undefined' && typeof window.showToast !== 'function') {
+  let toastTimer = null;
+  window.showToast = function showToast(message) {
+    if (typeof document === 'undefined' || !document.body) return;
+    let toastEl = document.getElementById('voltToast');
+    if (!toastEl) {
+      toastEl = document.createElement('div');
+      toastEl.id = 'voltToast';
+      toastEl.setAttribute('role', 'status');
+      toastEl.setAttribute('aria-live', 'polite');
+      toastEl.setAttribute('aria-atomic', 'true');
+      document.body.appendChild(toastEl);
+    }
+    toastEl.textContent = '';
+    requestAnimationFrame(() => {
+      toastEl.textContent = String(message || '');
+      toastEl.classList.add('show');
+    });
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toastEl.classList.remove('show');
+    }, 3200);
+  };
+}
+
 // Auto-run init
 VoltData.init();

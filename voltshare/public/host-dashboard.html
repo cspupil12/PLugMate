@@ -50,11 +50,12 @@
 </head>
 
 <body class="bg-gray-50 min-h-screen flex flex-col font-sans text-gray-800 overflow-x-hidden">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
 
   <!-- Shared Navbar Mount -->
   <div id="voltNavbarMount"></div>
 
-  <main class="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
+  <main id="main-content" tabindex="-1" class="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
 
     <!-- Top Host Banner -->
     <div
@@ -117,7 +118,7 @@
         <span class="text-[11px] font-bold text-gray-600 uppercase tracking-wider block">Average Rating</span>
         <div class="flex items-center gap-1 font-mono text-2xl font-black text-amber-700 mt-1">
           <span id="metricAvgRating">--</span>
-          <span class="text-sm text-amber-500" aria-hidden="true">★</span>
+          <span class="text-sm text-amber-700" aria-hidden="true">★</span>
         </div>
         <span class="text-[11px] text-gray-600 mt-0.5 block">Across listed chargers</span>
       </div>
@@ -454,7 +455,11 @@
       document.getElementById('formRate').value = '22';
       document.getElementById('formPower').value = '7.4';
       document.getElementById('formHours').value = '06:00 AM - 11:30 PM';
-      document.getElementById('chargerModal').classList.remove('hidden');
+      const modal = document.getElementById('chargerModal');
+      modal.classList.remove('hidden');
+      if (window.VoltA11y && typeof VoltA11y.trapFocus === 'function') {
+        modal._releaseTrap = VoltA11y.trapFocus(modal, closeChargerModal);
+      }
     }
 
     function openEditChargerModal(id) {
@@ -470,11 +475,20 @@
       document.getElementById('formRate').value = charger.hourly_rate;
       document.getElementById('formHours').value = charger.available_hours || '24 Hours';
       document.getElementById('formPhoto').value = charger.photo;
-      document.getElementById('chargerModal').classList.remove('hidden');
+      const modal = document.getElementById('chargerModal');
+      modal.classList.remove('hidden');
+      if (window.VoltA11y && typeof VoltA11y.trapFocus === 'function') {
+        modal._releaseTrap = VoltA11y.trapFocus(modal, closeChargerModal);
+      }
     }
 
     function closeChargerModal() {
-      document.getElementById('chargerModal').classList.add('hidden');
+      const modal = document.getElementById('chargerModal');
+      modal.classList.add('hidden');
+      if (typeof modal._releaseTrap === 'function') {
+        modal._releaseTrap();
+        modal._releaseTrap = null;
+      }
     }
 
     document.addEventListener('keydown', (e) => {
