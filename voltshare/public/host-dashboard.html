@@ -228,10 +228,20 @@
         </div>
 
         <div>
-          <label for="formPhoto" class="block font-medium text-gray-700 mb-1">Photo URL (Optional)</label>
-          <input type="url" id="formPhoto" placeholder="https://..."
-            value="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=800&q=80"
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-googleBlue">
+          <label for="formPhotoFile" class="block font-medium text-gray-700 mb-1">Charger Photo (Upload from Device)</label>
+          <input type="hidden" id="formPhoto"
+            value="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=800&q=80">
+          <div class="flex items-center gap-3 p-2.5 border border-gray-300 rounded-lg bg-gray-50">
+            <img id="formPhotoPreview"
+              src="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=800&q=80"
+              alt="Charger photo preview" width="64" height="48"
+              class="w-16 h-12 rounded-md object-cover border border-gray-200 shrink-0 bg-white">
+            <div class="flex-1 min-w-0">
+              <input type="file" id="formPhotoFile" accept="image/*" onchange="handlePhotoFileSelect(event)"
+                class="block w-full text-xs text-gray-700 file:mr-2.5 file:py-1.5 file:px-3 file:rounded-md file:border file:border-gray-300 file:text-xs file:font-semibold file:bg-white file:text-gray-800 hover:file:bg-gray-100">
+              <span id="formPhotoStatus" class="block text-[11px] text-gray-600 mt-1 truncate">Using default charger photo (optional)</span>
+            </div>
+          </div>
         </div>
 
         <div>
@@ -447,6 +457,50 @@
       }
     }
 
+    const DEFAULT_CHARGER_PHOTO = 'https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=800&q=80';
+
+    function handlePhotoFileSelect(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const statusEl = document.getElementById('formPhotoStatus');
+      const hiddenEl = document.getElementById('formPhoto');
+      const previewEl = document.getElementById('formPhotoPreview');
+      if (statusEl) statusEl.textContent = `Processing ${file.name}...`;
+
+      const reader = new FileReader();
+      reader.onload = function (loadEvent) {
+        const dataUrl = loadEvent.target.result;
+        const img = new Image();
+        img.onload = function () {
+          try {
+            const maxW = 800;
+            const scale = img.width > maxW ? maxW / img.width : 1;
+            const canvas = document.createElement('canvas');
+            canvas.width = Math.round(img.width * scale);
+            canvas.height = Math.round(img.height * scale);
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            const compressed = canvas.toDataURL('image/jpeg', 0.8);
+            hiddenEl.value = compressed;
+            if (previewEl) previewEl.src = compressed;
+            if (statusEl) statusEl.textContent = `Ready: ${file.name}`;
+          } catch (err) {
+            hiddenEl.value = dataUrl;
+            if (previewEl) previewEl.src = dataUrl;
+            if (statusEl) statusEl.textContent = `Ready: ${file.name}`;
+          }
+        };
+        img.onerror = function () {
+          hiddenEl.value = dataUrl;
+          if (previewEl) previewEl.src = dataUrl;
+          if (statusEl) statusEl.textContent = `Ready: ${file.name}`;
+        };
+        img.src = dataUrl;
+      };
+      reader.readAsDataURL(file);
+    }
+
     function openAddChargerModal() {
       document.getElementById('modalChargerHeading').textContent = 'Add New Driveway Charger';
       document.getElementById('editChargerId').value = '';
@@ -455,6 +509,13 @@
       document.getElementById('formRate').value = '22';
       document.getElementById('formPower').value = '7.4';
       document.getElementById('formHours').value = '06:00 AM - 11:30 PM';
+      document.getElementById('formPhoto').value = DEFAULT_CHARGER_PHOTO;
+      const fileInput = document.getElementById('formPhotoFile');
+      if (fileInput) fileInput.value = '';
+      const previewEl = document.getElementById('formPhotoPreview');
+      if (previewEl) previewEl.src = DEFAULT_CHARGER_PHOTO;
+      const statusEl = document.getElementById('formPhotoStatus');
+      if (statusEl) statusEl.textContent = 'Using default charger photo (optional)';
       const modal = document.getElementById('chargerModal');
       modal.classList.remove('hidden');
       if (window.VoltA11y && typeof VoltA11y.trapFocus === 'function') {
@@ -474,7 +535,14 @@
       document.getElementById('formPower').value = charger.power_kw;
       document.getElementById('formRate').value = charger.hourly_rate;
       document.getElementById('formHours').value = charger.available_hours || '24 Hours';
-      document.getElementById('formPhoto').value = charger.photo;
+      const currentPhoto = charger.photo || DEFAULT_CHARGER_PHOTO;
+      document.getElementById('formPhoto').value = currentPhoto;
+      const fileInput = document.getElementById('formPhotoFile');
+      if (fileInput) fileInput.value = '';
+      const previewEl = document.getElementById('formPhotoPreview');
+      if (previewEl) previewEl.src = currentPhoto;
+      const statusEl = document.getElementById('formPhotoStatus');
+      if (statusEl) statusEl.textContent = 'Current charger photo loaded (choose file to replace)';
       const modal = document.getElementById('chargerModal');
       modal.classList.remove('hidden');
       if (window.VoltA11y && typeof VoltA11y.trapFocus === 'function') {
